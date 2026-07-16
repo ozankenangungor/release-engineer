@@ -50,7 +50,21 @@ export function Footer() {
   return (
     <footer className="mx-auto flex w-full max-w-6xl flex-col justify-between gap-4 border-t border-white/8 px-5 py-7 text-xs text-slate-400 sm:flex-row sm:px-8">
       <p>Release Engineer · A second perspective before you ship.</p>
-      <nav aria-label="Legal" className="flex gap-6">
+      <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-3">
+        <a
+          className="transition hover:text-white"
+          href="https://github.com/ozankenangungor/release-engineer"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          GitHub
+        </a>
+        <a
+          className="transition hover:text-white"
+          href="mailto:founder@releaseengineer.tech"
+        >
+          Contact
+        </a>
         <Link className="transition hover:text-white" href="/privacy">
           Privacy
         </Link>

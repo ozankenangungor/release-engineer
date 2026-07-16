@@ -2,10 +2,22 @@ import type { Metadata } from "next";
 import { Header, Footer } from "@/components/brand";
 import "./globals.css";
 
+const title = "Release Engineer — Your AI Release Engineer";
+const description =
+  "Review public GitHub pull requests for regressions, testing gaps, breaking changes and release risks. Powered by Claude.";
+
 export const metadata: Metadata = {
-  title: "Release Engineer — Your AI Release Engineer",
-  description:
-    "Review public GitHub pull requests for regressions, testing gaps, breaking changes and release risks. Powered by Claude.",
+  metadataBase: new URL("https://releaseengineer.tech"),
+  title,
+  description,
+  alternates: { canonical: "./" },
+  openGraph: {
+    title,
+    description,
+    url: "./",
+    siteName: "Release Engineer",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
