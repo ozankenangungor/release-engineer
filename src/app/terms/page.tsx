@@ -1,5 +1,20 @@
 import type { Metadata } from "next";
-export const metadata: Metadata = { title: "Terms — Release Engineer" };
+
+const title = "Terms — Release Engineer";
+const description =
+  "Beta terms and limitations for Release Engineer’s public GitHub pull-request reviews.";
+
+export const metadata: Metadata = {
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    url: "./",
+    siteName: "Release Engineer",
+    type: "website",
+  },
+};
 
 export default function Terms() {
   return (
@@ -8,6 +23,9 @@ export default function Terms() {
         RELEASE ENGINEER / BETA
       </p>
       <h1 className="mt-4 text-4xl font-semibold tracking-tight">Terms</h1>
+      <p className="mt-4 text-xs text-slate-400">
+        Last updated: <time dateTime="2026-10-07">October 7, 2026</time>
+      </p>
       <div className="mt-8 space-y-7 text-sm leading-7 text-slate-300">
         <section>
           <h2 className="mb-2 text-base font-medium text-white">
@@ -49,6 +67,15 @@ export default function Terms() {
             product. They are not a custom legal assessment.
           </p>
         </section>
+        <p>
+          Contact:{" "}
+          <a
+            href="mailto:founder@releaseengineer.tech"
+            className="text-emerald-200 underline underline-offset-4"
+          >
+            founder@releaseengineer.tech
+          </a>
+        </p>
       </div>
     </main>
   );
