@@ -6,6 +6,10 @@ Your AI Release Engineer. Paste a public GitHub pull-request URL to get a struct
 
 Reports support human release decisions. They do not guarantee safe code or replace review and testing. An empty findings list is a valid result.
 
+## Startup
+
+Release Engineer is an early-stage, bootstrapped developer-tool startup founded in 2026 in Ankara, Türkiye by Ozan Kenan Güngör. Learn more on the [About page](https://releaseengineer.tech/about) or contact [founder@releaseengineer.tech](mailto:founder@releaseengineer.tech).
+
 ## MVP scope
 
 One responsive landing page and analysis interface, public PR retrieval, bounded change context, validated Claude reviews, and brief Privacy and Terms pages. There are no accounts, database, persistence, OAuth, billing, queues, analytics or telemetry vendors. PR contents and reports are held in memory for the request and browser session.
