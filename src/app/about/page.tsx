@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 const title = "About — Release Engineer";
 const description =
-  "About Release Engineer, an early-stage, bootstrapped developer-tool startup started in 2026 in Türkiye by Ozan Kenan Güngör.";
+  "About Release Engineer, an early-stage, bootstrapped developer-tool startup founded in 2026 in Ankara, Türkiye by Ozan Kenan Güngör.";
 
 export const metadata: Metadata = {
   title,
@@ -29,9 +29,28 @@ export default function About() {
         <section>
           <p>
             Release Engineer is an early-stage, bootstrapped developer-tool
-            startup started in 2026 in Türkiye.
+            startup founded in 2026 in Ankara, Türkiye.
           </p>
           <p className="mt-3">Founder: Ozan Kenan Güngör.</p>
+          <p className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
+            <a
+              href="https://github.com/ozankenangungor"
+              className="text-emerald-200 underline underline-offset-4"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Founder on GitHub
+            </a>
+            <span aria-hidden="true">·</span>
+            <a
+              href="https://linkedin.com/in/ozan-kenan-gungor"
+              className="text-emerald-200 underline underline-offset-4"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Founder on LinkedIn
+            </a>
+          </p>
         </section>
         <section>
           <h2 className="mb-2 text-base font-medium text-white">The product</h2>

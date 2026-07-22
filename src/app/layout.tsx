@@ -14,6 +14,7 @@ const structuredData = {
       "@id": "https://releaseengineer.tech/#organization",
       name: "Release Engineer",
       url: "https://releaseengineer.tech",
+      logo: "https://releaseengineer.tech/release-engineer-logo.svg",
       email: "founder@releaseengineer.tech",
       foundingDate: "2026",
       description:
@@ -30,6 +31,8 @@ const structuredData = {
       "@id": "https://releaseengineer.tech/#founder",
       name: "Ozan Kenan Güngör",
       url: "https://releaseengineer.tech/about",
+      jobTitle: "Founder",
+      worksFor: { "@id": "https://releaseengineer.tech/#organization" },
       sameAs: [
         "https://github.com/ozankenangungor",
         "https://linkedin.com/in/ozan-kenan-gungor",
@@ -44,7 +47,16 @@ const structuredData = {
       applicationCategory: "DeveloperApplication",
       creator: { "@id": "https://releaseengineer.tech/#founder" },
       provider: { "@id": "https://releaseengineer.tech/#organization" },
+      isPartOf: { "@id": "https://releaseengineer.tech/#website" },
       sameAs: "https://github.com/ozankenangungor/release-engineer",
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://releaseengineer.tech/#website",
+      name: "Release Engineer",
+      alternateName: "releaseengineer.tech",
+      url: "https://releaseengineer.tech/",
+      publisher: { "@id": "https://releaseengineer.tech/#organization" },
     },
   ],
 };
