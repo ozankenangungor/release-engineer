@@ -7,3 +7,5 @@ coverage/
 *.tsbuildinfo
 .DS_Store
 *.log
+.eval-build/
+evals/results/

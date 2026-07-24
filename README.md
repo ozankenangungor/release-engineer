@@ -90,6 +90,12 @@ pnpm build
 
 For a production preview, run `pnpm build` then `pnpm start`. Deploy to a Node.js host that permits a 120-second route and set the server environment variables. No hosting infrastructure is included in this MVP.
 
+## Evaluation
+
+The [evaluation harness](evals/README.md) includes 32 versioned, original synthetic PR cases, evidence-based rubrics, separate risk-recall/false-positive/safety metrics and compatible baseline comparisons. `pnpm test` tests the evaluator offline; `pnpm eval:validate` validates fixtures against the real context builder without a key or network. These checks are not a Claude quality baseline.
+
+`pnpm eval:live` is separate and fails closed unless `EVAL_LIVE=1` and `ANTHROPIC_API_KEY` are explicitly supplied in the process environment. It defaults to one small case, uses the production review engine without automatic retries, and writes ignored local artifacts. It never runs in CI or automatically loads environment files. See the evaluation documentation for spend caps, comparison commands, dataset versioning and grading limitations.
+
 ## Deployment safety
 
 The analysis endpoint is unauthenticated and each analysis can consume the operator's Claude credits. Before broad public exposure, configure:
