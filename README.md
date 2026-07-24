@@ -1,18 +1,32 @@
 # Release Engineer
 
-Live product: [releaseengineer.tech](https://releaseengineer.tech)
+Release Engineer is a Claude-native release-readiness review tool for public GitHub pull requests.
 
-Your AI Release Engineer. Paste a public GitHub pull-request URL to get a structured release-readiness review powered by Claude: regressions, correctness risks, testing gaps, breaking changes, security concerns, and visible dependency, configuration and operational risks.
+Live product: [releaseengineer.tech](https://releaseengineer.tech)
 
 Reports support human release decisions. They do not guarantee safe code or replace review and testing. An empty findings list is a valid result.
 
 ## Startup
 
-Release Engineer is an early-stage, bootstrapped developer-tool startup founded in 2026 in Ankara, Türkiye by Ozan Kenan Güngör. Learn more on the [About page](https://releaseengineer.tech/about) or contact [founder@releaseengineer.tech](mailto:founder@releaseengineer.tech).
+Release Engineer was founded in **October 2026** in **Ankara, Türkiye** by **Ozan Kenan Güngör**. It is an early-stage, bootstrapped developer-tool startup in **early beta**, with no external funding raised. See the [About page](https://releaseengineer.tech/about) and the founder's [GitHub](https://github.com/ozankenangungor) and [LinkedIn](https://linkedin.com/in/ozan-kenan-gungor) profiles.
+
+## What it does
+
+Paste a public GitHub pull-request URL. The server retrieves bounded PR metadata and changed-file patches, selects context within explicit byte limits, and asks Claude for a structured review of regressions, correctness risks, testing gaps, breaking changes, security concerns and visible dependency, configuration and operational risks. The report includes findings, recommended actions and coverage limitations.
+
+## Claude integration
+
+Claude is the core reasoning engine. The server uses the official Anthropic TypeScript SDK with structured output, validates the response against a strict Zod schema, then enforces coverage limitations. An incomplete context cannot receive a final `merge` recommendation. The production prompt and model configuration live in [src/lib/prompt.ts](src/lib/prompt.ts) and [src/lib/config.ts](src/lib/config.ts); evaluation uses the same review engine.
+
+## Early validation
+
+External developers have tested the beta on real public GitHub pull requests. This is early product feedback, not a measured accuracy result.
+
+The project also includes a [versioned offline evaluation harness](evals/README.md) with **32 original synthetic PR cases**. Deterministic checks exercise fixture integrity, schema handling, grading, grounding rules, uncertainty rules, prompt-injection checks and partial-context safeguards. They do not establish Claude's risk-detection quality. No live Claude quality baseline has been recorded.
 
 ## MVP scope
 
-One responsive landing page and analysis interface, public PR retrieval, bounded change context, validated Claude reviews, and brief Privacy and Terms pages. There are no accounts, database, persistence, OAuth, billing, queues, analytics or telemetry vendors. PR contents and reports are held in memory for the request and browser session.
+One responsive landing page and analysis interface, public PR retrieval, bounded change context, validated Claude reviews, an About page, and brief [Privacy](https://releaseengineer.tech/privacy) and [Terms](https://releaseengineer.tech/terms) pages. There are no accounts, database, persistence, OAuth, billing, queues, analytics or telemetry vendors. PR contents and reports are held in memory for the request and browser session.
 
 ## Architecture
 
@@ -33,7 +47,7 @@ Browser: PR input → POST /api/analyze → validated report
 - `src/app/api/analyze/route.ts`: bounded JSON request, orchestration and uncached responses.
 - `src/components/`: accessible form/loading/error states and readable report sections. React renders plain text; raw model output is never rendered as a report.
 
-Built with current stable Next.js 16.4 App Router, React, strict TypeScript, Tailwind CSS, Zod and Vitest. All GitHub and Anthropic requests happen on the server. `server-only` imports guard credential-bearing modules.
+Built with Next.js 16.4 App Router, React 19, strict TypeScript, Tailwind CSS, Zod and Vitest. All GitHub and Anthropic requests happen on the server. `server-only` imports guard credential-bearing modules.
 
 ## Local setup
 
@@ -117,3 +131,7 @@ These protections must be configured outside the application. This MVP does not 
 - The application does not log PR contents or provider responses. Hosting providers, GitHub and Anthropic have their own processing/retention policies. Privacy and Terms are brief MVP notices and have not received custom legal review.
 
 Official API references: [GitHub pull requests](https://docs.github.com/en/rest/pulls/pulls), [Claude structured outputs](https://platform.claude.com/docs/en/build-with-claude/structured-outputs).
+
+## Contact
+
+Contact [founder@releaseengineer.tech](mailto:founder@releaseengineer.tech). Source code and issues are available in the [public GitHub repository](https://github.com/ozankenangungor/release-engineer).
