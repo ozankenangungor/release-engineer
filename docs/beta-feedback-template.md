@@ -2,6 +2,18 @@
 
 **Blank template only. No tester record or validation result is asserted here.** Save completed records outside this public checkout or in ignored `.private-evidence/`. Never commit names, email addresses, quotes, raw reports or vulnerability details without an appropriate disclosure review.
 
+## Founder workflow
+
+1. Invite a developer to [try the beta](https://releaseengineer.tech/about#beta) on a public PR and email what was useful, wrong or missing. Do not promise correctness or ask for private code.
+2. Ask permission to retain feedback and agree a retention period before creating a retained record. If consent is unknown, resolve it or delete unnecessary material.
+3. Complete the fields below using the actual report and tester feedback. Pin the reviewed head SHA, not a later revision. Unknown fields stay unknown.
+4. Separate founder observations from external reports. A founder test, synthetic fixture or scripted browser check is **not an external test**.
+5. Independently adjudicate suspected false positives/misses; record disagreements and what the developer actually did, if known.
+6. Deduplicate repeat sessions using a private stable pseudonym. Do not publish any tester count until consented, deduplicated records exist; define which records qualify and the observation period. Participation is not a customer, active-user or accuracy metric.
+7. Obtain separate approval for an anonymized summary, exact quote and identity, then review the exact proposed publication for sensitive content. Never turn an unreviewed email into a public testimonial.
+
+Keep the private deduplication/contact mapping outside Git and collect only what is needed. A public PR can contain leaked secrets or personal information; do not copy those into feedback evidence. Use [SECURITY.md](../SECURITY.md) or the affected project's private disclosure channel.
+
 ## Observation
 
 - Record ID:

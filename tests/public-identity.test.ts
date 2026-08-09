@@ -55,7 +55,17 @@ describe("public identity", () => {
   it("makes the evaluation evidence and its limits visible in the About HTML", () => {
     const page = renderToStaticMarkup(createElement(About));
     expect(page).toContain("32 original synthetic pull-request cases");
-    expect(page).toContain("No live Claude quality baseline has been recorded.");
+    expect(page).toContain("Two manually dispatched complete 32-case synthetic runs");
+    expect(page).toContain("production Claude review path");
+    expect(page).toContain("32/32 cases completed with 0 infrastructure errors");
+    expect(page).toContain("Synthetic evaluation is not real-world accuracy, traction or external validation");
+    expect(page).toContain("Full live evaluation metrics, failures and regressions");
+    expect(page).not.toContain("22 passing cases");
+    expect(page).not.toContain("10 failing cases");
+    expect(page).not.toMatch(/no live.*baseline/i);
+    expect(page).toContain(
+      'href="https://github.com/ozankenangungor/release-engineer/blob/main/docs/live-evaluation-evidence.md"',
+    );
     expect(page).toContain(
       'href="https://github.com/ozankenangungor/release-engineer/blob/main/evals/README.md"',
     );
@@ -69,5 +79,18 @@ describe("public identity", () => {
     const page = renderToStaticMarkup(createElement(About));
     expect(page).toContain("The early beta is available for testing");
     expect(page).not.toContain("External developers have tested");
+  });
+
+  it("provides a server-rendered beta path with private feedback and separate publication consent", () => {
+    const home = renderToStaticMarkup(createElement(Home));
+    const about = renderToStaticMarkup(createElement(About));
+    expect(home).toContain('href="/about#beta"');
+    expect(about).toContain('<section id="beta">');
+    expect(about).toContain('href="/"');
+    expect(about).toContain('href="mailto:founder@releaseengineer.tech"');
+    expect(about).toContain("not private");
+    expect(about).toContain("code, secrets or sensitive vulnerability details");
+    expect(about).toContain("Feedback stays private");
+    expect(about).toContain("consent to publish your name or a quote");
   });
 });

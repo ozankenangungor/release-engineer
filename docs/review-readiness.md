@@ -8,9 +8,11 @@ This is a verification procedure, not a record of completed beta tests or model 
 | --- | --- | --- |
 | Verified | Directly observed, with a source and date | Command exit/status at a commit, workflow run, a parsed live artifact, consented tester record |
 | Inferred | Supported by source inspection, not external execution | A fixed GitHub host prevents caller-selected hosts in this fetch path; application code has no persistence sink |
-| Not yet verified | No adequate observation or source | Live quality baseline, actual provider retention, external testing without records, hosting WAF configuration without account inspection |
+| Not yet verified | No adequate observation or source | Arbitrary real-world model quality, actual provider retention, external testing without records, hosting WAF configuration without account inspection |
 
 Keep technical evidence separate from traction. A deployed page, valid structured response or passing CI job does not establish user/customer counts, accuracy or release safety.
+
+Two complete synthetic live runs are documented in the [dated evidence summary](live-evaluation-evidence.md). Use those sources, including failures, rather than treating an offline check as model evidence. Use the [private evidence checklist](product-evidence-checklist.md) for a current dossier and the [case-study workflow](public-pr-case-study-template.md) for human-adjudicated public PR observations.
 
 ## Offline verification
 

@@ -2,6 +2,8 @@
 
 **Proposal only.** The current dataset remains 32 original synthetic cases. No real-PR fixtures, human labels or live results are added by this document. Synthetic fixtures isolate known failure modes; they do not represent arbitrary repository context, patch complexity or developer behavior.
 
+For individual observations before a labeled dataset exists, use the [public-PR case-study workflow and blank template](public-pr-case-study-template.md). A case study needs independent adjudication and explicit source/participant attribution; it is not automatically a benchmark case or external validation.
+
 ## Admission requirements
 
 A future real-PR set should use small, public changes with enough supplied evidence for a defensible rubric. Admit a labeled case only when a reviewer can explain its expected behavior independently of Claude's response:

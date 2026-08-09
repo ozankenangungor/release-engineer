@@ -20,9 +20,9 @@ Claude is the core reasoning engine. The server uses the official Anthropic Type
 
 ## Early validation
 
-The early beta is available for testing on public GitHub pull requests. External testing, user counts and quality outcomes are not established by the repository's automated tests. Completed, consented feedback records are needed before publishing beta-validation claims; a [private feedback template](docs/beta-feedback-template.md) is provided.
+The early beta is available for testing on public GitHub pull requests. [Try the beta](https://releaseengineer.tech/about#beta): analyze a public PR, then email [founder@releaseengineer.tech](mailto:founder@releaseengineer.tech) with what was useful, wrong or missing. Do not send private code, secrets or sensitive vulnerability details. External testing and user counts are not established by automated tests; completed, consented records are needed before publishing beta-validation claims. Use the [private feedback workflow](docs/beta-feedback-template.md).
 
-The project also includes a [versioned offline evaluation harness](evals/README.md) with **32 original synthetic PR cases**. Deterministic checks exercise fixture integrity, schema handling, grading, grounding rules, uncertainty rules, prompt-injection checks and partial-context safeguards. They do not establish Claude's risk-detection quality. No live Claude quality baseline has been recorded.
+The [evaluation harness](evals/README.md) contains **32 original synthetic PR cases**. Two manually dispatched complete 32-case synthetic runs used the production Claude review path. In the latest recorded run (October 7, 2026), 32/32 cases completed with 0 infrastructure errors. [Full metrics, failures and regressions](docs/live-evaluation-evidence.md) are transparently documented with source runs and limitations. **Synthetic evaluation is not real-world accuracy, traction or external validation.**
 
 ## MVP scope
 
@@ -108,9 +108,9 @@ For a production preview, run `pnpm build` then `pnpm start`. Deploy to a Node.j
 
 The [evaluation harness](evals/README.md) includes 32 versioned, original synthetic PR cases, evidence-based rubrics, separate risk-recall/false-positive/safety metrics and compatible baseline comparisons. `pnpm test` tests the evaluator offline; `pnpm eval:validate` validates fixtures against the real context builder without a key or network. These checks are not a Claude quality baseline.
 
-`pnpm eval:live` is separate and fails closed unless `EVAL_LIVE=1` and `ANTHROPIC_API_KEY` are explicitly supplied in the process environment. It defaults to one small case, uses the production review engine without automatic retries, and writes ignored local artifacts. It never runs in CI or automatically loads environment files. See the evaluation documentation for spend caps, comparison commands, dataset versioning and grading limitations.
+`pnpm eval:live` is separate and fails closed unless `EVAL_LIVE=1` and `ANTHROPIC_API_KEY` are explicitly supplied in the process environment. It defaults to one small case with a three-case cap, uses the production review engine without automatic retries, and writes ignored local artifacts. Pull-request/push CI is offline. The separate [live workflow](.github/workflows/live-eval.yml) runs only when manually dispatched on main with a configured repository secret and an explicitly selected scope. Neither path automatically loads environment files. See the evaluation documentation for spend caps, comparison commands, dataset versioning and grading limitations.
 
-The [review evidence runbook](docs/review-readiness.md) explains reproducible offline checks, the optional one-request smoke run and evidence handling. The [real-world evaluation plan](docs/evaluation-real-world-plan.md) describes how pinned public PR cases could be admitted using defensible labels; no such dataset or results are included yet.
+The [review evidence runbook](docs/review-readiness.md) explains reproducible offline checks and evidence handling. The [real-world evaluation plan](docs/evaluation-real-world-plan.md) describes how pinned public PR cases could be admitted using defensible labels; no such dataset or results are included yet. The [case-study workflow](docs/public-pr-case-study-template.md) and [private evidence checklist](docs/product-evidence-checklist.md) help prepare human-adjudicated evidence without inventing completed records.
 
 ## Reporting security issues
 
