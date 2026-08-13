@@ -88,20 +88,23 @@ export function AnalysisForm() {
 
   return (
     <>
-      <div className="mx-auto max-w-3xl rounded-2xl border border-white/10 bg-[#111a20] p-5 shadow-[0_24px_80px_#00000030] sm:p-7">
-        <div className="mb-5 flex items-center justify-between gap-4">
-          <h2 className="text-sm font-medium text-slate-100">
-            What are you shipping?
-          </h2>
-          <span className="font-mono text-[10px] text-slate-400">
-            PR → RELEASE REVIEW
+      <section aria-label="Pull request analysis" className="workspace-card w-full rounded-3xl border border-emerald-200/15 p-5 sm:p-8">
+        <div className="mb-6 flex items-start justify-between gap-4">
+          <div>
+            <p className="section-kicker">REVIEW WORKSPACE</p>
+            <h2 className="mt-3 text-xl font-medium tracking-tight text-slate-100">
+              What are you shipping?
+            </h2>
+          </div>
+          <span aria-hidden="true" className="mt-1 flex size-9 shrink-0 items-center justify-center rounded-xl border border-emerald-200/15 bg-emerald-200/5 text-lg text-emerald-200">
+            ↗
           </span>
         </div>
         <form onSubmit={analyze} aria-busy={loading}>
-          <label htmlFor="pr-url" className="mb-2 block text-xs text-slate-400">
+          <label htmlFor="pr-url" className="mb-2.5 block text-xs text-slate-300">
             Public GitHub pull request URL
           </label>
-          <div className="flex flex-col gap-3 sm:flex-row">
+          <div className="flex flex-col gap-3">
             <input
               id="pr-url"
               type="url"
@@ -119,12 +122,12 @@ export function AnalysisForm() {
               aria-invalid={!!error}
               aria-describedby={error ? "analysis-error" : "privacy-note"}
               placeholder="https://github.com/owner/repo/pull/123"
-              className="min-w-0 flex-1 rounded-lg border border-white/15 bg-[#0b1217] px-4 py-3.5 font-mono text-xs text-slate-100 placeholder:text-slate-500 disabled:opacity-60 sm:text-sm"
+              className="min-w-0 flex-1 rounded-xl border border-white/15 bg-[#090f14] px-4 py-4 font-mono text-xs text-slate-100 shadow-inner transition-colors placeholder:text-slate-500 hover:border-white/25 focus:border-emerald-300/50 disabled:opacity-60 sm:text-sm"
             />
             <button
               type="submit"
               disabled={loading}
-              className="flex min-w-36 items-center justify-center gap-2 rounded-lg bg-emerald-200 px-5 py-3.5 text-sm font-semibold text-[#10251e] transition hover:bg-emerald-100 disabled:cursor-wait disabled:opacity-70"
+              className="flex min-w-36 items-center justify-center gap-2 rounded-xl border border-emerald-100/20 bg-linear-to-b from-emerald-200 to-emerald-300 px-5 py-4 text-sm font-semibold text-[#10251e] shadow-[0_4px_20px_#6ee7b71a] transition hover:brightness-110 disabled:cursor-wait disabled:opacity-70"
             >
               {loading ? (
                 <>
@@ -198,13 +201,13 @@ export function AnalysisForm() {
             </p>
           </div>
         )}
-      </div>
+      </section>
       {result && (
         <div
           ref={resultRef}
           tabIndex={-1}
           aria-label="Completed release review"
-          className="mt-12 rounded-2xl"
+          className="mt-4 min-w-0 rounded-2xl lg:col-span-2"
         >
           <ReviewReport result={result} />
         </div>
