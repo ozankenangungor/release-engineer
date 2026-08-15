@@ -22,21 +22,21 @@ function ReviewList({
   empty: string;
 }) {
   return (
-    <section className="surface-card rounded-2xl border border-white/10 p-5 sm:p-6">
-      <h3 className="text-sm font-semibold text-white">
+    <section className="surface-card rounded-2xl p-5 sm:p-7">
+      <h3 className="report-section-title flex items-center justify-between gap-3 text-sm font-semibold text-white">
         {title}{" "}
-        <span className="ml-2 font-mono text-xs font-normal text-slate-500">
+        <span className="font-mono text-xs font-normal text-slate-400">
           {items.length.toString().padStart(2, "0")}
         </span>
       </h3>
       {items.length ? (
         <ul className="mt-4 space-y-3 text-sm leading-6 text-slate-300">
           {items.map((item, index) => (
-            <li key={index} className="report-text flex gap-3">
-              <span aria-hidden="true" className="text-emerald-300/60">
-                •
+            <li key={index} className="report-text flex min-w-0 gap-3">
+              <span aria-hidden="true" className="mt-0.5 shrink-0 font-mono text-[10px] text-emerald-200/70">
+                {String(index + 1).padStart(2, "0")}
               </span>
-              <span>{item}</span>
+              <span className="min-w-0">{item}</span>
             </li>
           ))}
         </ul>
@@ -55,10 +55,10 @@ function Finding({
   index: number;
 }) {
   return (
-    <article className="surface-card rounded-2xl border border-white/10 p-5 sm:p-6">
+    <article data-severity={finding.severity} className="finding-card surface-card rounded-2xl p-5 sm:p-7">
       <div className="flex flex-wrap items-center gap-2">
         <span
-          className={`rounded border px-2 py-1 font-mono text-[10px] uppercase ${riskStyles[finding.severity]}`}
+          className={`rounded-md border px-2.5 py-1 font-mono text-[10px] uppercase ${riskStyles[finding.severity]}`}
         >
           {finding.severity}
         </span>
@@ -69,7 +69,7 @@ function Finding({
           {String(index + 1).padStart(2, "0")}
         </span>
       </div>
-      <h4 className="report-text mt-4 text-base font-semibold text-slate-100">
+      <h4 className="report-text mt-5 text-lg font-semibold tracking-tight text-slate-100">
         {finding.title}
       </h4>
       {finding.file && (
@@ -80,8 +80,8 @@ function Finding({
       <p className="report-text mt-3 text-sm leading-6 text-slate-300">
         {finding.explanation}
       </p>
-      <div className="mt-4 border-t border-white/8 pt-4">
-        <p className="font-mono text-[10px] tracking-wide text-slate-500">
+      <div className="report-recommendation mt-5 border-t border-white/8">
+        <p className="font-mono text-[9px] tracking-widest text-emerald-200">
           RECOMMENDATION
         </p>
         <p className="report-text mt-1.5 text-sm leading-6 text-slate-200">
@@ -95,7 +95,7 @@ function Finding({
 export function ReviewReport({ result }: { result: AnalysisResponse }) {
   const { review, pullRequest: pr, coverage, warnings } = result;
   return (
-    <section aria-labelledby="review-title" className="mx-auto max-w-5xl">
+    <section aria-labelledby="review-title" className="mx-auto max-w-6xl">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <p className="font-mono text-xs tracking-widest text-emerald-300">
           RELEASE READINESS / REVIEW
@@ -109,7 +109,7 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
           {pr.owner}/{pr.repository} #{pr.number} ↗
         </a>
       </div>
-      <div className="workspace-card rounded-3xl border border-emerald-200/15 p-6 sm:p-8">
+      <div data-risk={review.overallRisk} className="report-summary workspace-card rounded-2xl p-6 sm:p-9">
         <div className="flex flex-wrap items-center gap-3">
           <span
             className={`rounded-full border px-3 py-1.5 font-mono text-[11px] uppercase ${riskStyles[review.overallRisk]}`}
@@ -122,14 +122,14 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
         </div>
         <h2
           id="review-title"
-          className="report-text mt-5 text-2xl leading-snug font-semibold tracking-tight sm:text-3xl"
+          className="report-text mt-6 text-2xl leading-snug font-semibold tracking-[-0.035em] sm:text-4xl"
         >
           {pr.title}
         </h2>
         <p className="report-text mt-4 max-w-3xl text-sm leading-7 text-slate-300 sm:text-base">
           {review.summary}
         </p>
-        <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 border-t border-white/10 pt-5 font-mono text-xs text-slate-400">
+        <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 border-t border-white/10 pt-6 font-mono text-[11px] text-slate-400">
           <span>
             {coverage.includedFiles}/{pr.changedFileCount} files in context
           </span>
@@ -146,21 +146,21 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
       {warnings.length > 0 && (
         <aside
           aria-label="Partial analysis warning"
-          className="mt-5 rounded-xl border border-amber-300/25 bg-amber-300/5 p-5"
+          className="mt-5 rounded-2xl border border-amber-300/30 bg-amber-300/7 p-5 sm:p-6"
         >
           <h3 className="text-sm font-medium text-amber-200">
             Partial review · Some change context was unavailable
           </h3>
           <ul className="mt-2 space-y-1 text-sm leading-6 text-amber-100/80">
             {warnings.map((warning, index) => (
-              <li key={index}>{warning}</li>
+              <li key={index} className="report-text">{warning}</li>
             ))}
           </ul>
         </aside>
       )}
       <section className="mt-8" aria-labelledby="findings-title">
-        <div className="mb-4 flex items-center gap-3">
-          <h3 id="findings-title" className="text-base font-semibold">
+        <div className="mb-5 flex items-center gap-3">
+          <h3 id="findings-title" className="text-lg font-semibold tracking-tight">
             Findings
           </h3>
           <span className="rounded-md border border-white/10 px-2 py-0.5 font-mono text-xs text-slate-400">
@@ -205,7 +205,7 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
         />
       </div>
       <details
-        className="surface-card mt-5 rounded-2xl border border-white/10 p-5"
+        className="surface-card mt-5 rounded-2xl p-5 sm:p-6"
         open
       >
         <summary className="cursor-pointer text-sm font-medium text-slate-300">
