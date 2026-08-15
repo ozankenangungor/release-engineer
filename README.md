@@ -18,15 +18,17 @@ Paste a public GitHub pull-request URL. The server retrieves bounded PR metadata
 
 Claude is the core reasoning engine. The server uses the official Anthropic TypeScript SDK with structured output, validates the response against a strict Zod schema, then enforces coverage limitations. An incomplete context cannot receive a final `merge` recommendation. The production prompt and model configuration live in [src/lib/prompt.ts](src/lib/prompt.ts) and [src/lib/config.ts](src/lib/config.ts); evaluation uses the same review engine.
 
-## Early validation
+## Early beta evidence
 
-The early beta is available for testing on public GitHub pull requests. [Try the beta](https://releaseengineer.tech/about#beta): analyze a public PR, then email [founder@releaseengineer.tech](mailto:founder@releaseengineer.tech) with what was useful, wrong or missing. Do not send private code, secrets or sensitive vulnerability details. External testing and user counts are not established by automated tests; completed, consented records are needed before publishing beta-validation claims. Use the [private feedback workflow](docs/beta-feedback-template.md).
+The early beta is available for testing on public GitHub pull requests. [Try the beta](https://releaseengineer.tech/about#beta): analyze a public PR, then email [founder@releaseengineer.tech](mailto:founder@releaseengineer.tech) with what was useful, wrong or missing. Do not send private code, secrets or sensitive vulnerability details. Three exact, founder-supplied, publication-approved external beta quotes are rendered from [the public feedback content](src/content/testimonials.ts), using approved display names and roles. No tester PR links were approved. This is informal qualitative feedback, not accuracy, verified findings or a unique developer/customer count. Consent records remain private. Use the [private feedback workflow](docs/beta-feedback-template.md).
+
+The [evidence index](https://releaseengineer.tech/evidence) links source, limitations and dated evaluations. No pinned, human-checked public PR case study or verified production analysis count has been supplied. [Case-study content](src/content/case-studies.ts) is empty and fails closed; its routes return 404 and are omitted from navigation/sitemap until supported content exists.
 
 The [evaluation harness](evals/README.md) contains **32 original synthetic PR cases**. Two manually dispatched complete 32-case synthetic runs used the production Claude review path. In the latest recorded run (October 7, 2026), 32/32 cases completed with 0 infrastructure errors. [Full metrics, failures and regressions](docs/live-evaluation-evidence.md) are transparently documented with source runs and limitations. **Synthetic evaluation is not real-world accuracy, traction or external validation.**
 
 ## MVP scope
 
-One responsive landing page and analysis interface, public PR retrieval, bounded change context, validated Claude reviews, an About page, and brief [Privacy](https://releaseengineer.tech/privacy) and [Terms](https://releaseengineer.tech/terms) pages. There are no accounts, database, persistence, OAuth, billing, queues, analytics or telemetry vendors. PR contents and reports are held in memory for the request and browser session.
+One responsive landing page and analysis interface, public PR retrieval, bounded change context, validated Claude reviews, About and Evidence pages, and brief [Privacy](https://releaseengineer.tech/privacy) and [Terms](https://releaseengineer.tech/terms) pages. There are no accounts, database, OAuth, billing, queues, analytics or telemetry vendors. PR contents and reports are held in memory for the request and browser session. Content-free operational events are written to hosting logs; [the usage evidence runbook](docs/live-usage-evidence.md) explains retention, private preservation, deduplication and the distinction between analyses and people. No public usage counter is displayed.
 
 ## Architecture
 
@@ -46,6 +48,8 @@ Browser: PR input → POST /api/analyze → validated report
 - `src/lib/review-schema.ts`: strict Zod review and API-response contracts, shared with the browser.
 - `src/app/api/analyze/route.ts`: bounded JSON request, orchestration and uncached responses.
 - `src/components/`: accessible form/loading/error states and readable report sections. React renders plain text; raw model output is never rendered as a report.
+- `src/components/three/`: dynamically imported Three.js / React Three Fiber sculpture of the review pipeline. DPR is capped at 1.5; rendering is on demand, pauses offscreen/hidden and stops after a five-second entrance signal. Mobile, reduced motion, forced colors, WebGL failure and JavaScript-disabled browsers use a server-rendered static illustration. Product copy and form are server-rendered independently.
+- `src/lib/live-usage.ts`: allowlisted, content-free operational events; no browser/session identity or PR content. `scripts/summarize-live-usage.mjs` counts preserved, sanitized production outcomes without network calls.
 
 Built with Next.js 16.4 App Router, React 19, strict TypeScript, Tailwind CSS, Zod and Vitest. All GitHub and Anthropic requests happen on the server. `server-only` imports guard credential-bearing modules.
 
@@ -98,6 +102,8 @@ pnpm lint
 pnpm typecheck
 pnpm test
 pnpm build
+pnpm eval:validate
+git diff --check
 ```
 
 `pnpm test:watch` runs Vitest interactively. Tests cover safe URL parsing, exact serialized context budgets and Unicode, deterministic selection, structured result validation, GitHub pagination/visibility/errors, official SDK request/response handling, injection separation, partial-verdict enforcement and endpoint failures. Upstream services are mocked; tests never consume API credits. CI runs all commands above on pull requests and main.

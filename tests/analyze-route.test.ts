@@ -27,6 +27,44 @@ function request(body: string, contentType = "application/json") {
 }
 
 describe("analysis endpoint", () => {
+  it("records only a successful validated pipeline, without PR/provider content or browser identity", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("VERCEL_ENV", "production");
+    const log = vi.spyOn(console, "info").mockImplementation(() => {});
+    const response = await POST(
+      request(JSON.stringify({ url: pullRequest().url })),
+    );
+    const events = log.mock.calls.map(([line]) => JSON.parse(String(line)));
+    expect(events.map((event) => event.event)).toEqual([
+      "analysis_started",
+      "analysis_succeeded",
+    ]);
+    expect(events[1].includedFileCount).toBe(1);
+    expect(JSON.stringify(events)).not.toMatch(
+      /octocat|hello-world|Update application|test-only-api-key|github.com/,
+    );
+    expect(await response.text()).not.toContain(events[0].analysisId);
+  });
+  it("records failures after start, never success for a malformed report, and no event for rejected input", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    const log = vi.spyOn(console, "info").mockImplementation(() => {});
+    claudeMock.mockResolvedValueOnce({ ...review(), summary: "" });
+    expect(
+      (await POST(request(JSON.stringify({ url: pullRequest().url })))).status,
+    ).toBe(502);
+    expect(
+      log.mock.calls.map(([line]) => JSON.parse(String(line)).event),
+    ).toEqual(["analysis_started", "analysis_failed"]);
+    log.mockClear();
+    expect(
+      (
+        await POST(
+          request(JSON.stringify({ url: "https://evil.example/path" })),
+        )
+      ).status,
+    ).toBe(400);
+    expect(log).not.toHaveBeenCalled();
+  });
   it("returns only a validated report and non-sensitive metadata with no-store headers", async () => {
     const response = await POST(
       request(JSON.stringify({ url: pullRequest().url })),
@@ -70,28 +108,38 @@ describe("analysis endpoint", () => {
     expect((await response.json()).error.code).toBe("SERVICE_NOT_CONFIGURED");
     expect(githubMock).not.toHaveBeenCalled();
   });
-  it.each([undefined, "1"])("bounds chunked input with Content-Length %s and cancels the body", async contentLength => {
-    const cancel = vi.fn();
-    const body = new ReadableStream<Uint8Array>({
-      start(controller) {
-        controller.enqueue(new Uint8Array(1_024));
-        controller.enqueue(new Uint8Array(1_025));
-        controller.enqueue(new Uint8Array(1));
-        controller.close();
-      },
-      cancel,
-    });
-    const init: RequestInit & { duplex: "half" } = {
-      method: "POST", body, duplex: "half",
-      headers: { "Content-Type": "application/json", ...(contentLength ? { "Content-Length": contentLength } : {}) },
-    };
-    const response = await POST(new Request("http://localhost/api/analyze", init));
-    expect(response.status).toBe(413);
-    expect(cancel).toHaveBeenCalledTimes(1);
-    expect(githubMock).not.toHaveBeenCalled();
-    expect(claudeMock).not.toHaveBeenCalled();
-    expect(response.headers.get("cache-control")).toBe("no-store");
-  });
+  it.each([undefined, "1"])(
+    "bounds chunked input with Content-Length %s and cancels the body",
+    async (contentLength) => {
+      const cancel = vi.fn();
+      const body = new ReadableStream<Uint8Array>({
+        start(controller) {
+          controller.enqueue(new Uint8Array(1_024));
+          controller.enqueue(new Uint8Array(1_025));
+          controller.enqueue(new Uint8Array(1));
+          controller.close();
+        },
+        cancel,
+      });
+      const init: RequestInit & { duplex: "half" } = {
+        method: "POST",
+        body,
+        duplex: "half",
+        headers: {
+          "Content-Type": "application/json",
+          ...(contentLength ? { "Content-Length": contentLength } : {}),
+        },
+      };
+      const response = await POST(
+        new Request("http://localhost/api/analyze", init),
+      );
+      expect(response.status).toBe(413);
+      expect(cancel).toHaveBeenCalledTimes(1);
+      expect(githubMock).not.toHaveBeenCalled();
+      expect(claudeMock).not.toHaveBeenCalled();
+      expect(response.headers.get("cache-control")).toBe("no-store");
+    },
+  );
   it("maps upstream errors without leaking internal details", async () => {
     githubMock.mockRejectedValueOnce(
       new AnalysisError("PR_NOT_FOUND", "Check the URL.", 404),

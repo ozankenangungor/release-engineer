@@ -42,15 +42,31 @@ export function Brand() {
 
 export function Header() {
   return (
-    <header className="site-header mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-5 py-5 sm:px-8 sm:py-6">
+    <header className="site-header flex w-full items-center justify-between gap-3 py-5 sm:py-6">
       <Brand />
-      <nav aria-label="Main" className="flex shrink-0 items-center gap-6 text-xs text-slate-300 sm:gap-8">
-        <Link href="/about" className="nav-link hidden sm:block">About</Link>
-        <a href="https://github.com/ozankenangungor/release-engineer" target="_blank" rel="noopener noreferrer" className="nav-link hidden md:block">
-          Source <span aria-hidden="true">↗</span>
+      <nav
+        aria-label="Main"
+        className="flex shrink-0 items-center gap-6 text-xs text-slate-300 sm:gap-8"
+      >
+        <Link href="/about" className="nav-link hidden sm:block">
+          About
+        </Link>
+        <Link href="/evidence" className="nav-link hidden md:block">
+          Evidence
+        </Link>
+        <a
+          href="https://github.com/ozankenangungor/release-engineer"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="nav-link hidden md:block"
+        >
+          Source <span aria-hidden="true">↗︎</span>
         </a>
         <span className="beta-badge inline-flex items-center gap-2 rounded-full px-2.5 py-1.5 font-mono text-[9px] tracking-wide text-emerald-200 sm:px-3 sm:text-[10px]">
-          <span aria-hidden="true" className="size-1 rounded-full bg-emerald-300" />
+          <span
+            aria-hidden="true"
+            className="size-1 rounded-full bg-emerald-300"
+          />
           EARLY BETA
         </span>
       </nav>
@@ -60,18 +76,30 @@ export function Header() {
 
 export function Footer() {
   return (
-    <footer className="site-footer mx-auto flex w-full max-w-7xl flex-col justify-between gap-8 px-5 py-10 text-xs text-slate-400 sm:px-8 lg:flex-row lg:items-start">
+    <footer className="site-footer flex w-full flex-col justify-between gap-8 py-10 text-xs text-slate-400 lg:flex-row lg:items-start">
       <div>
         <Brand />
         <p className="mt-3 leading-6">A second perspective before you ship.</p>
+        <p className="mt-2 font-mono text-[9px] text-slate-400">
+          ANKARA, TÜRKİYE · BOOTSTRAPPED · EARLY BETA
+        </p>
       </div>
-      <nav aria-label="Footer" className="grid grid-cols-3 gap-x-7 gap-y-4 sm:gap-x-14">
+      <nav
+        aria-label="Footer"
+        className="grid grid-cols-3 gap-x-7 gap-y-4 sm:gap-x-14"
+      >
         <div className="flex flex-col gap-3">
           <p className="footer-label">PRODUCT</p>
           <Link className="transition hover:text-white" href="/about">
             About
           </Link>
-          <a className="transition hover:text-white" href="mailto:founder@releaseengineer.tech">
+          <Link className="transition hover:text-white" href="/evidence">
+            Evidence
+          </Link>
+          <a
+            className="transition hover:text-white"
+            href="mailto:founder@releaseengineer.tech"
+          >
             Contact
           </a>
         </div>

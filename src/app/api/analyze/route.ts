@@ -7,6 +7,7 @@ import { reviewPullRequest } from "@/lib/claude";
 import { getClaudeConfig } from "@/lib/config";
 import { AnalysisError } from "@/lib/errors";
 import { analysisResponseSchema } from "@/lib/review-schema";
+import { startUsageRecord } from "@/lib/live-usage";
 
 export const runtime = "nodejs";
 export const maxDuration = 120;
@@ -70,6 +71,7 @@ async function readInput(request: Request): Promise<unknown> {
 }
 
 export async function POST(request: Request) {
+  let usage: ReturnType<typeof startUsageRecord> | undefined;
   try {
     const input = requestSchema.safeParse(await readInput(request));
     if (!input.success) return failure("INVALID_URL", PR_URL_ERROR, 400);
@@ -80,6 +82,7 @@ export async function POST(request: Request) {
       return failure("INVALID_URL", PR_URL_ERROR, 400);
     }
     getClaudeConfig();
+    usage = startUsageRecord();
     const signal = AbortSignal.any([
       request.signal,
       AbortSignal.timeout(115_000),
@@ -106,8 +109,21 @@ export async function POST(request: Request) {
       coverage: context.coverage,
       warnings: context.warnings,
     });
-    return NextResponse.json(result, { headers: responseHeaders });
+    const response = NextResponse.json(result, { headers: responseHeaders });
+    usage.succeeded({
+      changedFileCount: pr.changedFileCount,
+      includedFileCount: context.coverage.includedFiles,
+      partialContext: context.coverage.partial,
+    });
+    return response;
   } catch (error) {
+    usage?.failed(
+      request.signal.aborted
+        ? "REQUEST_ABORTED"
+        : error instanceof AnalysisError
+          ? error.code
+          : "ANALYSIS_FAILED",
+    );
     if (error instanceof AnalysisError)
       return failure(error.code, error.message, error.status);
     // Never include provider responses, submitted content or credentials in errors/logs.

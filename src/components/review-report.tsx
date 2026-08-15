@@ -33,7 +33,10 @@ function ReviewList({
         <ul className="mt-4 space-y-3 text-sm leading-6 text-slate-300">
           {items.map((item, index) => (
             <li key={index} className="report-text flex min-w-0 gap-3">
-              <span aria-hidden="true" className="mt-0.5 shrink-0 font-mono text-[10px] text-emerald-200/70">
+              <span
+                aria-hidden="true"
+                className="mt-0.5 shrink-0 font-mono text-[10px] text-emerald-200/70"
+              >
                 {String(index + 1).padStart(2, "0")}
               </span>
               <span className="min-w-0">{item}</span>
@@ -55,7 +58,10 @@ function Finding({
   index: number;
 }) {
   return (
-    <article data-severity={finding.severity} className="finding-card surface-card rounded-2xl p-5 sm:p-7">
+    <article
+      data-severity={finding.severity}
+      className="finding-card surface-card rounded-2xl p-5 sm:p-7"
+    >
       <div className="flex flex-wrap items-center gap-2">
         <span
           className={`rounded-md border px-2.5 py-1 font-mono text-[10px] uppercase ${riskStyles[finding.severity]}`}
@@ -106,44 +112,95 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
           rel="noopener noreferrer"
           className="report-text text-xs text-slate-400 underline underline-offset-4 hover:text-white"
         >
-          {pr.owner}/{pr.repository} #{pr.number} ↗
+          {pr.owner}/{pr.repository} #{pr.number} ↗︎
         </a>
       </div>
-      <div data-risk={review.overallRisk} className="report-summary workspace-card rounded-2xl p-6 sm:p-9">
-        <div className="flex flex-wrap items-center gap-3">
-          <span
-            className={`rounded-full border px-3 py-1.5 font-mono text-[11px] uppercase ${riskStyles[review.overallRisk]}`}
-          >
-            {review.overallRisk} risk
-          </span>
-          <span className="text-sm text-slate-300">
-            {verdictLabels[review.verdict]}
-          </span>
+      <div
+        data-risk={review.overallRisk}
+        className="report-summary workspace-card p-6 sm:p-9"
+      >
+        <div className="report-summary-grid">
+          <div>
+            <div className="flex flex-wrap items-center gap-3">
+              <span
+                className={`rounded-full border px-3 py-1.5 font-mono text-[11px] uppercase ${riskStyles[review.overallRisk]}`}
+              >
+                {review.overallRisk} risk
+              </span>
+              <span className="font-mono text-[10px] text-slate-300">
+                CLAUDE / STRUCTURED REVIEW
+              </span>
+            </div>
+            <h2
+              id="review-title"
+              className="report-text mt-6 text-2xl leading-snug font-semibold tracking-[-0.035em] sm:text-4xl"
+            >
+              {pr.title}
+            </h2>
+            <p className="report-verdict">{verdictLabels[review.verdict]}</p>
+            <p className="report-text mt-4 max-w-3xl text-sm leading-7 text-slate-300 sm:text-base">
+              {review.summary}
+            </p>
+          </div>
+          <dl className="report-stats">
+            <div>
+              <dt>FILES IN CONTEXT</dt>
+              <dd>
+                {coverage.includedFiles}
+                <span className="text-sm text-slate-400">
+                  {" "}
+                  / {pr.changedFileCount}
+                </span>
+              </dd>
+            </div>
+            <div>
+              <dt>FINDINGS</dt>
+              <dd>{review.findings.length}</dd>
+            </div>
+            <div>
+              <dt>CONTEXT</dt>
+              <dd className="!text-base">
+                {coverage.partial ? "Partial" : "Within retrieval limits"}
+              </dd>
+            </div>
+          </dl>
         </div>
-        <h2
-          id="review-title"
-          className="report-text mt-6 text-2xl leading-snug font-semibold tracking-[-0.035em] sm:text-4xl"
-        >
-          {pr.title}
-        </h2>
-        <p className="report-text mt-4 max-w-3xl text-sm leading-7 text-slate-300 sm:text-base">
-          {review.summary}
-        </p>
-        <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 border-t border-white/10 pt-6 font-mono text-[11px] text-slate-400">
-          <span>
-            {coverage.includedFiles}/{pr.changedFileCount} files in context
-          </span>
-          <span>
-            <span className="text-emerald-300">+{pr.additions}</span> /{" "}
-            <span className="text-rose-300">−{pr.deletions}</span>
-          </span>
-          <span className="report-text">
-            {pr.headBranch} → {pr.baseBranch}
-          </span>
-          <span>HEAD {pr.headSha.slice(0, 7)}</span>
-        </div>
+        <dl className="report-metadata mt-7 border-t border-white/10 pt-6">
+          <div>
+            <dt>REVIEWED HEAD SHA</dt>
+            <dd>
+              <a
+                href={`https://github.com/${pr.owner}/${pr.repository}/commit/${pr.headSha}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline decoration-white/25 underline-offset-4"
+              >
+                {pr.headSha} ↗︎
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt>BRANCHES</dt>
+            <dd>
+              {pr.headBranch} → {pr.baseBranch}
+            </dd>
+          </div>
+          <div>
+            <dt>RETRIEVED / TOTAL FILES</dt>
+            <dd>
+              {coverage.retrievedFiles} / {coverage.totalFiles}
+            </dd>
+          </div>
+          <div>
+            <dt>CHANGE SIZE</dt>
+            <dd>
+              <span className="text-emerald-200">+{pr.additions}</span> /{" "}
+              <span className="text-rose-200">−{pr.deletions}</span>
+            </dd>
+          </div>
+        </dl>
       </div>
-      {warnings.length > 0 && (
+      {(coverage.partial || warnings.length > 0) && (
         <aside
           aria-label="Partial analysis warning"
           className="mt-5 rounded-2xl border border-amber-300/30 bg-amber-300/7 p-5 sm:p-6"
@@ -153,14 +210,19 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
           </h3>
           <ul className="mt-2 space-y-1 text-sm leading-6 text-amber-100/80">
             {warnings.map((warning, index) => (
-              <li key={index} className="report-text">{warning}</li>
+              <li key={index} className="report-text">
+                {warning}
+              </li>
             ))}
           </ul>
         </aside>
       )}
       <section className="mt-8" aria-labelledby="findings-title">
         <div className="mb-5 flex items-center gap-3">
-          <h3 id="findings-title" className="text-lg font-semibold tracking-tight">
+          <h3
+            id="findings-title"
+            className="text-lg font-semibold tracking-tight"
+          >
             Findings
           </h3>
           <span className="rounded-md border border-white/10 px-2 py-0.5 font-mono text-xs text-slate-400">
@@ -204,10 +266,7 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
           empty="Complete your normal human review and CI checks before merging."
         />
       </div>
-      <details
-        className="surface-card mt-5 rounded-2xl p-5 sm:p-6"
-        open
-      >
+      <details className="surface-card mt-5 rounded-2xl p-5 sm:p-6" open>
         <summary className="cursor-pointer text-sm font-medium text-slate-300">
           Review limitations
         </summary>
@@ -219,7 +278,7 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
           ))}
         </ul>
       </details>
-      <p className="mt-5 text-xs leading-5 text-slate-500">
+      <p className="mt-5 text-xs leading-5 text-slate-400">
         Powered by Claude. Findings are decision support; verify them against
         the code and your release process.
       </p>

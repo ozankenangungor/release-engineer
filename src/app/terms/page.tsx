@@ -7,10 +7,17 @@ const description =
 export const metadata: Metadata = {
   title,
   description,
+  alternates: { canonical: "/terms" },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: ["/opengraph-image"],
+  },
   openGraph: {
     title,
     description,
-    url: "./",
+    url: "/terms",
     siteName: "Release Engineer",
     type: "website",
   },
@@ -18,13 +25,13 @@ export const metadata: Metadata = {
 
 export default function Terms() {
   return (
-    <main id="main" className="mx-auto max-w-2xl px-5 py-14 sm:px-8">
+    <main id="main" className="page-shell legal-page">
       <p className="font-mono text-xs text-emerald-300">
         RELEASE ENGINEER / BETA
       </p>
-      <h1 className="mt-4 text-4xl font-semibold tracking-tight">Terms</h1>
+      <h1 className="page-title">Terms</h1>
       <p className="mt-4 text-xs text-slate-400">
-        Last updated: <time dateTime="2026-10-07">October 7, 2026</time>
+        Last updated: <time dateTime="2026-10-08">October 8, 2026</time>
       </p>
       <div className="mt-8 space-y-7 text-sm leading-7 text-slate-300">
         <section>
@@ -36,6 +43,24 @@ export default function Terms() {
             public GitHub pull requests. Use it responsibly, submit only public
             content you are entitled to have processed, and do not abuse the
             service or attempt to access private data.
+          </p>
+        </section>
+        <section>
+          <h2 className="mb-2 text-base font-medium text-white">
+            Data handling
+          </h2>
+          <p>
+            Public PR contents are processed by GitHub, Anthropic and our
+            hosting provider to produce a review. The application records
+            content-free operational events to assess service usage and
+            availability. See the{" "}
+            <a
+              href="/privacy"
+              className="text-emerald-200 underline underline-offset-4"
+            >
+              Privacy notice
+            </a>{" "}
+            for fields and retention boundaries.
           </p>
         </section>
         <section>
