@@ -1,8 +1,9 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Component, useEffect, useRef, useState, type ReactNode } from "react";
+import { Component, useState, type ReactNode } from "react";
 import { SceneFallback } from "./scene-fallback";
+import { useSceneVisibility } from "./use-scene-visibility";
 
 const SceneCanvas = dynamic(() => import("./scene-canvas"), {
   ssr: false,
@@ -26,87 +27,59 @@ class SceneBoundary extends Component<
 }
 
 export function ReleaseIntelligenceScene() {
-  const container = useRef<HTMLDivElement>(null);
-  const [eligible, setEligible] = useState(false);
-  const [active, setActive] = useState(false);
+  const [paused, setPaused] = useState(false);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
-
-  useEffect(() => {
-    const queries = [
-      matchMedia("(min-width: 1024px) and (pointer: fine)"),
-      matchMedia("(prefers-reduced-motion: reduce)"),
-      matchMedia("(forced-colors: active)"),
-    ];
-    let visible = false;
-    let capability: boolean | undefined;
-    let deferred: ReturnType<typeof setTimeout> | undefined;
-    function update() {
-      clearTimeout(deferred);
-      const allowed =
-        queries[0]!.matches && !queries[1]!.matches && !queries[2]!.matches;
-      setActive(allowed && visible && document.visibilityState === "visible");
-      if (!allowed) {
-        setEligible(false);
-        setReady(false);
-        return;
-      }
-      // Defer GPU work until the form has hydrated; never gate product usability.
-      deferred = setTimeout(() => {
-        if (!visible || document.visibilityState !== "visible") return;
-        if (capability === undefined) {
-          try {
-            const canvas = document.createElement("canvas");
-            const gl = canvas.getContext("webgl2", {
-              failIfMajorPerformanceCaveat: true,
-            });
-            capability = !!gl;
-            gl?.getExtension("WEBGL_lose_context")?.loseContext();
-          } catch {
-            capability = false;
-          }
-        }
-        setEligible(capability);
-      }, 650);
-    }
-    const observer = new IntersectionObserver(([entry]) => {
-      visible = entry?.isIntersecting ?? false;
-      update();
-    });
-    if (container.current) observer.observe(container.current);
-    queries.forEach((query) => query.addEventListener("change", update));
-    document.addEventListener("visibilitychange", update);
-    update();
-    return () => {
-      clearTimeout(deferred);
-      observer.disconnect();
-      queries.forEach((query) => query.removeEventListener("change", update));
-      document.removeEventListener("visibilitychange", update);
-    };
-  }, []);
-
+  const { container, eligible, active, motionAllowed } =
+    useSceneVisibility(paused);
   return (
     <div
       ref={container}
       className={`intelligence-scene ${ready && eligible && !failed ? "scene-ready" : ""}`}
-      aria-hidden="true"
       data-scene={failed ? "fallback" : ready && eligible ? "webgl" : "static"}
+      data-motion-active={active}
     >
-      <div className="scene-ambient" />
-      <SceneFallback />
-      {eligible && !failed && (
-        <SceneBoundary onFailure={() => setFailed(true)}>
-          <SceneCanvas
-            active={active}
-            onReady={() => setReady(true)}
-            onUnavailable={() => setFailed(true)}
-          />
-        </SceneBoundary>
-      )}
-      <div className="scene-caption">
-        <span>RELEASE INTELLIGENCE CORE</span>
-        <span>CONCEPTUAL PIPELINE</span>
+      <div className="scene-visual" aria-hidden="true">
+        <div className="scene-ambient" />
+        <div className="scene-coordinate scene-coordinate-top">
+          RE / RELEASE INTELLIGENCE REACTOR
+        </div>
+        <SceneFallback />
+        {eligible && !failed && (
+          <SceneBoundary onFailure={() => setFailed(true)}>
+            <SceneCanvas
+              active={active}
+              onReady={() => setReady(true)}
+              onUnavailable={() => setFailed(true)}
+            />
+          </SceneBoundary>
+        )}
+        <div className="scene-label scene-label-input">
+          <span>01 / INPUT</span>Public PR changes
+        </div>
+        <div className="scene-label scene-label-context">
+          <span>02 / CONTEXT</span>Bounded selection
+        </div>
+        <div className="scene-label scene-label-core">
+          <span>03 / REASONING</span>Claude at the core
+        </div>
+        <div className="scene-label scene-label-output">
+          <span>04 / OUTPUT</span>Structured review
+        </div>
+        <div className="scene-caption">
+          CONCEPTUAL PIPELINE · NO LIVE TELEMETRY
+        </div>
       </div>
+      {motionAllowed && (
+        <button
+          className="scene-motion-control"
+          type="button"
+          onClick={() => setPaused((value) => !value)}
+        >
+          <span aria-hidden="true">{paused ? "▷" : "Ⅱ"}</span>
+          {paused ? "Play animation" : "Pause animation"}
+        </button>
+      )}
     </div>
   );
 }

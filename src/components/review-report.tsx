@@ -16,13 +16,19 @@ function ReviewList({
   title,
   items,
   empty,
+  id,
 }: {
   title: string;
   items: string[];
   empty: string;
+  id?: string;
 }) {
   return (
-    <section className="surface-card rounded-2xl p-5 sm:p-7">
+    <section
+      id={id}
+      className={`surface-card report-list rounded-2xl p-5 sm:p-7 ${id === "review-actions" ? "report-actions" : ""}`}
+      data-reveal="0"
+    >
       <h3 className="report-section-title flex items-center justify-between gap-3 text-sm font-semibold text-white">
         {title}{" "}
         <span className="font-mono text-xs font-normal text-slate-400">
@@ -61,6 +67,7 @@ function Finding({
     <article
       data-severity={finding.severity}
       className="finding-card surface-card rounded-2xl p-5 sm:p-7"
+      data-reveal="0"
     >
       <div className="flex flex-wrap items-center gap-2">
         <span
@@ -101,10 +108,10 @@ function Finding({
 export function ReviewReport({ result }: { result: AnalysisResponse }) {
   const { review, pullRequest: pr, coverage, warnings } = result;
   return (
-    <section aria-labelledby="review-title" className="mx-auto max-w-6xl">
+    <section aria-labelledby="review-title" className="report-artifact mx-auto">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <p className="font-mono text-xs tracking-widest text-emerald-300">
-          RELEASE READINESS / REVIEW
+          RELEASE ENGINEER / REVIEW ARTIFACT
         </p>
         <a
           href={pr.url}
@@ -115,9 +122,18 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
           {pr.owner}/{pr.repository} #{pr.number} ↗︎
         </a>
       </div>
+      <nav className="report-navigation" aria-label="Review sections">
+        <a href="#review-title">Overview</a>
+        <a href="#review-actions">Next actions</a>
+        <a href="#findings-title">
+          Findings <span>{review.findings.length}</span>
+        </a>
+        <a href="#review-limitations">Limitations</a>
+      </nav>
       <div
         data-risk={review.overallRisk}
         className="report-summary workspace-card p-6 sm:p-9"
+        data-reveal="0"
       >
         <div className="report-summary-grid">
           <div>
@@ -131,13 +147,14 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
                 CLAUDE / STRUCTURED REVIEW
               </span>
             </div>
+            <p className="verdict-label">RELEASE RECOMMENDATION</p>
+            <p className="report-verdict">{verdictLabels[review.verdict]}</p>
             <h2
               id="review-title"
-              className="report-text mt-6 text-2xl leading-snug font-semibold tracking-[-0.035em] sm:text-4xl"
+              className="report-pr-title report-text mt-4 text-xl leading-snug font-medium tracking-[-0.025em] sm:text-2xl"
             >
               {pr.title}
             </h2>
-            <p className="report-verdict">{verdictLabels[review.verdict]}</p>
             <p className="report-text mt-4 max-w-3xl text-sm leading-7 text-slate-300 sm:text-base">
               {review.summary}
             </p>
@@ -203,7 +220,7 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
       {(coverage.partial || warnings.length > 0) && (
         <aside
           aria-label="Partial analysis warning"
-          className="mt-5 rounded-2xl border border-amber-300/30 bg-amber-300/7 p-5 sm:p-6"
+          className="partial-context-warning mt-5 rounded-2xl border border-amber-300/30 bg-amber-300/7 p-5 sm:p-6"
         >
           <h3 className="text-sm font-medium text-amber-200">
             Partial review · Some change context was unavailable
@@ -217,6 +234,14 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
           </ul>
         </aside>
       )}
+      <div className="mt-6">
+        <ReviewList
+          id="review-actions"
+          title="Recommended actions"
+          items={review.recommendedActions}
+          empty="Complete your normal human review and CI checks before merging."
+        />
+      </div>
       <section className="mt-8" aria-labelledby="findings-title">
         <div className="mb-5 flex items-center gap-3">
           <h3
@@ -259,14 +284,11 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
           empty="No breaking changes identified in the supplied context."
         />
       </div>
-      <div className="mt-4">
-        <ReviewList
-          title="Recommended actions"
-          items={review.recommendedActions}
-          empty="Complete your normal human review and CI checks before merging."
-        />
-      </div>
-      <details className="surface-card mt-5 rounded-2xl p-5 sm:p-6" open>
+      <details
+        id="review-limitations"
+        className="surface-card report-limitations mt-5 rounded-2xl p-5 sm:p-6"
+        open
+      >
         <summary className="cursor-pointer text-sm font-medium text-slate-300">
           Review limitations
         </summary>

@@ -8,6 +8,7 @@ import {
   type AnalysisResponse,
 } from "@/lib/review-schema";
 import { ReviewReport } from "./review-report";
+import { ReleaseMark } from "./brand";
 
 export function AnalysisForm() {
   const [url, setUrl] = useState("");
@@ -94,28 +95,35 @@ export function AnalysisForm() {
         id="analyze"
         tabIndex={-1}
         aria-label="Pull request analysis"
-        className="console-module workspace-card w-full min-w-0 rounded-[18px]"
+        className="console-module workspace-card w-full min-w-0"
+        data-loading={loading}
       >
-        <div className="console-titlebar flex items-center justify-between gap-3 rounded-t-[22px] px-5 py-3 sm:px-7">
+        <div className="console-titlebar flex items-center justify-between gap-3 px-5 py-4 sm:px-7">
           <p className="font-mono text-[10px] tracking-widest text-slate-300">
-            RELEASE REVIEW / NEW
+            REVIEW WORKSPACE
           </p>
-          <span className="text-sm text-emerald-200" aria-hidden="true">
-            ↗︎
+          <span className="console-mode">
+            <span aria-hidden="true" />
+            PUBLIC PR
           </span>
         </div>
-        <div className="p-5 sm:p-7">
+        <div className="console-body p-5 sm:p-7">
           <div className="mb-6 flex items-start justify-between gap-4">
-            <h2 className="text-xl font-medium tracking-[-0.025em] text-slate-100 sm:text-2xl">
-              What are you shipping?
+            <h2 className="console-heading text-slate-100">
+              Put the change
+              <br />
+              in perspective.
             </h2>
             <span
               aria-hidden="true"
-              className="console-heading-arrow text-xl text-emerald-200"
+              className="console-heading-arrow text-emerald-200"
             >
-              ↗︎
+              <ReleaseMark className="size-6" />
             </span>
           </div>
+          <p className="console-description">
+            A bounded Claude review. Your release call.
+          </p>
           <form onSubmit={analyze} aria-busy={loading}>
             <label
               htmlFor="pr-url"
@@ -221,6 +229,12 @@ export function AnalysisForm() {
               aria-live="polite"
               className="console-status mt-5 rounded-xl border border-emerald-300/20 bg-emerald-300/5 p-4"
             >
+              <div className="analysis-flow" aria-hidden="true">
+                <i />
+                <i />
+                <i />
+                <i />
+              </div>
               <p className="text-sm text-emerald-100">
                 Retrieving GitHub changes and preparing your Claude review.
               </p>
@@ -231,9 +245,19 @@ export function AnalysisForm() {
             </div>
           )}
         </div>
-        <div className="flex flex-wrap justify-between gap-2 border-t border-white/8 px-5 py-3 font-mono text-[8px] tracking-wide text-slate-400 sm:px-7">
-          <span>BOUNDED CONTEXT</span>
-          <span>SCHEMA-VALIDATED OUTPUT</span>
+        <div className="console-assurances">
+          <div>
+            <span>CONTEXT</span>
+            <p>Explicit limits</p>
+          </div>
+          <div>
+            <span>OUTPUT</span>
+            <p>Schema validated</p>
+          </div>
+          <div>
+            <span>DECISION</span>
+            <p>Yours to verify</p>
+          </div>
         </div>
       </section>
       {result && (

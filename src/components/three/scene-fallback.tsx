@@ -1,87 +1,137 @@
-// Server-rendered illustration: no GPU, fonts, external assets or JavaScript.
-// A pipeline schematic, never a sample report or live telemetry.
+// SSR vector schematic of the same reactor, not a dashboard or review result.
+// Animated only when the shell is visible and motion preferences allow it.
 export function SceneFallback() {
   return (
     <svg
-      viewBox="0 0 800 460"
+      viewBox="0 0 1000 650"
       fill="none"
       className="scene-fallback"
       aria-hidden="true"
     >
       <defs>
         <linearGradient
-          id="core-metal"
-          x1="250"
-          y1="120"
-          x2="535"
-          y2="335"
+          id="reactor-metal"
+          x1="310"
+          y1="280"
+          x2="725"
+          y2="500"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#39594f" />
-          <stop offset=".45" stopColor="#132827" />
-          <stop offset="1" stopColor="#081716" />
+          <stop stopColor="#344467" />
+          <stop offset=".5" stopColor="#18243e" />
+          <stop offset="1" stopColor="#0a1428" />
         </linearGradient>
         <linearGradient
-          id="core-glass"
-          x1="320"
-          y1="145"
-          x2="458"
-          y2="250"
+          id="reactor-light"
+          x1="430"
+          y1="220"
+          x2="635"
+          y2="350"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#dcfff0" stopOpacity=".85" />
-          <stop offset=".35" stopColor="#80dfbd" stopOpacity=".6" />
-          <stop offset="1" stopColor="#3a997f" stopOpacity=".25" />
+          <stop stopColor="#ededff" />
+          <stop offset=".45" stopColor="#b6baff" />
+          <stop offset="1" stopColor="#7184e0" />
         </linearGradient>
-        <radialGradient id="core-field">
-          <stop stopColor="#66d4aa" stopOpacity=".15" />
-          <stop offset="1" stopColor="#66d4aa" stopOpacity="0" />
+        <radialGradient id="reactor-field">
+          <stop stopColor="#8792ff" stopOpacity=".26" />
+          <stop offset="1" stopColor="#8792ff" stopOpacity="0" />
         </radialGradient>
+        <linearGradient id="reactor-paper">
+          <stop stopColor="#aebcfa" stopOpacity=".27" />
+          <stop offset="1" stopColor="#7185c8" stopOpacity=".08" />
+        </linearGradient>
       </defs>
-      <ellipse cx="403" cy="285" rx="310" ry="155" fill="url(#core-field)" />
-      <g stroke="#68998c" strokeOpacity=".4">
-        <path
-          d="m260 239 153-89 153 89-153 89-153-89Z"
-          fill="url(#core-metal)"
-        />
-        <path d="m260 239 0 13 153 89 153-89v-13M413 328v13" />
-        <path
-          d="m280 202 133-76 133 76-133 77-133-77Z"
-          fill="#74bd9e"
-          fillOpacity=".07"
-        />
-        <path
-          d="m300 167 113-65 113 65-113 65-113-65Z"
-          fill="#9ce9c7"
-          fillOpacity=".06"
-        />
-        <path d="m163 207 80-46 86 49M121 245l73-43 97 55M192 303l81-46 80 45M494 212l107-61 75 44M510 273l100-58 82 47" />
+      <ellipse cx="545" cy="345" rx="380" ry="210" fill="url(#reactor-field)" />
+      <g stroke="#818cc7" strokeOpacity=".24">
+        <path d="m170 440 355-205 320 185M210 470l355-205 320 185M255 498l355-205 280 162M170 440l320 185M230 405l320 185M290 370l320 185M350 335l320 185M410 300l320 185M470 265l320 185" />
+        <ellipse cx="535" cy="420" rx="246" ry="126" />
       </g>
-      <g fill="#aee9d2">
-        <circle cx="163" cy="207" r="4" />
-        <circle cx="121" cy="245" r="4" />
-        <circle cx="192" cy="303" r="4" />
+      <g stroke="#9ca9ef" strokeOpacity=".4">
+        <path d="m80 305 100-57 174 101 112-65M124 384l115-66 175 101M167 225l147 85 100-57M610 355l112-65 197 112M618 418l96-55 215 123M631 291l115-66 132 76" />
+      </g>
+      <g
+        className="fallback-signal"
+        stroke="#ced9ff"
+        strokeWidth="2"
+        strokeDasharray="5 100"
+      >
+        <path d="m80 305 100-57 174 101 112-65M124 384l115-66 175 101M167 225l147 85 100-57M610 355l112-65 197 112M618 418l96-55 215 123M631 291l115-66 132 76" />
       </g>
       <path
-        d="m371 171 42-24 42 24-42 25-42-25Z"
-        fill="url(#core-glass)"
-        stroke="#bcf8dc"
-        strokeOpacity=".7"
+        d="m329 394 206-119 218 126-206 120-218-127Z"
+        fill="url(#reactor-metal)"
+        stroke="#a3ade0"
+        strokeOpacity=".45"
       />
       <path
-        d="m371 171v15l42 25 42-25v-15M413 196v15m-42-37 42-24 42 24M371 157l42-24 42 24-42 25-42-25Z"
-        stroke="#e0fff0"
-        strokeOpacity=".4"
+        d="m329 394v19l218 126 206-120v-19M547 521v18"
+        stroke="#6678b7"
+        strokeOpacity=".5"
       />
-      <g stroke="#b3ead3" strokeOpacity=".45" fill="#80c8ac" fillOpacity=".07">
-        <path d="m584 151 51-29 0 60-51 29v-60Z" />
-        <path d="m610 211 51-29v60l-51 29v-60Z" />
-        <path d="m637 271 51-29v60l-51 29v-60Z" />
+      <g className="fallback-chamber">
+        <g
+          fill="#a9b5ff"
+          fillOpacity=".065"
+          stroke="#bbc4ff"
+          strokeOpacity=".45"
+        >
+          <path d="m364 352 171-99 184 106-171 100-184-107Z" />
+          <path d="m364 310 171-99 184 106-171 100-184-107Z" />
+          <path d="m364 268 171-99 184 106-171 100-184-107Z" />
+          <path d="m364 226 171-99 184 106-171 100-184-107Z" />
+          <path
+            d="M364 226v126M719 233v126M535 127v126M548 333v126"
+            strokeOpacity=".2"
+          />
+        </g>
+        <path
+          d="m462 282 73-42 80 46-73 43-80-47Z"
+          fill="url(#reactor-metal)"
+          stroke="#9faeea"
+        />
+        <path
+          d="m462 282v16l80 46 73-42v-16"
+          fill="#28375a"
+          stroke="#8b9eda"
+          strokeOpacity=".7"
+        />
+        <path
+          d="m474 264 61-36 68 40-61 36-68-40Z"
+          fill="url(#reactor-light)"
+        />
+        <path d="m474 264v9l68 40 61-35v-9" fill="#929cfa" />
+        <path
+          d="m484 258 51-30 57 33-51 30-57-33Z"
+          fill="#1a2748"
+          stroke="#dadfff"
+          strokeOpacity=".4"
+        />
+        <path
+          d="m518 257 19-11 20 12-19 11-20-12Z"
+          stroke="#e8eaff"
+          strokeWidth="2"
+        />
+        <path
+          className="fallback-scan"
+          d="m364 289 171-99 184 106-171 100-184-107Z"
+          fill="#b4beff"
+          fillOpacity=".12"
+          stroke="#d1d9ff"
+          strokeOpacity=".8"
+        />
       </g>
-      <g stroke="#b5e5d2" strokeOpacity=".6">
-        <path d="m595 158 26-15m-26 27 19-11m-19 22 23-13M621 218l26-15m-26 27 19-11m8 60 26-15m-26 27 19-11" />
+      <g fill="url(#reactor-paper)" stroke="#becbff" strokeOpacity=".6">
+        <path d="m143 285 48-28 64 37-48 28-64-37Z" />
+        <path d="m227 354 48-28 64 37-48 28-64-37Z" />
+        <path d="m219 240 48-28 64 37-48 28-64-37Z" />
+        <path d="m766 288 66-38v91l-66 38v-91Z" />
+        <path d="m816 371 66-38v91l-66 38v-91Z" />
+        <path d="m697 420 66-38v91l-66 38v-91Z" />
       </g>
-      <path d="M80 358h640" stroke="#9ad8bd" strokeOpacity=".1" />
+      <g stroke="#c4edee" strokeWidth="2" strokeOpacity=".65">
+        <path d="m777 298 42-24m-42 39 30-17m-30 33 36-21m-36 36 26-15M827 381l42-24m-42 39 30-17m-30 33 36-21M708 430l42-24m-42 39 30-17m-30 33 36-21" />
+      </g>
     </svg>
   );
 }

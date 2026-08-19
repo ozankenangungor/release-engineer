@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ReleaseMark } from "@/components/brand";
 
 const title = "About — Release Engineer";
 const description =
@@ -25,22 +26,38 @@ export const metadata: Metadata = {
 
 export default function About() {
   return (
-    <main id="main" className="page-shell">
+    <main id="main" className="page-shell about-page">
       <div className="about-hero">
         <div>
           <p className="section-kicker">RELEASE ENGINEER / THE COMPANY</p>
           <h1 className="page-title">
-            Independent by design.
+            Built with conviction.
             <br />
-            Built for the release decision.
+            Open to inspection.
           </h1>
         </div>
-        <Link href="/evidence" className="text-link">
+        <p className="page-intro">
+          An independent developer-tool company, building a clearer second
+          perspective on the release decision.
+        </p>
+        <Link href="/evidence" className="secondary-action">
           Evidence & engineering ↗︎
         </Link>
+        <div className="company-visual" aria-hidden="true">
+          <div className="company-orbit" />
+          <div className="company-plane company-plane-one" />
+          <div className="company-plane company-plane-two" />
+          <div className="company-plane company-plane-three">
+            <ReleaseMark className="size-20" />
+          </div>
+          <span>RE / INDEPENDENT ENGINEERING</span>
+        </div>
       </div>
-      <div className="grid items-start gap-10 text-sm leading-7 text-slate-300 lg:grid-cols-[.8fr_1.2fr] lg:gap-16">
+      <div className="about-body grid items-start gap-10 text-sm leading-7 text-slate-300 lg:grid-cols-[.8fr_1.2fr] lg:gap-16">
         <section aria-labelledby="founder-title" className="about-founder">
+          <span className="founder-signature" aria-hidden="true">
+            OKG<span>FOUNDER / RELEASE ENGINEER</span>
+          </span>
           <p className="section-kicker">FOUNDER</p>
           <h2 id="founder-title" className="founder-name mt-4 text-white">
             Ozan Kenan Güngör
@@ -98,7 +115,7 @@ export default function About() {
           </a>
         </section>
         <div className="about-sections">
-          <section>
+          <section data-reveal="0">
             <h2>The product</h2>
             <p>
               Release Engineer is a Claude-native release-readiness tool for
@@ -113,7 +130,7 @@ export default function About() {
               tests or guarantee release safety.
             </p>
           </section>
-          <section>
+          <section data-reveal="0">
             <h2>Why Release Engineer</h2>
             <p>
               A release decision needs more than a summary of the diff. The
@@ -122,7 +139,7 @@ export default function About() {
               what the supplied context cannot establish.
             </p>
           </section>
-          <section>
+          <section data-reveal="0">
             <h2>Claude at the core</h2>
             <p>
               The server retrieves public changes from GitHub, selects context
@@ -166,7 +183,7 @@ export default function About() {
               quote.
             </p>
           </section>
-          <section>
+          <section data-reveal="0">
             <h2>Real-world evidence</h2>
             <p>
               Three founder-supplied, publication-approved quotes from external
@@ -187,7 +204,7 @@ export default function About() {
               explains the current record and usage methodology.
             </p>
           </section>
-          <section>
+          <section data-reveal="0">
             <h2>Evaluation</h2>
             <p>
               The project includes a versioned evaluation harness with 32
@@ -228,7 +245,7 @@ export default function About() {
               Evaluation methodology and limitations ↗︎
             </a>
           </section>
-          <section>
+          <section data-reveal="0">
             <h2>Source, security & contact</h2>
             <p>
               The source and review boundaries are public. For product feedback

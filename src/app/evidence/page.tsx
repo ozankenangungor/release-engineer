@@ -26,16 +26,27 @@ const sourceRevision = /^[a-f0-9]{40}$/.test(deploymentCommit ?? "")
 export default function Evidence() {
   const studies = getPublishedCaseStudies();
   return (
-    <main id="main" className="page-shell">
-      <p className="section-kicker">RELEASE ENGINEER / EVIDENCE INDEX</p>
-      <h1 className="page-title">The record behind the beta.</h1>
-      <p className="page-intro">
-        A clear view of what exists, where it can be inspected, and what it
-        establishes. Technical checks, qualitative feedback and usage records
-        answer different questions.
-      </p>
+    <main id="main" className="page-shell evidence-page">
+      <div className="evidence-hero">
+        <p className="section-kicker">RELEASE ENGINEER / EVIDENCE INDEX</p>
+        <h1 className="page-title">
+          The record
+          <br />
+          <span>behind the beta.</span>
+        </h1>
+        <p className="page-intro">
+          A clear view of what exists, where it can be inspected, and what it
+          establishes. Technical checks, qualitative feedback and usage records
+          answer different questions.
+        </p>
+        <div className="evidence-principles" aria-label="Evidence principles">
+          <span>Inspectable source</span>
+          <span>Dated observations</span>
+          <span>Explicit boundaries</span>
+        </div>
+      </div>
       <div className="evidence-ledger">
-        <section className="evidence-entry">
+        <section className="evidence-entry" data-reveal="0">
           <span className="evidence-status">PUBLIC PRODUCT & SOURCE</span>
           <div>
             <h2>Working software, inspectable engineering.</h2>
@@ -68,7 +79,7 @@ export default function Evidence() {
             </div>
           </div>
         </section>
-        <section className="evidence-entry">
+        <section className="evidence-entry" data-reveal="0">
           <span className="evidence-status">SYNTHETIC OBSERVATIONS</span>
           <div>
             <h2>Evaluation with failures in view.</h2>
@@ -93,7 +104,7 @@ export default function Evidence() {
             </a>
           </div>
         </section>
-        <section className="evidence-entry">
+        <section className="evidence-entry" data-reveal="0">
           <span className="evidence-status">QUALITATIVE FEEDBACK</span>
           <div>
             <h2>Approved early developer feedback.</h2>
@@ -109,7 +120,7 @@ export default function Evidence() {
             </Link>
           </div>
         </section>
-        <section className="evidence-entry">
+        <section className="evidence-entry" data-reveal="0">
           <span className="evidence-status">
             {studies.length ? "PINNED OBSERVATIONS" : "NOT YET PUBLISHED"}
           </span>
@@ -136,7 +147,7 @@ export default function Evidence() {
             )}
           </div>
         </section>
-        <section className="evidence-entry">
+        <section className="evidence-entry" data-reveal="0">
           <span className="evidence-status">MEASUREMENT METHOD</span>
           <div>
             <h2>Live usage, without a vanity counter.</h2>
@@ -161,7 +172,7 @@ export default function Evidence() {
             </a>
           </div>
         </section>
-        <section className="evidence-entry">
+        <section className="evidence-entry" data-reveal="0">
           <span className="evidence-status">IDENTITY & BOUNDARIES</span>
           <div>
             <h2>A founder, a public record, a way to contact us.</h2>
