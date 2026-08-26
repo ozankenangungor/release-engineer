@@ -3,7 +3,27 @@ import { AnalysisForm } from "@/components/analysis-form";
 import { ReleaseIntelligenceScene } from "@/components/three/release-intelligence-scene";
 import { ReleaseMark } from "@/components/brand";
 import { Testimonials } from "@/components/testimonials";
-import { CaseStudiesPreview } from "@/components/case-studies";
+import { FeaturedPublicObservation } from "@/components/case-studies";
+
+const intendedUsers = [
+  {
+    audience: "Open-source maintainers",
+    useCase: "A second pass on release risk before merging.",
+  },
+  {
+    audience: "Engineering leads",
+    useCase: "Review testing gaps and potential breaking changes.",
+  },
+  {
+    audience: "Developers reviewing unfamiliar changes",
+    useCase: "Identify what needs closer human verification.",
+  },
+  {
+    audience: "Small product teams",
+    useCase:
+      "Review configuration, migration and operational risks without dedicated release engineering staff.",
+  },
+];
 
 const workflow = [
   {
@@ -51,8 +71,9 @@ export default function Home() {
             <span className="hero-wordmark">Own the release.</span>
           </h1>
           <p className="hero-description">
-            Turn a public pull request into a structured Claude review. Release
-            risks, next steps, and the limits of what was reviewed.
+            Paste a public GitHub PR. Get a structured second review of release
+            risks, missing tests, breaking changes and what still needs human
+            verification.
           </p>
           <div className="hero-credentials">
             <span>Public PRs only</span>
@@ -66,9 +87,12 @@ export default function Home() {
             <Link href="/evidence" className="text-link">
               Inspect the evidence <span aria-hidden="true">↗︎</span>
             </Link>
-            <a href="#how-it-works" className="subtle-link">
-              How it works <span aria-hidden="true">↓</span>
-            </a>
+            <Link
+              href="/case-studies/rails-doc-typo-58968"
+              className="subtle-link"
+            >
+              A real public PR <span aria-hidden="true">↗︎</span>
+            </Link>
           </div>
         </div>
         <ReleaseIntelligenceScene />
@@ -99,12 +123,12 @@ export default function Home() {
           <div>
             <p className="section-kicker">AN INDEPENDENT PRODUCT COMPANY</p>
             <h2 className="founder-strip-title">
-              Real founder. Open engineering.
+              Founder-led. Built in public.
             </h2>
             <p className="mt-2 text-sm leading-6 text-slate-300">
               Founded in October 2026 in Ankara, Türkiye by Ozan Kenan Güngör.
-              <br className="hidden sm:block" /> Bootstrapped. No external
-              funding raised.
+              <br className="hidden sm:block" /> Shipping a Claude-native
+              product in early beta.
             </p>
           </div>
         </div>
@@ -118,6 +142,60 @@ export default function Home() {
           founder@releaseengineer.tech
         </a>
       </div>
+      <div className="reviewer-overview">
+        <section aria-labelledby="audience-title" data-reveal="0">
+          <div className="section-heading">
+            <div>
+              <p className="section-kicker">WHO IS THIS FOR?</p>
+              <h2 id="audience-title">
+                Built for teams that ship through pull requests.
+              </h2>
+            </div>
+          </div>
+          <p className="reviewer-intro">
+            Intended users and use cases for the early beta.
+          </p>
+          <dl className="audience-list">
+            {intendedUsers.map((item) => (
+              <div key={item.audience}>
+                <dt>{item.audience}</dt>
+                <dd>{item.useCase}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+        <section
+          aria-labelledby="claude-title"
+          className="reviewer-engine"
+          data-reveal="70"
+        >
+          <p className="section-kicker">WHY CLAUDE</p>
+          <h2 id="claude-title">The reasoning layer.</h2>
+          <p>
+            Release review requires reasoning across changed files,
+            distinguishing evidence from inference, and producing structured
+            findings with explicit uncertainty and coverage boundaries. Claude
+            handles that reasoning.
+          </p>
+          <h3>Application code defines the boundaries.</h3>
+          <ul>
+            <li>GitHub retrieval</li>
+            <li>Bounded context selection</li>
+            <li>Schema validation</li>
+            <li>Coverage enforcement</li>
+          </ul>
+          <a
+            className="text-link"
+            href="https://github.com/ozankenangungor/release-engineer/blob/main/src/lib/claude.ts"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Inspect the Claude integration <span aria-hidden="true">↗︎</span>
+          </a>
+        </section>
+      </div>
+      <FeaturedPublicObservation />
+      <Testimonials />
       <section
         id="how-it-works"
         aria-labelledby="workflow-title"
@@ -161,8 +239,6 @@ export default function Home() {
           ))}
         </div>
       </section>
-      <Testimonials />
-      <CaseStudiesPreview />
       <section
         aria-labelledby="evidence-title"
         className="trust-section section-stage"

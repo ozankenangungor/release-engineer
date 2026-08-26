@@ -95,43 +95,57 @@ export function CaseStudyRecord({ study }: { study: CaseStudy }) {
   );
 }
 
-export function CaseStudiesPreview() {
-  const studies = getPublishedCaseStudies();
-  if (!studies.length) return null;
+export function FeaturedPublicObservation() {
+  const study = getPublishedCaseStudies().find(
+    (item) =>
+      item.slug === "rails-doc-typo-58968" &&
+      item.participationSource === "founder-test",
+  );
+  if (!study) return null;
   return (
     <section
-      aria-labelledby="cases-title"
-      className="section-stage content-section"
+      aria-labelledby="featured-observation-title"
+      className="featured-observation section-stage"
+      data-reveal="0"
     >
-      <div className="section-heading">
-        <div>
-          <p className="section-kicker">PINNED PUBLIC OBSERVATIONS</p>
-          <h2 id="cases-title">From an actual pull request.</h2>
-        </div>
-        <Link className="text-link" href="/case-studies">
-          All case studies →
+      <div>
+        <p className="section-kicker">
+          REAL PUBLIC PR / FOUNDER-RUN OBSERVATION
+        </p>
+        <h2 id="featured-observation-title">
+          {study.repository} #{study.prNumber}
+        </h2>
+        <p className="observation-label">
+          Founder test — not external validation.
+        </p>
+        <p className="observation-summary">
+          One file. +1/−1. A documentation correction classified as low risk,
+          with no findings and explicit coverage limitations. The PR later
+          merged upstream.
+        </p>
+        <Link href={`/case-studies/${study.slug}`} className="text-link">
+          Read the observation & verification →
         </Link>
       </div>
-      <div className="grid gap-5 md:grid-cols-3">
-        {studies.slice(0, 3).map((study) => (
-          <article key={study.slug} className="case-record">
-            <p className="section-kicker">
-              {study.participationSource === "external-tester"
-                ? "EXTERNAL TESTER"
-                : "FOUNDER TEST"}
-            </p>
-            <h3 className="mt-4 text-xl">{study.title}</h3>
-            <p className="mt-3 text-sm leading-7 text-slate-300">
-              {study.summary}
-            </p>
-            <Link
-              href={`/case-studies/${study.slug}`}
-              className="text-link mt-5 inline-block"
-            >
-              Observation & verification →
-            </Link>
-          </article>
-        ))}
+      <div className="observation-context">
+        <p className="section-kicker">PINNED REVIEWED HEAD</p>
+        <a
+          href={`https://github.com/${study.repository}/commit/${study.reviewedHeadSha}`}
+          className="observation-sha text-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <code>{study.reviewedHeadSha}</code> <span aria-hidden="true">↗︎</span>
+        </a>
+        <p>
+          The full repository was not inspected and tests were not run. The
+          original report and exact product revision were not retained in the
+          public record.
+        </p>
+        <p>
+          The upstream merge does not establish model accuracy. No Rails use,
+          endorsement or validation is claimed.
+        </p>
       </div>
     </section>
   );

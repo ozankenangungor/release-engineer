@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getPublishedCaseStudies } from "@/content/case-studies";
+import { DeploymentProvenance } from "@/components/deployment-provenance";
+import { getDeploymentProvenance } from "@/lib/deployment-provenance";
 
 const title = "Evidence — Release Engineer";
 const description =
-  "Sources, dated synthetic evaluations, approved beta feedback and the limits of current Release Engineer evidence.";
+  "The live product, public source, approved external beta feedback, pinned Rails PR observation and limits of Release Engineer evidence.";
 export const metadata: Metadata = {
   title,
   description,
@@ -18,13 +20,16 @@ export const metadata: Metadata = {
   openGraph: { title, description, url: "/evidence", type: "website" },
 };
 const repository = "https://github.com/ozankenangungor/release-engineer";
-const deploymentCommit = process.env.VERCEL_GIT_COMMIT_SHA;
-const sourceRevision = /^[a-f0-9]{40}$/.test(deploymentCommit ?? "")
-  ? deploymentCommit
-  : "main";
 
 export default function Evidence() {
   const studies = getPublishedCaseStudies();
+  const railsObservation = studies.find(
+    (item) => item.slug === "rails-doc-typo-58968",
+  );
+  const sourceRevision =
+    getDeploymentProvenance({
+      sha: process.env.VERCEL_GIT_COMMIT_SHA,
+    })?.sha ?? "main";
   return (
     <main id="main" className="page-shell evidence-page">
       <div className="evidence-hero">
@@ -35,9 +40,9 @@ export default function Evidence() {
           <span>behind the beta.</span>
         </h1>
         <p className="page-intro">
-          A clear view of what exists, where it can be inspected, and what it
-          establishes. Technical checks, qualitative feedback and usage records
-          answer different questions.
+          Start with the live product, external beta feedback and a real public
+          PR observation. Then inspect Claude’s role, evaluation results and the
+          boundaries of each record.
         </p>
         <div className="evidence-principles" aria-label="Evidence principles">
           <span>Inspectable source</span>
@@ -51,10 +56,10 @@ export default function Evidence() {
           <div>
             <h2>Working software, inspectable engineering.</h2>
             <p>
-              A live public-PR review interface with Claude as the core
-              reasoning engine. Bounded retrieval, prompt-injection defenses,
-              structured output validation and deterministic coverage safeguards
-              are visible in the source.
+              Release Engineer is live in early beta. Paste a public GitHub PR
+              for a structured second review of release risks, testing gaps and
+              breaking changes, with explicit limits and human verification. The
+              application source and CI history are public.
             </p>
             <div className="flex flex-wrap gap-x-6">
               <Link className="text-link" href="/">
@@ -75,6 +80,105 @@ export default function Evidence() {
                 rel="noopener noreferrer"
               >
                 CI history ↗︎
+              </a>
+            </div>
+            <DeploymentProvenance />
+          </div>
+        </section>
+        <section className="evidence-entry" data-reveal="0">
+          <span className="evidence-status">EXTERNAL BETA FEEDBACK</span>
+          <div>
+            <h2>Approved early developer feedback.</h2>
+            <p>
+              Three exact quotes from external beta testers, supplied by the
+              founder and published with permission. Display aliases and roles
+              are publication-approved; private identities and PR links are not
+              disclosed.
+            </p>
+            <p className="mt-3">
+              This is informal qualitative feedback. It does not independently
+              verify findings, establish unique developer counts or demonstrate
+              customer traction.
+            </p>
+            <Link className="text-link" href="/#developer-feedback">
+              Read the approved quotes →
+            </Link>
+          </div>
+        </section>
+        <section className="evidence-entry" data-reveal="0">
+          <span className="evidence-status">
+            {studies.length
+              ? "PINNED PUBLIC PR OBSERVATION"
+              : "NOT YET PUBLISHED"}
+          </span>
+          <div>
+            <h2>
+              {railsObservation
+                ? "rails/rails #58968"
+                : "Public PR case studies."}
+            </h2>
+            <p>
+              {railsObservation
+                ? "A one-file, +1/−1 Rails documentation correction, classified as low risk with no findings and explicit coverage limits in a founder-run check. The reviewed head is pinned and the PR later merged upstream."
+                : studies.length
+                  ? "Published observations identify a reviewed head SHA, participation source, human verification, outcome and limitations."
+                  : "No case with a pinned public PR, reviewed head SHA and documented human verification has been supplied for publication."}
+            </p>
+            <p className="mt-3">
+              {railsObservation
+                ? "Founder test — not external validation. The original report and exact product commit are not in the public record. The upstream merge does not prove model accuracy; no Rails endorsement is claimed."
+                : "Founder tests are distinguished from external tester observations. Informal feedback is not a substitute for pinned evidence."}
+            </p>
+            {studies.length ? (
+              <Link
+                className="text-link"
+                href={
+                  railsObservation
+                    ? `/case-studies/${railsObservation.slug}`
+                    : "/case-studies"
+                }
+              >
+                Observation, sources & limitations →
+              </Link>
+            ) : (
+              <a
+                className="text-link"
+                href={`${repository}/blob/main/docs/public-pr-case-study-template.md`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Case-study publication requirements ↗︎
+              </a>
+            )}
+          </div>
+        </section>
+        <section className="evidence-entry" data-reveal="0">
+          <span className="evidence-status">CLAUDE INTEGRATION</span>
+          <div>
+            <h2>Claude reasons. Application code sets the scope.</h2>
+            <p>
+              Claude is the core reasoning engine for cross-file review,
+              evidence versus inference, and structured findings with explicit
+              uncertainty. Deterministic application code handles GitHub
+              retrieval, bounded context selection, schema validation and
+              coverage enforcement.
+            </p>
+            <div className="flex flex-wrap gap-x-6">
+              <a
+                className="text-link"
+                href={`${repository}/blob/${sourceRevision}/src/lib/claude.ts`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Production Claude integration ↗︎
+              </a>
+              <a
+                className="text-link"
+                href={`${repository}/blob/${sourceRevision}/src/lib/review-policy.ts`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Coverage safeguards ↗︎
               </a>
             </div>
           </div>
@@ -105,52 +209,9 @@ export default function Evidence() {
           </div>
         </section>
         <section className="evidence-entry" data-reveal="0">
-          <span className="evidence-status">QUALITATIVE FEEDBACK</span>
-          <div>
-            <h2>Approved early developer feedback.</h2>
-            <p>
-              Three exact quotes supplied by the founder, with permission to
-              publish the approved display names and roles. PR links were not
-              approved. This is informal external beta feedback; it does not
-              independently verify a finding or establish a unique developer
-              count.
-            </p>
-            <Link className="text-link" href="/#developer-feedback">
-              Read the approved quotes →
-            </Link>
-          </div>
-        </section>
-        <section className="evidence-entry" data-reveal="0">
-          <span className="evidence-status">
-            {studies.length ? "PINNED OBSERVATIONS" : "NOT YET PUBLISHED"}
-          </span>
-          <div>
-            <h2>Public PR case studies.</h2>
-            <p>
-              {studies.length
-                ? "Published observations identify a reviewed head SHA, participation source, human verification, outcome and limitations. Founder tests are explicitly distinguished from external tester observations."
-                : "No case with a pinned public PR, reviewed head SHA and documented human verification has been supplied for publication. Informal feedback is not a substitute for this evidence."}
-            </p>
-            {studies.length ? (
-              <Link className="text-link" href="/case-studies">
-                Read the public observations →
-              </Link>
-            ) : (
-              <a
-                className="text-link"
-                href={`${repository}/blob/main/docs/public-pr-case-study-template.md`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Case-study publication requirements ↗︎
-              </a>
-            )}
-          </div>
-        </section>
-        <section className="evidence-entry" data-reveal="0">
           <span className="evidence-status">MEASUREMENT METHOD</span>
           <div>
-            <h2>Live usage, without a vanity counter.</h2>
+            <h2>How live usage is measured.</h2>
             <p>
               The server emits privacy-safe operational events when an analysis
               starts, succeeds or fails. A success means the server prepared a
