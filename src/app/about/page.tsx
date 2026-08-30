@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ReleaseMark } from "@/components/brand";
 
 const title = "About — Release Engineer";
 const description =
-  "About Release Engineer, an early-stage, bootstrapped developer-tool startup founded in October 2026 in Ankara, Türkiye by Ozan Kenan Güngör.";
+  "About Release Engineer, an independent developer tool launched in October 2026 in Ankara, Türkiye, built and operated by Ozan Kenan Güngör.";
 export const metadata: Metadata = {
   title,
   description,
@@ -29,11 +28,11 @@ export default function About() {
     <main id="main" className="page-shell about-page">
       <div className="about-hero">
         <div>
-          <p className="section-kicker">RELEASE ENGINEER / THE COMPANY</p>
+          <p className="section-kicker">RELEASE ENGINEER / THE PROJECT</p>
           <h1 className="page-title">
-            Built with conviction.
+            An independent tool.
             <br />
-            Open to inspection.
+            Built in public.
           </h1>
         </div>
         <p className="page-intro">
@@ -51,15 +50,6 @@ export default function About() {
         >
           Try the live beta →
         </Link>
-        <div className="company-visual" aria-hidden="true">
-          <div className="company-orbit" />
-          <div className="company-plane company-plane-one" />
-          <div className="company-plane company-plane-two" />
-          <div className="company-plane company-plane-three">
-            <ReleaseMark className="size-20" />
-          </div>
-          <span>RE / INDEPENDENT ENGINEERING</span>
-        </div>
       </div>
       <div className="about-body grid items-start gap-10 text-sm leading-7 text-slate-300 lg:grid-cols-[.8fr_1.2fr] lg:gap-16">
         <section aria-labelledby="founder-title" className="about-founder">
@@ -71,11 +61,13 @@ export default function About() {
             Ozan Kenan Güngör
           </h2>
           <p className="mt-5">
-            Release Engineer is an early-stage, bootstrapped developer-tool
-            startup founded in <time dateTime="2026-10">October 2026</time> in
-            Ankara, Türkiye. No external funding has been raised.
+            Release Engineer is an independent, founder-built developer tool
+            launched in <time dateTime="2026-10">October 2026</time> in Ankara,
+            Türkiye. Built and operated by Ozan Kenan Güngör. Self-funded; no
+            external investment has been raised. No legal company has been
+            incorporated or registered.
           </p>
-          <dl className="company-facts">
+          <dl className="project-facts">
             <div>
               <dt>Product</dt>
               <dd>Release Engineer</dd>
@@ -85,7 +77,7 @@ export default function About() {
               <dd>Early beta</dd>
             </div>
             <div>
-              <dt>Founded</dt>
+              <dt>Launched</dt>
               <dd>October 2026</dd>
             </div>
             <div>
@@ -94,7 +86,7 @@ export default function About() {
             </div>
             <div>
               <dt>Funding</dt>
-              <dd>Bootstrapped</dd>
+              <dd>Self-funded</dd>
             </div>
           </dl>
           <div className="mt-6 flex flex-wrap gap-x-6 gap-y-3">
@@ -189,9 +181,9 @@ export default function About() {
             <h2>Real-world evidence</h2>
             <p>
               Three founder-supplied, publication-approved quotes from external
-              beta testers appear on the{" "}
-              <Link href="/#developer-feedback" className="text-link">
-                homepage
+              beta testers appear in the{" "}
+              <Link href="/evidence#developer-feedback" className="text-link">
+                evidence index
               </Link>
               . Exact quotes are published with permission. Display aliases and
               roles are publication-approved; private identities and PR links

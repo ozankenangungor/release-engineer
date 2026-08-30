@@ -42,16 +42,16 @@ export function Brand() {
 
 export function Header() {
   return (
-    <header className="site-header flex w-full items-center justify-between gap-3 py-5 sm:py-6">
+    <header className="site-header flex w-full flex-wrap items-center justify-between gap-x-3 gap-y-1 py-3 sm:py-5">
       <Brand />
       <nav
         aria-label="Main"
-        className="flex shrink-0 items-center gap-6 text-xs text-slate-300 sm:gap-8"
+        className="header-navigation flex items-center gap-5 text-sm text-slate-300 sm:gap-8"
       >
-        <Link href="/about" className="nav-link hidden sm:block">
+        <Link href="/about" className="nav-link">
           About
         </Link>
-        <Link href="/evidence" className="nav-link hidden md:block">
+        <Link href="/evidence" className="nav-link">
           Evidence
         </Link>
         <a
@@ -62,7 +62,7 @@ export function Header() {
         >
           Source <span aria-hidden="true">↗︎</span>
         </a>
-        <span className="beta-badge inline-flex items-center gap-2 rounded-full px-2.5 py-1.5 font-mono text-[9px] tracking-wide text-emerald-200 sm:px-3 sm:text-[10px]">
+        <span className="beta-badge hidden sm:inline-flex items-center gap-2 rounded-full px-2.5 py-1.5 font-mono text-[9px] tracking-wide text-emerald-200 sm:px-3 sm:text-[10px]">
           <span
             aria-hidden="true"
             className="size-1 rounded-full bg-emerald-300"
@@ -79,9 +79,9 @@ export function Footer() {
     <footer className="site-footer flex w-full flex-col justify-between gap-8 py-10 text-xs text-slate-400 lg:flex-row lg:items-start">
       <div>
         <Brand />
-        <p className="mt-3 leading-6">A second perspective before you ship.</p>
-        <p className="mt-2 font-mono text-[9px] text-slate-400">
-          ANKARA, TÜRKİYE · BOOTSTRAPPED · EARLY BETA
+        <p className="mt-3 leading-6">Public GitHub PR reviews with Claude.</p>
+        <p className="mt-2 text-xs text-slate-400">
+          Built by Ozan Kenan Güngör · Ankara, Türkiye · Self-funded beta
         </p>
       </div>
       <nav

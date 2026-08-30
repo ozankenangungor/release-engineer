@@ -10,3 +10,5 @@ coverage/
 .eval-build/
 evals/results/
 .private-evidence/
+test-results/
+playwright-report/

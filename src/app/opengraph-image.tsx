@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const alt =
-  "Release Engineer — Claude-native release readiness for GitHub pull requests";
+  "Release Engineer — Public GitHub PR reviews with Claude";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -16,11 +16,11 @@ export default function OpenGraphImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "60px 68px",
-          background: "#0b1318",
+          background: "#070c18",
           color: "#f0f5f2",
           fontFamily: "sans-serif",
           backgroundImage:
-            "radial-gradient(ellipse at 85% 30%, #25453a, #0b1318 60%)",
+            "radial-gradient(ellipse at 85% 30%, #242e50, #070c18 60%)",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
@@ -29,7 +29,7 @@ export default function OpenGraphImage() {
             height="46"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#b1ead0"
+            stroke="#c4c7ff"
             strokeWidth="1.5"
           >
             <path d="M7 4v10a4 4 0 0 0 4 4h6M7 9h8a3 3 0 0 0 3-3V4" />
@@ -52,16 +52,16 @@ export default function OpenGraphImage() {
           >
             <span
               style={{
-                color: "#b1ead0",
+                color: "#c4c7ff",
                 fontSize: 15,
                 letterSpacing: 3,
                 marginBottom: 22,
               }}
             >
-              CLAUDE AT THE CORE
+              REVIEW BEFORE YOU MERGE
             </span>
             <span style={{ fontSize: 68, letterSpacing: -3, lineHeight: 1.08 }}>
-              Claude-native release readiness for GitHub pull requests
+              Public GitHub PR reviews with Claude
             </span>
           </div>
           <svg width="280" height="255" viewBox="0 0 280 255" fill="none">
@@ -72,13 +72,13 @@ export default function OpenGraphImage() {
             />
             <path
               d="m40 133 100-58 100 58-100 58-100-58Z"
-              fill="#b1ead0"
+              fill="#c4c7ff"
               fillOpacity=".06"
               stroke="#719c89"
             />
             <path
               d="m50 106 90-52 90 52-90 52-90-52Z"
-              fill="#b1ead0"
+              fill="#c4c7ff"
               fillOpacity=".08"
               stroke="#a6c9b6"
             />

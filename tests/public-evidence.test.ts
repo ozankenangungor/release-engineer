@@ -83,6 +83,7 @@ describe("publication boundaries", () => {
       "Evaluation with failures in view.",
       "How live usage is measured.",
       "A founder, a public record, a way to contact us.",
+      "Early developer feedback.",
     ]);
     expect(html).toContain("22 PASS / 10 FAIL");
     expect(html).toContain("one critical violation remaining");

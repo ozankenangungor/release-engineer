@@ -32,24 +32,26 @@ describe("public identity", () => {
   });
 
   it("publishes consistent month-level identity in normal homepage and About HTML", () => {
-    const organization = graph.find(
-      (node) => node["@type"] === "Organization",
-    )!;
     const founder = graph.find((node) => node["@type"] === "Person")!;
-    expect(organization.foundingDate).toBe("2026-10");
+    expect(graph.some((node) => node["@type"] === "Organization")).toBe(false);
+    expect(JSON.stringify(graph)).not.toMatch(
+      /foundingDate|worksFor|#organization/,
+    );
     for (const Page of [Home, About]) {
       const page = renderToStaticMarkup(createElement(Page));
       expect(page).toContain("October 2026");
       expect(page).toContain(String(founder.name));
       expect(page).toContain("Ankara, Türkiye");
-      expect(page).toContain(`href="mailto:${organization.email}"`);
+      expect(page).toContain(
+        "No legal company has been incorporated or registered",
+      );
+      expect(page).toContain(`href="mailto:${founder.email}"`);
     }
   });
 
   it("renders one parseable graph with unique, resolving identity relationships", () => {
     expect(html.match(/type="application\/ld\+json"/g)).toHaveLength(1);
     expect(graph.map((node) => node["@type"]).sort()).toEqual([
-      "Organization",
       "Person",
       "SoftwareApplication",
       "WebSite",
@@ -63,11 +65,11 @@ describe("public identity", () => {
     }
     graph.forEach(checkReferences);
     expect(
-      graph.find((node) => node["@type"] === "Organization")?.founder,
-    ).toEqual({ "@id": "https://releaseengineer.tech/#founder" });
+      graph.find((node) => node["@type"] === "Person")?.homeLocation,
+    ).toEqual({ "@type": "Place", name: "Ankara, Türkiye" });
     expect(
       graph.find((node) => node["@type"] === "SoftwareApplication")?.provider,
-    ).toEqual({ "@id": "https://releaseengineer.tech/#organization" });
+    ).toEqual({ "@id": "https://releaseengineer.tech/#founder" });
   });
 
   it("makes the evaluation evidence and its limits visible in the About HTML", () => {

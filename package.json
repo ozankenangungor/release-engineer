@@ -17,7 +17,8 @@
     "test:watch": "vitest",
     "eval:validate": "node evals/run.mjs validate",
     "eval:live": "node evals/run.mjs live",
-    "eval:compare": "node evals/run.mjs compare"
+    "eval:compare": "node evals/run.mjs compare",
+    "test:browser": "playwright test"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.131.0",
@@ -30,6 +31,8 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.64.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^24.19.1",
     "@types/react": "^19.3.0",

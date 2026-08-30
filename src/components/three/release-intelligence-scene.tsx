@@ -27,11 +27,14 @@ class SceneBoundary extends Component<
 }
 
 export function ReleaseIntelligenceScene() {
+  const [enabled, setEnabled] = useState(false);
   const [paused, setPaused] = useState(false);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
-  const { container, eligible, active, motionAllowed } =
-    useSceneVisibility(paused);
+  const { container, eligible, active, motionAllowed } = useSceneVisibility(
+    paused,
+    enabled,
+  );
   return (
     <div
       ref={container}
@@ -70,7 +73,16 @@ export function ReleaseIntelligenceScene() {
           CONCEPTUAL PIPELINE · NO LIVE TELEMETRY
         </div>
       </div>
-      {motionAllowed && (
+      {motionAllowed && !enabled && (
+        <button
+          className="scene-motion-control"
+          type="button"
+          onClick={() => setEnabled(true)}
+        >
+          Enable optional animation
+        </button>
+      )}
+      {enabled && motionAllowed && (
         <button
           className="scene-motion-control"
           type="button"

@@ -5,10 +5,21 @@ import { CaseStudyRecord } from "@/components/case-studies";
 
 export const metadata: Metadata = {
   title: "Public PR observations — Release Engineer",
+  description:
+    "Founder-run public PR observations with pinned changes, verification sources and explicit evidence limitations.",
+  twitter: {
+    card: "summary_large_image",
+    title: "Public PR observations — Release Engineer",
+    description:
+      "Founder-run public PR observations with pinned changes, verification sources and explicit evidence limitations.",
+    images: ["/opengraph-image"],
+  },
   alternates: { canonical: "/case-studies" },
   openGraph: {
     title: "Public PR observations — Release Engineer",
     url: "/case-studies",
+    description:
+      "Founder-run public PR observations with pinned changes, verification sources and explicit evidence limitations.",
   },
 };
 

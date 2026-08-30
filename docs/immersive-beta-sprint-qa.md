@@ -1,5 +1,8 @@
 # Immersive beta sprint verification
 
+> Historical QA for an earlier revision. The [October 9 product and trust audit](product-trust-release.md) supersedes current homepage and identity descriptions. Release Engineer is an independently operated project; no legal company has been incorporated or registered.
+
+
 Observed October 8, 2026. Baseline: `6a5e80e4d1667f5569b9d747d07977ae07086cd8` (current main at sprint start). These are implementation/QA observations, not traction or a new Claude evaluation. No paid provider call was made. Browser reports used explicitly synthetic, intercepted API responses outside the repository; they are not product-use case studies.
 
 ## Local verification
