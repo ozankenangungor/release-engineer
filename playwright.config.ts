@@ -12,9 +12,12 @@ export default defineConfig({
   use: {
     baseURL: externalBase ?? "http://localhost:3101",
     browserName: "chromium",
-    launchOptions: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE
-      ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE }
-      : {},
+    launchOptions: {
+      args: ["--enable-unsafe-swiftshader"],
+      ...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE
+        ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE }
+        : {}),
+    },
     trace: "retain-on-failure",
   },
   webServer: externalBase

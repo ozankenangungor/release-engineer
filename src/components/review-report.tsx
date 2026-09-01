@@ -1,10 +1,10 @@
 import type { AnalysisResponse, Review } from "@/lib/review-schema";
 
 const riskStyles = {
-  low: "border-emerald-300/25 bg-emerald-300/10 text-emerald-200",
-  medium: "border-amber-300/25 bg-amber-300/10 text-amber-200",
-  high: "border-orange-300/25 bg-orange-300/10 text-orange-200",
-  critical: "border-rose-300/25 bg-rose-300/10 text-rose-200",
+  low: "risk-low",
+  medium: "risk-medium",
+  high: "risk-high",
+  critical: "risk-critical",
 };
 const verdictLabels = {
   merge: "Ready for human sign-off",
@@ -29,19 +29,19 @@ function ReviewList({
       className={`surface-card report-list rounded-2xl p-5 sm:p-7 ${id === "review-actions" ? "report-actions" : ""}`}
       data-reveal="0"
     >
-      <h3 className="report-section-title flex items-center justify-between gap-3 text-sm font-semibold text-white">
+      <h3 className="report-section-title flex items-center justify-between gap-3 text-sm font-semibold text-ink">
         {title}{" "}
-        <span className="font-mono text-xs font-normal text-slate-400">
+        <span className="font-mono text-xs font-normal text-muted">
           {items.length.toString().padStart(2, "0")}
         </span>
       </h3>
       {items.length ? (
-        <ul className="mt-4 space-y-3 text-sm leading-6 text-slate-300">
+        <ul className="mt-4 space-y-3 text-sm leading-6 text-muted">
           {items.map((item, index) => (
             <li key={index} className="report-text flex min-w-0 gap-3">
               <span
                 aria-hidden="true"
-                className="mt-0.5 shrink-0 font-mono text-[10px] text-emerald-200/70"
+                className="mt-0.5 shrink-0 font-mono text-[11px] text-signal"
               >
                 {String(index + 1).padStart(2, "0")}
               </span>
@@ -50,7 +50,7 @@ function ReviewList({
           ))}
         </ul>
       ) : (
-        <p className="mt-3 text-sm leading-6 text-slate-400">{empty}</p>
+        <p className="mt-3 text-sm leading-6 text-muted">{empty}</p>
       )}
     </section>
   );
@@ -71,33 +71,33 @@ export function Finding({
     >
       <div className="flex flex-wrap items-center gap-2">
         <span
-          className={`rounded-md border px-2.5 py-1 font-mono text-[10px] uppercase ${riskStyles[finding.severity]}`}
+          className={`rounded-md border px-2.5 py-1 font-mono text-[11px] uppercase ${riskStyles[finding.severity]}`}
         >
           {finding.severity}
         </span>
-        <span className="font-mono text-[10px] uppercase tracking-wide text-slate-400">
+        <span className="font-mono text-[11px] uppercase tracking-wide text-muted">
           {finding.category.replaceAll("_", " ")}
         </span>
-        <span className="ml-auto font-mono text-xs text-slate-500">
+        <span className="ml-auto font-mono text-xs text-muted">
           {String(index + 1).padStart(2, "0")}
         </span>
       </div>
-      <h4 className="report-text mt-5 text-lg font-semibold tracking-tight text-slate-100">
+      <h4 className="report-text mt-5 text-lg font-semibold tracking-tight text-ink">
         {finding.title}
       </h4>
       {finding.file && (
-        <p className="report-text mt-2 font-mono text-xs text-emerald-200/80">
+        <p className="report-text mt-2 font-mono text-xs text-signal">
           {finding.file}
         </p>
       )}
-      <p className="report-text mt-3 text-sm leading-6 text-slate-300">
+      <p className="report-text mt-3 text-sm leading-6 text-muted">
         {finding.explanation}
       </p>
-      <div className="report-recommendation mt-5 border-t border-white/8">
-        <p className="font-mono text-[9px] tracking-widest text-emerald-200">
+      <div className="report-recommendation mt-5 border-t border-[#dbe0e7]">
+        <p className="font-mono text-[11px] tracking-widest text-signal">
           RECOMMENDATION
         </p>
-        <p className="report-text mt-1.5 text-sm leading-6 text-slate-200">
+        <p className="report-text mt-1.5 text-sm leading-6 text-ink">
           {finding.recommendation}
         </p>
       </div>
@@ -110,14 +110,14 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
   return (
     <section aria-labelledby="review-title" className="report-artifact mx-auto">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <p className="font-mono text-xs tracking-widest text-emerald-300">
+        <p className="font-mono text-xs tracking-widest text-signal">
           RELEASE ENGINEER / REVIEW ARTIFACT
         </p>
         <a
           href={pr.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="report-text text-xs text-slate-400 underline underline-offset-4 hover:text-white"
+          className="report-text text-xs text-muted underline underline-offset-4 hover:text-signal"
         >
           {pr.owner}/{pr.repository} #{pr.number} ↗︎
         </a>
@@ -143,7 +143,7 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
               >
                 {review.overallRisk} risk
               </span>
-              <span className="font-mono text-[10px] text-slate-300">
+              <span className="font-mono text-[11px] text-muted">
                 CLAUDE / STRUCTURED REVIEW
               </span>
             </div>
@@ -155,7 +155,7 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
             >
               {pr.title}
             </h2>
-            <p className="report-text mt-4 max-w-3xl text-sm leading-7 text-slate-300 sm:text-base">
+            <p className="report-text mt-4 max-w-3xl text-sm leading-7 text-muted sm:text-base">
               {review.summary}
             </p>
           </div>
@@ -164,7 +164,7 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
               <dt>FILES IN CONTEXT</dt>
               <dd>
                 {coverage.includedFiles}
-                <span className="text-sm text-slate-400">
+                <span className="text-sm text-muted">
                   {" "}
                   / {pr.changedFileCount}
                 </span>
@@ -182,7 +182,7 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
             </div>
           </dl>
         </div>
-        <dl className="report-metadata mt-7 border-t border-white/10 pt-6">
+        <dl className="report-metadata mt-7 border-t border-[#dbe0e7] pt-6">
           <div>
             <dt>REVIEWED HEAD SHA</dt>
             <dd>
@@ -211,8 +211,8 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
           <div>
             <dt>CHANGE SIZE</dt>
             <dd>
-              <span className="text-emerald-200">+{pr.additions}</span> /{" "}
-              <span className="text-rose-200">−{pr.deletions}</span>
+              <span className="text-signal">+{pr.additions}</span> /{" "}
+              <span className="text-[#a33622]">−{pr.deletions}</span>
             </dd>
           </div>
         </dl>
@@ -222,10 +222,10 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
           aria-label="Partial analysis warning"
           className="partial-context-warning mt-5 rounded-2xl border border-amber-300/30 bg-amber-300/7 p-5 sm:p-6"
         >
-          <h3 className="text-sm font-medium text-amber-200">
+          <h3 className="text-sm font-medium text-[#745020]">
             Partial review · Some change context was unavailable
           </h3>
-          <ul className="mt-2 space-y-1 text-sm leading-6 text-amber-100/80">
+          <ul className="mt-2 space-y-1 text-sm leading-6 text-[#745020]">
             {warnings.map((warning, index) => (
               <li key={index} className="report-text">
                 {warning}
@@ -250,7 +250,7 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
           >
             Findings
           </h3>
-          <span className="rounded-md border border-white/10 px-2 py-0.5 font-mono text-xs text-slate-400">
+          <span className="rounded-md border border-[#dbe0e7] px-2 py-0.5 font-mono text-xs text-muted">
             {review.findings.length}
           </span>
         </div>
@@ -261,11 +261,11 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
             ))}
           </div>
         ) : (
-          <div className="rounded-xl border border-emerald-300/15 bg-emerald-300/5 p-6">
-            <p className="text-sm font-medium text-emerald-200">
+          <div className="border-l-2 border-[#abd6c4] bg-[#e3f5ed] p-6">
+            <p className="text-sm font-medium text-signal">
               No issue detected in the supplied context.
             </p>
-            <p className="mt-2 text-sm leading-6 text-slate-400">
+            <p className="mt-2 text-sm leading-6 text-muted">
               This review does not establish that the change is safe. Check the
               testing gaps and review limitations below.
             </p>
@@ -289,10 +289,10 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
         className="surface-card report-limitations mt-5 rounded-2xl p-5 sm:p-6"
         open
       >
-        <summary className="cursor-pointer text-sm font-medium text-slate-300">
+        <summary className="cursor-pointer text-sm font-medium text-muted">
           Review limitations
         </summary>
-        <ul className="mt-3 space-y-2 text-xs leading-6 text-slate-400">
+        <ul className="mt-3 space-y-2 text-xs leading-6 text-muted">
           {review.limitations.map((limitation, index) => (
             <li key={index} className="report-text">
               {limitation}
@@ -300,7 +300,7 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
           ))}
         </ul>
       </details>
-      <p className="mt-5 text-xs leading-5 text-slate-400">
+      <p className="mt-5 text-xs leading-5 text-muted">
         Powered by Claude. Findings are decision support; verify them against
         the code and your release process.
       </p>

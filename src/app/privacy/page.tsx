@@ -26,16 +26,16 @@ export const metadata: Metadata = {
 export default function Privacy() {
   return (
     <main id="main" className="page-shell legal-page">
-      <p className="font-mono text-xs text-emerald-300">
+      <p className="section-kicker">
         RELEASE ENGINEER / BETA
       </p>
       <h1 className="page-title">Privacy</h1>
-      <p className="mt-4 text-xs text-slate-400">
+      <p className="mt-4 text-xs text-muted">
         Last updated: <time dateTime="2026-10-09">October 9, 2026</time>
       </p>
-      <div className="mt-8 space-y-7 text-sm leading-7 text-slate-300">
+      <div className="mt-8 space-y-7 text-sm leading-7 text-muted">
         <section>
-          <h2 className="mb-2 text-base font-medium text-white">
+          <h2 className="mb-2 text-base font-medium text-ink">
             Who operates this product
           </h2>
           <p>
@@ -45,7 +45,7 @@ export default function Privacy() {
           </p>
         </section>
         <section>
-          <h2 className="mb-2 text-base font-medium text-white">
+          <h2 className="mb-2 text-base font-medium text-ink">
             What happens when you analyze a PR
           </h2>
           <p>
@@ -57,7 +57,7 @@ export default function Privacy() {
           </p>
         </section>
         <section>
-          <h2 className="mb-2 text-base font-medium text-white">
+          <h2 className="mb-2 text-base font-medium text-ink">
             Operational usage evidence
           </h2>
           <p>
@@ -81,7 +81,7 @@ export default function Privacy() {
           </p>
         </section>
         <section>
-          <h2 className="mb-2 text-base font-medium text-white">
+          <h2 className="mb-2 text-base font-medium text-ink">
             Storage and providers
           </h2>
           <p>
@@ -95,7 +95,7 @@ export default function Privacy() {
           <p className="mt-3">
             <a
               href="https://www.anthropic.com/legal/privacy"
-              className="text-emerald-200 underline underline-offset-4"
+              className="text-signal underline underline-offset-4"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -104,7 +104,7 @@ export default function Privacy() {
             ·{" "}
             <a
               href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement"
-              className="text-emerald-200 underline underline-offset-4"
+              className="text-signal underline underline-offset-4"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -113,7 +113,7 @@ export default function Privacy() {
             ·{" "}
             <a
               href="https://vercel.com/legal/privacy-policy"
-              className="text-emerald-200 underline underline-offset-4"
+              className="text-signal underline underline-offset-4"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -122,7 +122,7 @@ export default function Privacy() {
           </p>
         </section>
         <section>
-          <h2 className="mb-2 text-base font-medium text-white">MVP notice</h2>
+          <h2 className="mb-2 text-base font-medium text-ink">MVP notice</h2>
           <p>
             This page describes the current beta application’s data handling. It
             is a brief product notice, not a custom legal assessment. We will
@@ -133,7 +133,7 @@ export default function Privacy() {
           Contact:{" "}
           <a
             href="mailto:founder@releaseengineer.tech"
-            className="text-emerald-200 underline underline-offset-4"
+            className="text-signal underline underline-offset-4"
           >
             founder@releaseengineer.tech
           </a>

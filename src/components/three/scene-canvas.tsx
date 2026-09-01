@@ -3,7 +3,7 @@
 import { Canvas, useThree } from "@react-three/fiber";
 import { useEffect } from "react";
 import { Vector3 } from "three";
-import { ReleaseReactor } from "./release-reactor-scene";
+import { ReleaseGraph } from "./release-graph-scene";
 import { SceneLights } from "./scene-lights";
 
 function ContextGuard({ onUnavailable }: { onUnavailable: () => void }) {
@@ -36,18 +36,18 @@ export default function SceneCanvas({
         tabIndex={-1}
         dpr={[1, 1.5]}
         frameloop={active ? "demand" : "never"}
-        camera={{ position: [6.8, 5.6, 10.5], fov: 33, near: 0.1, far: 40 }}
+        camera={{ position: [4.6, 3.1, 11.4], fov: 43, near: 0.1, far: 40 }}
         gl={{
           alpha: true,
           antialias: true,
           powerPreference: "low-power",
           failIfMajorPerformanceCaveat: true,
         }}
-        onCreated={({ camera }) => camera.lookAt(new Vector3(0, 0.65, 0))}
+        onCreated={({ camera }) => camera.lookAt(new Vector3(0, 0, 0))}
         fallback={null}
       >
         <SceneLights />
-        <ReleaseReactor active={active} onReady={onReady} />
+        <ReleaseGraph active={active} onReady={onReady} />
         <ContextGuard onUnavailable={onUnavailable} />
       </Canvas>
     </div>

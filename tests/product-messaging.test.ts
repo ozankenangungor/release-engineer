@@ -15,10 +15,12 @@ const render = (Page: () => React.ReactNode) =>
 describe("product clarity and evidence integrity", () => {
   it("explains input, Claude and output before the working form, with a free preview", () => {
     const html = render(Home);
-    expect(html).toMatch(/<h1[^>]*>Know what could break/);
-    expect(html).toContain("Analyze a public GitHub pull request with Claude");
+    expect(html).toMatch(/<h1[^>]*>Catch release/);
     expect(html).toContain(
-      "potential release risks, missing tests and breaking changes",
+      "Claude-powered analysis for public GitHub pull requests",
+    );
+    expect(html).toContain(
+      "Surface breaking changes, regressions and testing gaps",
     );
     expect(html).toContain('href="#report-preview"');
     expect(html).toContain('href="/evidence"');

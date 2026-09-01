@@ -26,16 +26,16 @@ export const metadata: Metadata = {
 export default function Terms() {
   return (
     <main id="main" className="page-shell legal-page">
-      <p className="font-mono text-xs text-emerald-300">
+      <p className="section-kicker">
         RELEASE ENGINEER / BETA
       </p>
       <h1 className="page-title">Terms</h1>
-      <p className="mt-4 text-xs text-slate-400">
+      <p className="mt-4 text-xs text-muted">
         Last updated: <time dateTime="2026-10-09">October 9, 2026</time>
       </p>
-      <div className="mt-8 space-y-7 text-sm leading-7 text-slate-300">
+      <div className="mt-8 space-y-7 text-sm leading-7 text-muted">
         <section>
-          <h2 className="mb-2 text-base font-medium text-white">
+          <h2 className="mb-2 text-base font-medium text-ink">
             Who operates this product
           </h2>
           <p>
@@ -45,7 +45,7 @@ export default function Terms() {
           </p>
         </section>
         <section>
-          <h2 className="mb-2 text-base font-medium text-white">
+          <h2 className="mb-2 text-base font-medium text-ink">
             Using the beta
           </h2>
           <p>
@@ -56,7 +56,7 @@ export default function Terms() {
           </p>
         </section>
         <section>
-          <h2 className="mb-2 text-base font-medium text-white">
+          <h2 className="mb-2 text-base font-medium text-ink">
             Data handling
           </h2>
           <p>
@@ -66,7 +66,7 @@ export default function Terms() {
             availability. See the{" "}
             <a
               href="/privacy"
-              className="text-emerald-200 underline underline-offset-4"
+              className="text-signal underline underline-offset-4"
             >
               Privacy notice
             </a>{" "}
@@ -74,7 +74,7 @@ export default function Terms() {
           </p>
         </section>
         <section>
-          <h2 className="mb-2 text-base font-medium text-white">
+          <h2 className="mb-2 text-base font-medium text-ink">
             Your release decision
           </h2>
           <p>
@@ -85,7 +85,7 @@ export default function Terms() {
           </p>
         </section>
         <section>
-          <h2 className="mb-2 text-base font-medium text-white">
+          <h2 className="mb-2 text-base font-medium text-ink">
             Availability and limits
           </h2>
           <p>
@@ -96,7 +96,7 @@ export default function Terms() {
           </p>
         </section>
         <section>
-          <h2 className="mb-2 text-base font-medium text-white">MVP notice</h2>
+          <h2 className="mb-2 text-base font-medium text-ink">MVP notice</h2>
           <p>
             These brief beta terms describe the intended use and limits of the
             product. They are not a custom legal assessment.
@@ -106,7 +106,7 @@ export default function Terms() {
           Contact:{" "}
           <a
             href="mailto:founder@releaseengineer.tech"
-            className="text-emerald-200 underline underline-offset-4"
+            className="text-signal underline underline-offset-4"
           >
             founder@releaseengineer.tech
           </a>

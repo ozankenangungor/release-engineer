@@ -28,7 +28,7 @@ The [evaluation harness](evals/README.md) contains **32 original synthetic PR ca
 
 ## MVP scope
 
-One responsive landing page, illustrative report preview and analysis interface, public PR retrieval, bounded change context, validated Claude reviews, About and Evidence pages, and brief [Privacy](https://releaseengineer.tech/privacy) and [Terms](https://releaseengineer.tech/terms) pages. There are no accounts, database, OAuth, billing, queues, analytics or telemetry vendors. PR contents and reports are held in memory for the request and browser session. Content-free operational events are written to hosting logs; [the usage evidence runbook](docs/live-usage-evidence.md) explains retention, private preservation, deduplication and the distinction between analyses and people. No public usage counter is displayed.
+An editorial RELEASE / SIGNAL homepage, cinematic Release Graph, interactive illustrative diff-to-finding workspace and real analysis interface, public PR retrieval, bounded change context, validated Claude reviews, About and Evidence pages, and brief [Privacy](https://releaseengineer.tech/privacy) and [Terms](https://releaseengineer.tech/terms) pages. There are no accounts, database, OAuth, billing, queues, analytics or telemetry vendors. PR contents and reports are held in memory for the request and browser session. Content-free operational events are written to hosting logs; [the usage evidence runbook](docs/live-usage-evidence.md) explains retention, private preservation, deduplication and the distinction between analyses and people. No public usage counter is displayed.
 
 ## Architecture
 
@@ -48,7 +48,7 @@ Browser: PR input → POST /api/analyze → validated report
 - `src/lib/review-schema.ts`: strict Zod review and API-response contracts, shared with the browser.
 - `src/app/api/analyze/route.ts`: bounded JSON request, orchestration and uncached responses.
 - `src/components/`: accessible form/loading/error states and readable report sections. React renders plain text; raw model output is never rendered as a report.
-- `src/components/three/`: optional Three.js / React Three Fiber illustration below the analyzer, inside a collapsed explanation. The renderer is imported only after explicit animation activation. DPR is capped at 1.5; the visible reactor uses bounded demand scheduling and pauses when the scene is offscreen, the document is hidden, or motion is explicitly paused. Mobile, reduced motion, forced colors, WebGL failure and JavaScript-disabled browsers use a server-rendered static illustration. Product copy and form are server-rendered independently.
+- `src/components/three/`: procedural Release Graph in the desktop hero, enhanced automatically after initial paint and a device/WebGL capability check. A server-rendered SVG of the same source/dependency topology is immediate. The renderer is lazy loaded; DPR is capped at 1.5, with a bounded demand clock at 30fps that adapts to DPR 1/20fps on slow frames. It pauses when offscreen, the document is hidden or the user pauses motion. Mobile, constrained devices, reduced motion, forced colors and unavailable WebGL retain the static composition. Context loss preserves the fallback and offers a renderer retry. The graph is conceptual, not live analysis telemetry. Product copy, form and example remain independent of WebGL.
 - `src/lib/live-usage.ts`: allowlisted, content-free operational events; no browser/session identity or PR content. `scripts/summarize-live-usage.mjs` counts preserved, sanitized production outcomes without network calls.
 
 Built with Next.js 16.4 App Router, React 19, strict TypeScript, Tailwind CSS, Zod and Vitest. All GitHub and Anthropic requests happen on the server. `server-only` imports guard credential-bearing modules.
@@ -149,3 +149,7 @@ Official API references: [GitHub pull requests](https://docs.github.com/en/rest/
 ## Contact
 
 Contact [founder@releaseengineer.tech](mailto:founder@releaseengineer.tech). Source code and issues are available in the [public GitHub repository](https://github.com/ozankenangungor/release-engineer).
+
+## RELEASE / SIGNAL design and verification
+
+The visual system and component architecture are documented in [the design direction](docs/release-signal-design.md), with [six visual comparisons and verification evidence](docs/release-signal-qa.md). `scripts/visual-audit.mjs` captures all six required viewports, full pages, document routes, mobile navigation and a stubbed error, with raw lab observations for LCP, CLS and initial/deferred JavaScript. It intercepts analysis requests before navigation; no paid Claude call is made. The WebGL browser fixture allows software GL in CI while production capability checks stay intact. Browser coverage includes source-to-finding interaction, keyboard tabs, real renderer movement/pause, offscreen suspension, context loss/retry and reduced motion.

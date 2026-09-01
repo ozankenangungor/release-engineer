@@ -1,0 +1,394 @@
+[
+  {
+    "base": "https://releaseengineer.tech",
+    "width": 1440,
+    "height": 900,
+    "status": 200,
+    "lcp": 724,
+    "cls": 0,
+    "longTasks": [],
+    "overflow": false,
+    "formTop": 152,
+    "submitBottom": 496.890625,
+    "canvasCount": 0,
+    "scene": "static",
+    "js": [
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/1tu6xt8_2fra-.js",
+        "bytes": 2064,
+        "transfer": 2364
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/31quvt4oiq7d-.js",
+        "bytes": 73449,
+        "transfer": 73749
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/0m3srfegxfxny.js",
+        "bytes": 8037,
+        "transfer": 8337
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/turbopack-1byz1flvc-bu1.js",
+        "bytes": 4603,
+        "transfer": 4903
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/3xkftsb4hybcq.js",
+        "bytes": 47175,
+        "transfer": 47475
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/18fjrq1t-6zgr.js",
+        "bytes": 3982,
+        "transfer": 4282
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/0gm4f75enm_d1.js",
+        "bytes": 3647,
+        "transfer": 3947
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/44kfe099z3gut.js",
+        "bytes": 225,
+        "transfer": 525
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/0df1ev3x9igou.js",
+        "bytes": 40818,
+        "transfer": 41118
+      }
+    ],
+    "errors": [],
+    "failures": [],
+    "attempts": []
+  },
+  {
+    "base": "https://releaseengineer.tech",
+    "width": 1920,
+    "height": 1080,
+    "status": 200,
+    "lcp": 404,
+    "cls": 0,
+    "longTasks": [
+      60
+    ],
+    "overflow": false,
+    "formTop": 152.390625,
+    "submitBottom": 497.28125,
+    "canvasCount": 0,
+    "scene": "static",
+    "js": [
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/1tu6xt8_2fra-.js",
+        "bytes": 2064,
+        "transfer": 2364
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/turbopack-1byz1flvc-bu1.js",
+        "bytes": 4603,
+        "transfer": 4903
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/3xkftsb4hybcq.js",
+        "bytes": 47175,
+        "transfer": 47475
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/0m3srfegxfxny.js",
+        "bytes": 8037,
+        "transfer": 8337
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/31quvt4oiq7d-.js",
+        "bytes": 73449,
+        "transfer": 73749
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/18fjrq1t-6zgr.js",
+        "bytes": 3982,
+        "transfer": 4282
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/44kfe099z3gut.js",
+        "bytes": 225,
+        "transfer": 525
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/0df1ev3x9igou.js",
+        "bytes": 40818,
+        "transfer": 41118
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/0gm4f75enm_d1.js",
+        "bytes": 3647,
+        "transfer": 3947
+      }
+    ],
+    "errors": [],
+    "failures": [],
+    "attempts": []
+  },
+  {
+    "base": "https://releaseengineer.tech",
+    "width": 1366,
+    "height": 768,
+    "status": 200,
+    "lcp": 388,
+    "cls": 0,
+    "longTasks": [
+      60
+    ],
+    "overflow": false,
+    "formTop": 152,
+    "submitBottom": 496.890625,
+    "canvasCount": 0,
+    "scene": "static",
+    "js": [
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/1tu6xt8_2fra-.js",
+        "bytes": 2064,
+        "transfer": 2364
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/31quvt4oiq7d-.js",
+        "bytes": 73449,
+        "transfer": 73749
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/0m3srfegxfxny.js",
+        "bytes": 8037,
+        "transfer": 8337
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/3xkftsb4hybcq.js",
+        "bytes": 47175,
+        "transfer": 47475
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/turbopack-1byz1flvc-bu1.js",
+        "bytes": 4603,
+        "transfer": 4903
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/44kfe099z3gut.js",
+        "bytes": 225,
+        "transfer": 525
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/18fjrq1t-6zgr.js",
+        "bytes": 3982,
+        "transfer": 4282
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/0gm4f75enm_d1.js",
+        "bytes": 3647,
+        "transfer": 3947
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/0df1ev3x9igou.js",
+        "bytes": 40818,
+        "transfer": 41118
+      }
+    ],
+    "errors": [],
+    "failures": [],
+    "attempts": []
+  },
+  {
+    "base": "https://releaseengineer.tech",
+    "width": 768,
+    "height": 1024,
+    "status": 200,
+    "lcp": 432,
+    "cls": 0,
+    "longTasks": [],
+    "overflow": false,
+    "formTop": 491,
+    "submitBottom": 835.890625,
+    "canvasCount": 0,
+    "scene": "static",
+    "js": [
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/0m3srfegxfxny.js",
+        "bytes": 8037,
+        "transfer": 8337
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/1tu6xt8_2fra-.js",
+        "bytes": 2064,
+        "transfer": 2364
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/31quvt4oiq7d-.js",
+        "bytes": 73449,
+        "transfer": 73749
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/3xkftsb4hybcq.js",
+        "bytes": 47175,
+        "transfer": 47475
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/18fjrq1t-6zgr.js",
+        "bytes": 3982,
+        "transfer": 4282
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/turbopack-1byz1flvc-bu1.js",
+        "bytes": 4603,
+        "transfer": 4903
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/44kfe099z3gut.js",
+        "bytes": 225,
+        "transfer": 525
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/0df1ev3x9igou.js",
+        "bytes": 40818,
+        "transfer": 41118
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/0gm4f75enm_d1.js",
+        "bytes": 3647,
+        "transfer": 3947
+      }
+    ],
+    "errors": [],
+    "failures": [],
+    "attempts": []
+  },
+  {
+    "base": "https://releaseengineer.tech",
+    "width": 390,
+    "height": 844,
+    "status": 200,
+    "lcp": 356,
+    "cls": 0,
+    "longTasks": [
+      62
+    ],
+    "overflow": false,
+    "formTop": 418.3125,
+    "submitBottom": 726.6875,
+    "canvasCount": 0,
+    "scene": "static",
+    "js": [
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/31quvt4oiq7d-.js",
+        "bytes": 73449,
+        "transfer": 73749
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/0m3srfegxfxny.js",
+        "bytes": 8037,
+        "transfer": 8337
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/1tu6xt8_2fra-.js",
+        "bytes": 2064,
+        "transfer": 2364
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/44kfe099z3gut.js",
+        "bytes": 225,
+        "transfer": 525
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/18fjrq1t-6zgr.js",
+        "bytes": 3982,
+        "transfer": 4282
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/3xkftsb4hybcq.js",
+        "bytes": 47175,
+        "transfer": 47475
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/turbopack-1byz1flvc-bu1.js",
+        "bytes": 4603,
+        "transfer": 4903
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/0df1ev3x9igou.js",
+        "bytes": 40818,
+        "transfer": 41118
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/0gm4f75enm_d1.js",
+        "bytes": 3647,
+        "transfer": 3947
+      }
+    ],
+    "errors": [],
+    "failures": [],
+    "attempts": []
+  },
+  {
+    "base": "https://releaseengineer.tech",
+    "width": 360,
+    "height": 800,
+    "status": 200,
+    "lcp": 340,
+    "cls": 0,
+    "longTasks": [
+      59
+    ],
+    "overflow": false,
+    "formTop": 408.890625,
+    "submitBottom": 717.265625,
+    "canvasCount": 0,
+    "scene": "static",
+    "js": [
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/1tu6xt8_2fra-.js",
+        "bytes": 2064,
+        "transfer": 2364
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/0m3srfegxfxny.js",
+        "bytes": 8037,
+        "transfer": 8337
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/turbopack-1byz1flvc-bu1.js",
+        "bytes": 4603,
+        "transfer": 4903
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/31quvt4oiq7d-.js",
+        "bytes": 73449,
+        "transfer": 73749
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/3xkftsb4hybcq.js",
+        "bytes": 47175,
+        "transfer": 47475
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/0gm4f75enm_d1.js",
+        "bytes": 3647,
+        "transfer": 3947
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/44kfe099z3gut.js",
+        "bytes": 225,
+        "transfer": 525
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/18fjrq1t-6zgr.js",
+        "bytes": 3982,
+        "transfer": 4282
+      },
+      {
+        "url": "https://releaseengineer.tech/_next/static/immutable/chunks/0df1ev3x9igou.js",
+        "bytes": 40818,
+        "transfer": 41118
+      }
+    ],
+    "errors": [],
+    "failures": [],
+    "attempts": []
+  }
+]
