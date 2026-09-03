@@ -40,6 +40,8 @@ The new browser coverage exercises changed-line selection, keyboard navigation b
 
 Every browser analysis request is intercepted before navigation. The authored workspace never sends a request. Example prefill never submits. Schema-valid report and error fixtures are clearly labeled; none is a new live Claude result.
 
+After PR #25 passed its checks and merged, the main-branch rerun and production report fixture exposed a timing-dependent contrast failure in the inherited surface reveal: text briefly faded to 55% opacity. The correction keeps the gentle translation and removes opacity animation from text surfaces. The accessibility assertions remain unchanged. Delivery requires another green PR and exact-SHA production verification after this correction.
+
 ## Measured lab observations
 
 One unthrottled desktop Chromium run per viewport against current production before editing, and one against the optimized local build after editing. Same installed browser executable. Raw observations: [before](release-signal/before-measurements.json), [after](release-signal/after-measurements.json). JavaScript sizes are encoded resource body bytes, not source size. The graph request performance mark distinguishes initial scripts from deferred renderer scripts.
