@@ -2327,7 +2327,7 @@ button:disabled {
     inset: 25px -25px 20px;
   }
   .scene-fallback {
-    transform: scale(1.45);
+    transform: translateY(16px) scale(1.28);
   }
   .graph-label-source {
     left: 15%;

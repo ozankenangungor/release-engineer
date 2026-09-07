@@ -42,6 +42,8 @@ Every browser analysis request is intercepted before navigation. The authored wo
 
 After PR #25 passed its checks and merged, the main-branch rerun and production report fixture exposed a timing-dependent contrast failure in the inherited surface reveal: text briefly faded to 55% opacity. The correction keeps the gentle translation and removes opacity animation from text surfaces. The accessibility assertions remain unchanged. Delivery requires another green PR and exact-SHA production verification after this correction.
 
+Final production screenshot inspection also found a source node touching the graph title on small phones. The mobile SVG is slightly smaller and shifted down within its existing stage, leaving clear space for the title and conceptual caption. The analyzer position, stage dimensions and desktop renderer are unaffected. Actual optimized-build views: [390px graph](release-signal/graph-mobile-390.png), [360px graph](release-signal/graph-mobile-360.png).
+
 ## Measured lab observations
 
 One unthrottled desktop Chromium run per viewport against current production before editing, and one against the optimized local build after editing. Same installed browser executable. Raw observations: [before](release-signal/before-measurements.json), [after](release-signal/after-measurements.json). JavaScript sizes are encoded resource body bytes, not source size. The graph request performance mark distinguishes initial scripts from deferred renderer scripts.
