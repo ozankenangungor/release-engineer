@@ -1169,38 +1169,6 @@ button:disabled {
   justify-self: end;
   font-size: 12px;
 }
-.evaluation-record {
-  display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 70px;
-  background: var(--ink);
-  color: white;
-  padding: 35px 40px;
-  margin-top: 24px;
-}
-.evaluation-record .section-kicker {
-  color: #9eb2d1;
-  font-size: 10px;
-  margin-bottom: 15px;
-}
-.evaluation-result {
-  font-size: 32px;
-  letter-spacing: -0.035em;
-}
-.evaluation-result span {
-  color: #627590;
-  margin-inline: 10px;
-}
-.evaluation-record > div:last-child > p {
-  font-size: 13px;
-  line-height: 1.8;
-  color: #c3d0e3;
-}
-.evaluation-record .text-link {
-  color: #a2baff;
-  font-size: 12px;
-  margin-top: 16px;
-}
 .founder-section {
   display: grid;
   grid-template-columns: 1fr 1.05fr;
@@ -2159,13 +2127,6 @@ button:disabled {
   .trust-ledger article > p {
     font-size: 13px;
   }
-  .evaluation-record {
-    gap: 35px;
-    padding: 28px;
-  }
-  .evaluation-result {
-    font-size: 27px;
-  }
   .founder-section {
     gap: 40px;
   }
@@ -2569,23 +2530,6 @@ button:disabled {
   .trust-ledger a {
     font-size: 12px;
   }
-  .evaluation-record {
-    grid-template-columns: 1fr;
-    gap: 20px;
-    padding: 24px 20px;
-  }
-  .evaluation-record .section-kicker {
-    font-size: 8px;
-  }
-  .evaluation-result {
-    font-size: 25px;
-  }
-  .evaluation-result span {
-    margin-inline: 5px;
-  }
-  .evaluation-record > div:last-child > p {
-    font-size: 12px;
-  }
   .founder-section {
     grid-template-columns: 1fr;
     gap: 30px;
@@ -2793,7 +2737,6 @@ button:disabled {
 @media (forced-colors: active) {
   .hero-stage,
   .product-workspace,
-  .evaluation-record,
   .final-cta {
     background: Canvas;
     color: CanvasText;
