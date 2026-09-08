@@ -247,6 +247,11 @@ export default function About() {
               Participation does not imply consent to publish your name or a
               quote.
             </p>
+            <p className="mt-3">
+              Save a report, record your human verification and explain what
+              changed in your review with the <Link href="/pilot" className="text-link">beta feedback guide ↗︎</Link>.
+              Notes and downloads stay on your device until you choose to share them.
+            </p>
           </section>
           <section data-reveal="0">
             <h2>Evaluation</h2>

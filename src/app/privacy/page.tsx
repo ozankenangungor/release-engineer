@@ -129,6 +129,25 @@ export default function Privacy() {
             update it if the product’s data handling changes.
           </p>
         </section>
+        <section>
+          <h2 className="mb-2 text-base font-medium text-ink">Downloads and voluntary feedback</h2>
+          <p>
+            If you choose to download a report or verification record, your
+            browser saves a file on your device. Verification notes are held
+            in page memory; they are not sent to our server, saved in browser
+            storage or included in operational logs. Reloading clears them.
+            Downloads can contain public PR identifiers, report text or notes
+            you entered. Review the file before sharing it.
+          </p>
+          <p className="mt-3">
+            If you separately email feedback, your mail provider processes that
+            message and the founder receives the material you chose to send.
+            Agree permission and a retention period before a pilot record is
+            retained. Publication of feedback, quotes or identity requires
+            separate permission. Do not send secrets, private code or sensitive
+            vulnerability details.
+          </p>
+        </section>
         <p>
           Contact:{" "}
           <a

@@ -1,4 +1,7 @@
 import type { AnalysisResponse, Review } from "@/lib/review-schema";
+import dynamic from "next/dynamic";
+
+const ReviewHandoff = dynamic(() => import("./review-handoff").then((module) => module.ReviewHandoff));
 
 const riskStyles = {
   low: "risk-low",
@@ -105,7 +108,9 @@ export function Finding({
   );
 }
 
-export function ReviewReport({ result }: { result: AnalysisResponse }) {
+export function ReviewReport({ result, receivedAt = null, interfaceRevision = null }: {
+  result: AnalysisResponse; receivedAt?: string | null; interfaceRevision?: string | null;
+}) {
   const { review, pullRequest: pr, coverage, warnings } = result;
   return (
     <section aria-labelledby="review-title" className="report-artifact mx-auto">
@@ -129,6 +134,7 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
           Findings <span>{review.findings.length}</span>
         </a>
         <a href="#review-limitations">Limitations</a>
+        <a href="#review-handoff">Save & verify</a>
       </nav>
       <div
         data-risk={review.overallRisk}
@@ -300,6 +306,7 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
           ))}
         </ul>
       </details>
+      <ReviewHandoff result={result} receivedAt={receivedAt} interfaceRevision={interfaceRevision} />
       <p className="mt-5 text-xs leading-5 text-muted">
         Powered by Claude. Findings are decision support; verify them against
         the code and your release process.

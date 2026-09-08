@@ -18,6 +18,7 @@
     "eval:validate": "node evals/run.mjs validate",
     "eval:live": "node evals/run.mjs live",
     "eval:compare": "node evals/run.mjs compare",
+    "pilot:summarize": "node scripts/run-pilot.mjs",
     "test:browser": "playwright test"
   },
   "dependencies": {

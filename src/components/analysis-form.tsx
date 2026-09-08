@@ -10,13 +10,16 @@ import {
 import { ReviewReport } from "./review-report";
 import { createPortal } from "react-dom";
 
-export function AnalysisForm({ examplePrUrl }: { examplePrUrl?: string }) {
+export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
+  examplePrUrl?: string; interfaceRevision?: string | null;
+}) {
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [invalidUrl, setInvalidUrl] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<AnalysisResponse | null>(null);
+  const [receivedAt, setReceivedAt] = useState<string | null>(null);
   const controllerRef = useRef<AbortController | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const resultRef = useRef<HTMLDivElement | null>(null);
@@ -94,6 +97,7 @@ export function AnalysisForm({ examplePrUrl }: { examplePrUrl?: string }) {
       const validated = analysisResponseSchema.safeParse(data);
       if (!validated.success)
         throw new Error("The report could not be validated. Please try again.");
+      setReceivedAt(new Date().toISOString());
       setResult(validated.data);
     } catch (failure) {
       if (controller.signal.aborted)
@@ -233,7 +237,7 @@ export function AnalysisForm({ examplePrUrl }: { examplePrUrl?: string }) {
             aria-label="Completed release review"
             className="completed-report"
           >
-            <ReviewReport result={result} />
+            <ReviewReport key={receivedAt} result={result} receivedAt={receivedAt} interfaceRevision={interfaceRevision} />
           </div>,
           output,
         )}

@@ -1,0 +1,34 @@
+RELEASE ENGINEER / BLANK BETA FEEDBACK WORKSHEET
+
+This is an empty worksheet. No use, finding, verification or customer is asserted.
+Keep completed records private. Include only what you choose to share.
+
+Public PR URL:
+Reviewed PR head SHA:
+Observation date/time and timezone:
+Interface revision, if available:
+Coverage warnings or missing context:
+Source of observation (external tester / founder test / other / unknown):
+
+What was useful, wrong or missing?
+
+Finding checked (title or index):
+Assessment (not checked / supported / incorrect / needs more context):
+Evidence checked (public code, contract or actual test result):
+What did you actually do after reading the report?
+Have you used Release Engineer before? (optional)
+
+Permission to retain this feedback and agreed retention/review date:
+Permission to publish an anonymized summary: not granted unless separately agreed.
+Permission to publish an exact quote: not granted unless separately agreed.
+Permission to identify you publicly: not granted unless separately agreed.
+
+Do not include secrets, private code, personal information or sensitive
+vulnerability details. Use the affected project's private disclosure channel.
+
+The product does not run tests or inspect the full repository. Feedback and
+actions are self-reported until separately checked. No findings does not prove
+release safety. A feedback record is not a customer or a unique-user count.
+
+Voluntary feedback: founder@releaseengineer.tech
+Guide: https://releaseengineer.tech/pilot

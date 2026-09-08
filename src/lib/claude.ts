@@ -11,6 +11,7 @@ import {
 } from "./review-schema";
 import type { ReviewContext } from "./context";
 import { enforceReviewCoverage } from "./review-policy";
+import { reviewIntegrityIssues } from "./review-integrity";
 
 export type ReviewMetadata = {
   requestedModel: string;
@@ -122,6 +123,12 @@ export async function reviewPullRequestWithMetadata(
     throw new AnalysisError(
       "INVALID_REVIEW",
       "Claude’s review did not pass validation. No report was accepted. Please try again.",
+    );
+  }
+  if (reviewIntegrityIssues(review, context).length) {
+    throw new AnalysisError(
+      "INVALID_REVIEW",
+      "Claude’s review claimed evidence or checks outside the supplied context. No report was accepted. Please try again.",
     );
   }
   return {
