@@ -94,6 +94,37 @@ export default function Evidence() {
           </div>
         </section>
         <section className="evidence-entry" data-reveal="0">
+          <span className="evidence-status">SOURCE & RUNTIME CHECKS</span>
+          <div>
+            <h2>Public changes, checked against pinned sources.</h2>
+            <p>
+              An assistant-executed technical walkthrough compares two upstream
+              PRs before and after their changes. It records TypeScript compiler
+              diagnostics, Bun request behavior and 106 passing tests from two
+              selected Hono request-test files, with commands and source revisions.
+            </p>
+            <p className="mt-3">
+              This is source and runtime verification. No Claude analysis or
+              external developer session was performed; no finding, customer or
+              model-quality claim is added. Failures and coverage limits remain
+              visible in the record.
+            </p>
+            <div className="flex flex-wrap gap-x-6">
+              <a
+                className="text-link"
+                href={`${repository}/blob/${sourceRevision}/docs/technical-walkthrough/README.md`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Sources, observations & reproduction ↗︎
+              </a>
+              <a className="text-link" href="/technical-walkthrough-kit.zip" download>
+                Download the reproduction kit ↓
+              </a>
+            </div>
+          </div>
+        </section>
+        <section className="evidence-entry" data-reveal="0">
           <span className="evidence-status">EXTERNAL BETA FEEDBACK</span>
           <div>
             <h2>Approved early developer feedback.</h2>
