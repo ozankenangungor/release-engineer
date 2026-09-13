@@ -1461,6 +1461,13 @@ button:disabled {
   color: var(--muted);
   max-width: 530px;
 }
+.founder-section > div:last-child > .founder-role {
+  margin-top: -7px;
+  margin-bottom: 15px;
+  color: var(--blue);
+  font-size: 14px;
+  font-weight: 500;
+}
 .founder-links {
   display: flex;
   flex-wrap: wrap;
