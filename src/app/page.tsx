@@ -68,7 +68,7 @@ export default function Home() {
     (study) => study.slug === "rails-doc-typo-58968",
   );
   return (
-    <main id="main" className="home-shell">
+    <main id="main" className="home-shell signal-experience">
       <section className="signal-hero" aria-labelledby="hero-title">
         <div className="hero-composition">
           <div className="hero-copy">
@@ -77,11 +77,10 @@ export default function Home() {
               INTELLIGENCE
             </p>
             <h1 id="hero-title">
-              Catch release
-              <br />
-              risks before
-              <br />
-              they <span className="ship-word">ship.</span>
+              <span>Catch release risks.</span>
+              <span className="hero-resolution">
+                Before they <span className="ship-word">ship.</span>
+              </span>
             </h1>
             <p className="hero-description">
               Claude-powered analysis for public GitHub pull requests. Surface

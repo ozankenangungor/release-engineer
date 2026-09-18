@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import { Component, useCallback, useState, type ReactNode } from "react";
 import { SceneFallback } from "./scene-fallback";
 import { useSceneVisibility } from "./use-scene-visibility";
+import { graphStages, type GraphPhase } from "./graph-topology";
 const SceneCanvas = dynamic(() => import("./scene-canvas"), {
   ssr: false,
   loading: () => null,
@@ -24,6 +25,7 @@ class SceneBoundary extends Component<
 }
 export function ReleaseIntelligenceScene() {
   const [paused, setPaused] = useState(false);
+  const [phase, setPhase] = useState<GraphPhase>("trace");
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
   const [attempt, setAttempt] = useState(0);
@@ -45,49 +47,60 @@ export function ReleaseIntelligenceScene() {
       className={`hero-stage intelligence-scene ${ready && eligible && !failed ? "scene-ready" : ""}`}
       data-scene={failed ? "fallback" : ready && eligible ? "webgl" : "static"}
       data-motion-active={eligible && ready && active && !failed}
+      data-phase={phase}
       role="group"
       aria-label="Conceptual release graph, not live telemetry"
     >
       <div className="scene-topline">
         <span>RELEASE / SIGNAL</span>
-        <span className="scene-version">CONCEPT 01</span>
+        <span className="scene-version">AN INTERACTIVE CONCEPT</span>
       </div>
-      <p className="scene-intro">
-        The Release Graph<span>Follow the change. Trace the consequence.</span>
-      </p>
       <div className="scene-visual" aria-hidden="true">
         <div className="scene-ambient" />
-        <SceneFallback />
+        <SceneFallback phase={phase} />
         {eligible && !failed && (
           <SceneBoundary key={attempt} onFailure={onUnavailable}>
             <SceneCanvas
               active={active}
+              phase={phase}
               onReady={onReady}
               onUnavailable={onUnavailable}
             />
           </SceneBoundary>
         )}
-        <div className="graph-label graph-label-source">
-          <span>01 / SOURCE</span>Changes enter
-        </div>
-        <div className="graph-label graph-label-engine">
-          <span>02 / TRACE</span>Relationships matter
-        </div>
-        <div className="graph-label graph-label-risk">
-          <span>03 / SIGNAL</span>Risks surface
-          <span className="graph-risk-line" />
-        </div>
       </div>
-      <div className="scene-bottomline">
-        <span>
-          <i />
-          Stable path
-        </span>
-        <span>
-          <i />
-          Potential risk
-        </span>
+      <div
+        className="scene-chapters"
+        role="group"
+        aria-label="Explore the release graph"
+      >
+        {graphStages.map((stage, index) => (
+          <button
+            type="button"
+            key={stage.id}
+            aria-pressed={phase === stage.id}
+            aria-describedby="scene-phase-description"
+            onClick={() => setPhase(stage.id)}
+          >
+            <span aria-hidden="true">0{index + 1}</span>
+            {stage.label}
+            <span aria-hidden="true">↗︎</span>
+          </button>
+        ))}
       </div>
+      <p
+        className="scene-phase-description"
+        id="scene-phase-description"
+        aria-live="polite"
+      >
+        {graphStages.find((stage) => stage.id === phase)?.description}
+      </p>
+      {phase === "signal" && (
+        <a className="scene-signal-link" href="#report-preview">
+          <span className="signal-link-dot" aria-hidden="true" />
+          Explore an illustrative finding <span aria-hidden="true">↗︎</span>
+        </a>
+      )}
       <p className="scene-caption">
         Conceptual visualization · No live telemetry
       </p>

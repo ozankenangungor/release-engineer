@@ -3,6 +3,7 @@ import { Header, Footer } from "@/components/brand";
 import { MotionSurfaces } from "@/components/motion-surfaces";
 import localFont from "next/font/local";
 import "./globals.css";
+import "./experience.css";
 
 const inter = localFont({
   src: "../fonts/inter-latin.woff2",
