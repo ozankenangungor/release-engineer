@@ -39,7 +39,7 @@ export default function SceneCanvas({
         tabIndex={-1}
         dpr={[1, 1.5]}
         frameloop="demand"
-        camera={{ position: [5.8, 5.3, 10.5], fov: 36, near: 0.1, far: 50 }}
+        camera={{ position: [0.4, 4.3, 12], fov: 25, near: 0.1, far: 50 }}
         gl={{
           alpha: true,
           antialias: true,
@@ -47,7 +47,7 @@ export default function SceneCanvas({
           failIfMajorPerformanceCaveat: true,
           toneMapping: NeutralToneMapping,
         }}
-        onCreated={({ camera }) => camera.lookAt(new Vector3(0, 0.2, 0))}
+        onCreated={({ camera }) => camera.lookAt(new Vector3(0, 0.9, 0))}
         fallback={null}
       >
         <SceneLights />

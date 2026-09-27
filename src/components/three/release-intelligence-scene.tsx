@@ -53,7 +53,7 @@ export function ReleaseIntelligenceScene() {
     >
       <div className="scene-topline">
         <span>RELEASE / SIGNAL</span>
-        <span className="scene-version">AN INTERACTIVE CONCEPT</span>
+        <span className="scene-version">ILLUSTRATIVE TOPOLOGY</span>
       </div>
       <div className="scene-visual" aria-hidden="true">
         <div className="scene-ambient" />
@@ -68,6 +68,32 @@ export function ReleaseIntelligenceScene() {
             />
           </SceneBoundary>
         )}
+      </div>
+      <div className="scene-source-note">
+        <p className="scene-note-label">ILLUSTRATIVE CHANGE</p>
+        <h3>A response changes.</h3>
+        <code>
+          Release[] <span aria-hidden="true">→</span>
+          <br />
+          {"{ items: Release[] }"}
+        </code>
+      </div>
+      <div className="scene-review-note">
+        <p className="scene-note-label">REVIEW THE CONSEQUENCE</p>
+        <h3>
+          {phase === "source"
+            ? "Inspect the changed shape."
+            : phase === "trace"
+              ? "Follow affected paths."
+              : "Verify affected callers."}
+        </h3>
+        <p>
+          {phase === "source"
+            ? "The response wraps an array in an object."
+            : phase === "trace"
+              ? "Caller code beyond this patch has not been inspected."
+              : "Potential contract break. Human verification required."}
+        </p>
       </div>
       <div
         className="scene-chapters"
@@ -95,12 +121,10 @@ export function ReleaseIntelligenceScene() {
       >
         {graphStages.find((stage) => stage.id === phase)?.description}
       </p>
-      {phase === "signal" && (
-        <a className="scene-signal-link" href="#report-preview">
-          <span className="signal-link-dot" aria-hidden="true" />
-          Explore an illustrative finding <span aria-hidden="true">↗︎</span>
-        </a>
-      )}
+      <a className="scene-signal-link" href="#report-preview">
+        <span className="signal-link-dot" aria-hidden="true" />
+        Explore an illustrative finding <span aria-hidden="true">↗︎</span>
+      </a>
       <p className="scene-caption">
         Conceptual visualization · No live telemetry
       </p>

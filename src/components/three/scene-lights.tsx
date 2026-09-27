@@ -23,10 +23,10 @@ export function SceneLights() {
         attach="environment"
         dispose={null}
       />
-      <ambientLight intensity={0.4} />
-      <hemisphereLight args={["#eaf2ff", "#9aa9bf", 1.3]} />
+      <ambientLight intensity={0.18} />
+      <hemisphereLight args={["#cbd9f5", "#080a0f", 0.65]} />
       <directionalLight position={[-3, 7, 6]} intensity={2} color="#ffffff" />
-      <directionalLight position={[5, 3, -4]} intensity={2} color="#95b8ff" />
+      <directionalLight position={[5, 3, -4]} intensity={1.5} color="#93a8df" />
     </>
   );
 }

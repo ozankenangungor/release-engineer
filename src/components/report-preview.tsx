@@ -103,9 +103,9 @@ export function ReportPreview() {
         <div>
           <p className="section-kicker">01 / FROM DIFF TO DECISION</p>
           <h2 id="preview-title">
-            A small change.
+            The change. The evidence.
             <br />
-            <span>A different contract.</span>
+            <span>Your next decision.</span>
           </h2>
         </div>
         <div>
@@ -128,7 +128,8 @@ export function ReportPreview() {
           </span>
           <div className="workspace-title-actions">
             <span className="workspace-fixture">
-              <span className="status-dot" aria-hidden="true" /> INTERACTIVE EXAMPLE
+              <span className="status-dot" aria-hidden="true" /> INTERACTIVE
+              EXAMPLE
             </span>
             <button
               type="button"
@@ -398,7 +399,9 @@ export function ReportPreview() {
                             setSelected(true);
                             // Reveal the diff before focusing its changed line.
                             requestAnimationFrame(() => {
-                              changedLine.current?.focus({ preventScroll: true });
+                              changedLine.current?.focus({
+                                preventScroll: true,
+                              });
                               changedLine.current?.scrollIntoView({
                                 block: "nearest",
                                 behavior: "instant",
@@ -456,8 +459,8 @@ export function ReportPreview() {
                   </p>
                   <h3>Turn the concern into a check.</h3>
                   <p className="checklist-disclosure">
-                    Try a review checklist. Your selections stay in this page and
-                    do not verify a real release.
+                    Try a review checklist. Your selections stay in this page
+                    and do not verify a real release.
                   </p>
                   <ol className="example-checklist">
                     {checks.map((check, index) => (

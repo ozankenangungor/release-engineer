@@ -17,7 +17,7 @@ describe("product clarity and evidence integrity", () => {
     const html = render(Home);
     const heading = html.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/)?.[1];
     expect(heading?.replace(/<[^>]+>/g, "")).toMatch(
-      /^Catch release risks\.\s*Before they ship\.$/,
+      /^Understand the change\.\s*Own the release\.$/,
     );
     expect(html).toContain(
       "Claude-powered analysis for public GitHub pull requests",
@@ -64,8 +64,11 @@ describe("product clarity and evidence integrity", () => {
       "No legal company has been incorporated or registered",
     );
     for (const Page of [About, Evidence, Privacy, Terms]) {
-      expect(render(Page).replace(/<[^>]+>/g, "").replace(/\s+/g, " "))
-        .toContain("No legal company has been incorporated or registered");
+      expect(
+        render(Page)
+          .replace(/<[^>]+>/g, "")
+          .replace(/\s+/g, " "),
+      ).toContain("No legal company has been incorporated or registered");
     }
     const readme = readFileSync(
       new URL("../README.md", import.meta.url),
