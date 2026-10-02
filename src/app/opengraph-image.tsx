@@ -15,8 +15,9 @@ export default function OpenGraphImage() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          background: "#ffffff",
-          color: "#151922",
+          background:
+            "radial-gradient(ellipse at 50% 0%, #1b2b55 0%, #060709 75%)",
+          color: "#f1f3f8",
           fontFamily: "sans-serif",
           padding: "30px 44px",
         }}
@@ -34,7 +35,7 @@ export default function OpenGraphImage() {
               display: "flex",
               alignItems: "center",
               gap: 10,
-              color: "#254ce5",
+              color: "#9bb2ff",
             }}
           >
             <ReleaseMark />
@@ -42,14 +43,14 @@ export default function OpenGraphImage() {
               style={{
                 fontSize: 23,
                 fontWeight: 700,
-                color: "#151922",
+                color: "#f1f3f8",
                 letterSpacing: -1,
               }}
             >
               Release Engineer
             </span>
           </div>
-          <span style={{ fontSize: 13, color: "#667284" }}>
+          <span style={{ fontSize: 13, color: "#a5aebd" }}>
             releaseengineer.tech
           </span>
         </div>
@@ -65,7 +66,7 @@ export default function OpenGraphImage() {
             style={{
               fontSize: 10,
               letterSpacing: 2,
-              color: "#657185",
+              color: "#a5aebd",
               marginBottom: 15,
             }}
           >
@@ -87,11 +88,12 @@ export default function OpenGraphImage() {
               fontWeight: 700,
               letterSpacing: -3.4,
               lineHeight: 1.1,
+              color: "#a6c2ff",
             }}
           >
             Own the release.
           </span>
-          <span style={{ fontSize: 15, color: "#5b6370", marginTop: 17 }}>
+          <span style={{ fontSize: 15, color: "#a5aebd", marginTop: 17 }}>
             Public GitHub PR analysis. Claude-powered reasoning. Human
             decisions.
           </span>
@@ -101,7 +103,8 @@ export default function OpenGraphImage() {
             display: "flex",
             height: 245,
             marginTop: 27,
-            background: "#080b12",
+            background: "linear-gradient(135deg, #111b2c, #090b11)",
+            border: "1px solid #35405a",
             borderRadius: 10,
             position: "relative",
             alignItems: "center",

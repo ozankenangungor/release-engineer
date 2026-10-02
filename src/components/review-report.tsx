@@ -96,7 +96,7 @@ export function Finding({
       <p className="report-text mt-3 text-sm leading-6 text-muted">
         {finding.explanation}
       </p>
-      <div className="report-recommendation mt-5 border-t border-[#dbe0e7]">
+      <div className="report-recommendation mt-5 border-t border-[var(--rule)]">
         <p className="font-mono text-[11px] tracking-widest text-signal">
           RECOMMENDATION
         </p>
@@ -188,7 +188,7 @@ export function ReviewReport({ result, receivedAt = null, interfaceRevision = nu
             </div>
           </dl>
         </div>
-        <dl className="report-metadata mt-7 border-t border-[#dbe0e7] pt-6">
+        <dl className="report-metadata mt-7 border-t border-[var(--rule)] pt-6">
           <div>
             <dt>REVIEWED HEAD SHA</dt>
             <dd>
@@ -218,7 +218,7 @@ export function ReviewReport({ result, receivedAt = null, interfaceRevision = nu
             <dt>CHANGE SIZE</dt>
             <dd>
               <span className="text-signal">+{pr.additions}</span> /{" "}
-              <span className="text-[#a33622]">−{pr.deletions}</span>
+              <span className="text-[var(--coral)]">−{pr.deletions}</span>
             </dd>
           </div>
         </dl>
@@ -226,12 +226,12 @@ export function ReviewReport({ result, receivedAt = null, interfaceRevision = nu
       {(coverage.partial || warnings.length > 0) && (
         <aside
           aria-label="Partial analysis warning"
-          className="partial-context-warning mt-5 rounded-2xl border border-amber-300/30 bg-amber-300/7 p-5 sm:p-6"
+          className="partial-context-warning mt-5 rounded-2xl p-5 sm:p-6"
         >
-          <h3 className="text-sm font-medium text-[#745020]">
+          <h3 className="text-sm font-medium">
             Partial review · Some change context was unavailable
           </h3>
-          <ul className="mt-2 space-y-1 text-sm leading-6 text-[#745020]">
+          <ul className="mt-2 space-y-1 text-sm leading-6">
             {warnings.map((warning, index) => (
               <li key={index} className="report-text">
                 {warning}
@@ -256,7 +256,7 @@ export function ReviewReport({ result, receivedAt = null, interfaceRevision = nu
           >
             Findings
           </h3>
-          <span className="rounded-md border border-[#dbe0e7] px-2 py-0.5 font-mono text-xs text-muted">
+          <span className="rounded-md border border-[var(--rule)] px-2 py-0.5 font-mono text-xs text-muted">
             {review.findings.length}
           </span>
         </div>
@@ -267,7 +267,7 @@ export function ReviewReport({ result, receivedAt = null, interfaceRevision = nu
             ))}
           </div>
         ) : (
-          <div className="border-l-2 border-[#abd6c4] bg-[#e3f5ed] p-6">
+          <div className="report-empty p-6">
             <p className="text-sm font-medium text-signal">
               No issue detected in the supplied context.
             </p>

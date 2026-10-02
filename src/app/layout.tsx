@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Header, Footer } from "@/components/brand";
 import { MotionSurfaces } from "@/components/motion-surfaces";
 import localFont from "next/font/local";
@@ -57,6 +57,11 @@ const structuredData = {
       description,
     },
   ],
+};
+
+export const viewport: Viewport = {
+  themeColor: "#060709",
+  colorScheme: "dark",
 };
 
 export const metadata: Metadata = {
