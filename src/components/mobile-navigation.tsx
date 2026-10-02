@@ -56,7 +56,7 @@ export function MobileNavigation({
           rel="noopener noreferrer"
         >
           <span className="menu-index" aria-hidden="true">
-            05
+            {String(items.length + 1).padStart(2, "0")}
           </span>
           GitHub<span aria-hidden="true">↗︎</span>
         </a>

@@ -178,8 +178,8 @@ export default function About() {
             <p>
               Three founder-supplied, publication-approved quotes from external
               beta testers appear in the{" "}
-              <Link href="/evidence#developer-feedback" className="text-link">
-                evidence index
+              <Link href="/feedback" className="text-link">
+                developer feedback page
               </Link>
               . Exact quotes are published with permission. Display aliases and
               roles are publication-approved; private identities and PR links

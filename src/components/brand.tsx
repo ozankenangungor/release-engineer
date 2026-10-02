@@ -38,6 +38,7 @@ const navigation = [
   { href: "/#report-preview", label: "Product" },
   { href: "/#how-it-works", label: "How it works" },
   { href: "/evidence", label: "Evidence" },
+  { href: "/feedback", label: "Feedback" },
   { href: "/about", label: "About" },
 ];
 export function Header() {
@@ -84,6 +85,7 @@ export function Footer() {
             <p className="footer-label">PRODUCT</p>
             <Link href="/#report-preview">Product</Link>
             <Link href="/evidence">Evidence</Link>
+            <Link href="/feedback">Feedback</Link>
             <Link href="/about">About</Link>
           </div>
           <div>

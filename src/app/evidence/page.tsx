@@ -139,7 +139,7 @@ export default function Evidence() {
               verify findings, establish unique developer counts or demonstrate
               customer traction.
             </p>
-            <Link className="text-link" href="#developer-feedback">
+            <Link className="text-link" href="/feedback">
               Read the approved quotes →
             </Link>
           </div>
