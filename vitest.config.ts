@@ -5,8 +5,14 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
-      "server-only": fileURLToPath(new URL("./tests/server-only.ts", import.meta.url)),
+      "server-only": fileURLToPath(
+        new URL("./tests/server-only.ts", import.meta.url),
+      ),
     },
   },
-  test: { environment: "node", include: ["tests/**/*.test.ts"], restoreMocks: true },
+  test: {
+    environment: "node",
+    include: ["tests/**/*.test.ts"],
+    restoreMocks: true,
+  },
 });
