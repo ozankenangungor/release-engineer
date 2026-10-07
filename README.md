@@ -1,5 +1,7 @@
 # Release Engineer
 
+Live product: [releaseengineer.tech](https://releaseengineer.tech)
+
 Your AI Release Engineer. Paste a public GitHub pull-request URL to get a structured release-readiness review powered by Claude: regressions, correctness risks, testing gaps, breaking changes, security concerns, and visible dependency, configuration and operational risks.
 
 Reports support human release decisions. They do not guarantee safe code or replace review and testing. An empty findings list is a valid result.
@@ -36,7 +38,6 @@ Use Node.js 24 or later and pnpm 12.9.1 (recorded in `packageManager`). Install 
 ```sh
 git clone https://github.com/ozankenangungor/release-engineer.git
 cd release-engineer
-git switch mvp/initial-application
 pnpm install --frozen-lockfile
 cp .env.example .env.local
 # Edit .env.local with your own Anthropic API key.
