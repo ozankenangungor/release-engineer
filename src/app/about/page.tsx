@@ -108,17 +108,13 @@ export default function About() {
           </p>
           <p className="mt-3">
             Offline checks validate fixtures, schema handling and the grader.
-            Two manually dispatched live Claude runs also evaluated these cases
-            through the production review path. The October 7, 2026 candidate
-            completed 32/32 cases with no infrastructure errors: schema validity 32/32, required
-            synthetic risks detected 17/17 and material false positives 0/9
-            eligible safe controls.
+            Two manually dispatched complete 32-case synthetic runs used the
+            production Claude review path. In the latest recorded run
+            (October 7, 2026), 32/32 cases completed with 0 infrastructure errors.
           </p>
           <p className="mt-3">
-            That run had 22 passing cases, 10 failing cases and one critical
-            evaluator violation: an unsupported test-confirmation claim. These
-            synthetic observations are not real-world accuracy or external beta
-            validation. Reports still require human verification.
+            Synthetic evaluation is not real-world accuracy, traction or
+            external validation. Reports still require human verification.
           </p>
           <p className="mt-3">
             <a
@@ -127,7 +123,7 @@ export default function About() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Live evaluation evidence, failures and source runs
+              Full live evaluation metrics, failures and regressions
             </a>
           </p>
           <p className="mt-3">

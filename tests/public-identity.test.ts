@@ -55,9 +55,13 @@ describe("public identity", () => {
   it("makes the evaluation evidence and its limits visible in the About HTML", () => {
     const page = renderToStaticMarkup(createElement(About));
     expect(page).toContain("32 original synthetic pull-request cases");
-    expect(page).toContain("Two manually dispatched live Claude runs");
-    expect(page).toContain("22 passing cases, 10 failing cases and one critical");
-    expect(page).toContain("synthetic observations are not real-world accuracy or external beta");
+    expect(page).toContain("Two manually dispatched complete 32-case synthetic runs");
+    expect(page).toContain("production Claude review path");
+    expect(page).toContain("32/32 cases completed with 0 infrastructure errors");
+    expect(page).toContain("Synthetic evaluation is not real-world accuracy, traction or external validation");
+    expect(page).toContain("Full live evaluation metrics, failures and regressions");
+    expect(page).not.toContain("22 passing cases");
+    expect(page).not.toContain("10 failing cases");
     expect(page).not.toMatch(/no live.*baseline/i);
     expect(page).toContain(
       'href="https://github.com/ozankenangungor/release-engineer/blob/main/docs/live-evaluation-evidence.md"',
