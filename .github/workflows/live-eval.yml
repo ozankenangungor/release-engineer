@@ -1,0 +1,87 @@
+name: Live evaluation
+
+on:
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: Evaluation scope
+        required: true
+        default: smoke
+        type: choice
+        options:
+          - smoke
+          - baseline
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-engineer-live-evaluation
+  cancel-in-progress: false
+
+jobs:
+  evaluate:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+      EVAL_LIVE: "1"
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate evaluation fixtures
+        run: pnpm eval:validate
+
+      - name: Check Anthropic credential
+        shell: bash
+        run: |
+          if [[ -z "$ANTHROPIC_API_KEY" ]]; then
+            echo "::error::Repository secret ANTHROPIC_API_KEY is not configured."
+            exit 2
+          fi
+
+      - name: Run one-case smoke evaluation
+        if: inputs.scope == 'smoke'
+        run: pnpm eval:live --cases correctness-null-dereference --max-cases 1 --label gha-smoke
+
+      - name: Run 32-case baseline
+        if: inputs.scope == 'baseline'
+        run: pnpm eval:live --cases all --max-cases 32 --label gha-baseline
+
+      - name: Add evaluation report to workflow summary
+        if: always()
+        shell: bash
+        run: |
+          shopt -s nullglob
+          reports=(evals/results/*/report.md)
+          if (( ${#reports[@]} == 0 )); then
+            echo "No evaluation report was produced." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          cat "${reports[-1]}" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload evaluation artifacts
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: live-eval-${{ inputs.scope }}-${{ github.run_id }}
+          path: |
+            evals/results/**/result.json
+            evals/results/**/report.md
+          if-no-files-found: warn
+          retention-days: 7
