@@ -10,12 +10,44 @@ import {
   type Review,
 } from "./review-schema";
 import type { ReviewContext } from "./context";
+import { enforceReviewCoverage } from "./review-policy";
+
+export type ReviewMetadata = {
+  requestedModel: string;
+  servedModel: string | null;
+  stopReason: string | null;
+  usage: {
+    inputTokens: number | null;
+    outputTokens: number | null;
+    cacheCreationInputTokens: number | null;
+    cacheReadInputTokens: number | null;
+  };
+};
+
+export type ReviewExecution = {
+  modelReview: Review;
+  review: Review;
+  metadata: ReviewMetadata;
+};
 
 export async function reviewPullRequest(
   context: ReviewContext,
   signal?: AbortSignal,
 ): Promise<Review> {
-  const { apiKey, model } = getClaudeConfig();
+  return (await reviewPullRequestWithMetadata(context, signal)).review;
+}
+
+export async function reviewPullRequestWithMetadata(
+  context: ReviewContext,
+  signal?: AbortSignal,
+  options: {
+    model?: string;
+    onResponse?: (metadata: ReviewMetadata) => void;
+  } = {},
+): Promise<ReviewExecution> {
+  const config = getClaudeConfig();
+  const apiKey = config.apiKey;
+  const model = options.model ?? config.model;
   const client = new Anthropic({ apiKey, maxRetries: 0, timeout: 90_000 });
   let response: Anthropic.Message;
   try {
@@ -60,6 +92,18 @@ export async function reviewPullRequest(
       "Claude is temporarily unavailable. Please try again.",
     );
   }
+  const metadata: ReviewMetadata = {
+    requestedModel: model,
+    servedModel: response.model ?? null,
+    stopReason: response.stop_reason,
+    usage: {
+      inputTokens: response.usage?.input_tokens ?? null,
+      outputTokens: response.usage?.output_tokens ?? null,
+      cacheCreationInputTokens: response.usage?.cache_creation_input_tokens ?? null,
+      cacheReadInputTokens: response.usage?.cache_read_input_tokens ?? null,
+    },
+  };
+  options.onResponse?.(metadata);
   if (response.stop_reason !== "end_turn")
     throw new AnalysisError(
       "INVALID_REVIEW",
@@ -80,16 +124,9 @@ export async function reviewPullRequest(
       "Claude’s review did not pass validation. No report was accepted. Please try again.",
     );
   }
-  // Enforce coverage rules in code as well as in the prompt.
-  if (context.coverage.partial && review.verdict === "merge")
-    review.verdict = "review";
-  review.limitations = [
-    ...new Set([
-      ...review.limitations.slice(0, 14),
-      ...context.warnings,
-      "Only the supplied PR metadata and patches were reviewed. The full repository was not inspected and tests were not run.",
-    ]),
-  ];
-  // Model output and deterministic additions are validated together before returning.
-  return reviewSchema.parse(review);
+  return {
+    modelReview: review,
+    review: enforceReviewCoverage(review, context),
+    metadata,
+  };
 }
