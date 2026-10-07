@@ -107,5 +107,7 @@ describe("operator-admitted offline pilot summary", () => {
     expect(run.stderr).toContain("no input data was printed");
     expect(run.stderr).not.toMatch(/PRIVATE-|release-pilot-|example.test/);
     expect(run.stdout).toBe("");
-  });
+    // Two CLI invocations each compile TypeScript and have a 30s child-process
+    // timeout. A 5s Vitest default races healthy compilation on shared CI hosts.
+  }, 65_000);
 });

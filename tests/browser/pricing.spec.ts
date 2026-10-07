@@ -34,7 +34,10 @@ for (const width of [1440, 1024, 390, 360]) {
     await expect(team.locator(".pricing-price")).toHaveText("$79");
     await expect(pro.getByRole("link", { name: "Request Pro access" })).toHaveAttribute("href", /^mailto:founder@releaseengineer\.tech\?subject=/);
     await expect(team.getByRole("link", { name: "Request Team access" })).toHaveAttribute("href", /^mailto:/);
-    await expect(page.getByRole("button", { name: /buy|subscribe|checkout/i })).toHaveCount(0);
+    await expect(pro.getByRole("button", { name: "Preview checkout", exact: true })).toBeVisible();
+    await expect(pro).toContainText("No real charge or paid access.");
+    await expect(pro).toContainText("$9/month test amount");
+    await expect(page.getByRole("button", { name: /buy|subscribe/i })).toHaveCount(0);
     const question = page.getByText("How do the 10 free reviews work?", { exact: false });
     await question.focus();
     await page.keyboard.press("Enter");

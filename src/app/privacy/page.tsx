@@ -88,7 +88,7 @@ export default function Privacy() {
             The application does not persist submitted PR contents or review
             reports. They are held in memory while processing and displayed in
             your browser. There are no accounts, application database, analytics
-            vendors or tracking cookies. Our hosting provider, GitHub and
+            vendors or application tracking cookies. Our hosting provider, GitHub and
             Anthropic may process request metadata or contents under their own
             policies; this application does not control their retention.
           </p>
@@ -119,6 +119,26 @@ export default function Privacy() {
             >
               Vercel privacy policy
             </a>
+          </p>
+        </section>
+        <section>
+          <h2 className="mb-2 text-base font-medium text-ink">Checkout preview</h2>
+          <p>
+            The Pricing page offers an optional Paddle sandbox checkout. Paddle’s
+            checkout code is loaded when you select Preview checkout, not when
+            you open the page. Paddle then receives connection metadata and any
+            email, address or test payment details you enter in its checkout,
+            under its own privacy and retention policies. Use test cards only.
+            No PR contents or review reports are passed to Paddle.
+          </p>
+          <p className="mt-3">
+            Sandbox checkout does not collect real payment or activate a paid
+            plan. The application does not save checkout details or callback
+            contents in a database, browser storage or operational logs. Paddle
+            may retain sandbox records in the operator’s Paddle account and
+            generate test subscription emails. The on-page completion message
+            stays in page memory and clears on navigation or reload. See the{" "}
+            <a href="https://www.paddle.com/legal/privacy" className="text-signal underline underline-offset-4" target="_blank" rel="noopener noreferrer">Paddle privacy policy</a>.
           </p>
         </section>
         <section>
