@@ -24,6 +24,9 @@ export function AnalysisForm() {
     return () => clearInterval(interval);
   }, [loading]);
   useEffect(() => () => controllerRef.current?.abort(), []);
+  useEffect(() => {
+    if (result) resultRef.current?.focus();
+  }, [result]);
 
   async function analyze(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -67,7 +70,6 @@ export function AnalysisForm() {
       if (!validated.success)
         throw new Error("The report could not be validated. Please try again.");
       setResult(validated.data);
-      requestAnimationFrame(() => resultRef.current?.focus());
     } catch (failure) {
       if (controller.signal.aborted)
         setError(
@@ -88,22 +90,37 @@ export function AnalysisForm() {
 
   return (
     <>
-      <section aria-label="Pull request analysis" className="console-module workspace-card w-full min-w-0 rounded-[22px]">
+      <section
+        id="analyze"
+        tabIndex={-1}
+        aria-label="Pull request analysis"
+        className="console-module workspace-card w-full min-w-0 rounded-[18px]"
+      >
         <div className="console-titlebar flex items-center justify-between gap-3 rounded-t-[22px] px-5 py-3 sm:px-7">
-          <p className="font-mono text-[9px] tracking-widest text-slate-300">REVIEW WORKSPACE</p>
-          <span className="font-mono text-[9px] text-emerald-200">PUBLIC PR → CLAUDE</span>
+          <p className="font-mono text-[10px] tracking-widest text-slate-300">
+            RELEASE REVIEW / NEW
+          </p>
+          <span className="text-sm text-emerald-200" aria-hidden="true">
+            ↗︎
+          </span>
         </div>
         <div className="p-5 sm:p-7">
           <div className="mb-6 flex items-start justify-between gap-4">
             <h2 className="text-xl font-medium tracking-[-0.025em] text-slate-100 sm:text-2xl">
               What are you shipping?
             </h2>
-            <span aria-hidden="true" className="text-xl text-emerald-200">
-              ↗
+            <span
+              aria-hidden="true"
+              className="console-heading-arrow text-xl text-emerald-200"
+            >
+              ↗︎
             </span>
           </div>
           <form onSubmit={analyze} aria-busy={loading}>
-            <label htmlFor="pr-url" className="mb-3 block text-xs text-slate-300">
+            <label
+              htmlFor="pr-url"
+              className="mb-3 block text-xs text-slate-300"
+            >
               Public GitHub pull request URL
             </label>
             <div className="flex flex-col gap-3">
@@ -157,7 +174,10 @@ export function AnalysisForm() {
                   </span>
                 ) : (
                   <>
-                    Analyze PR <span aria-hidden="true" className="text-lg leading-5">→</span>
+                    Analyze PR{" "}
+                    <span aria-hidden="true" className="text-lg leading-5">
+                      →
+                    </span>
                   </>
                 )}
               </button>
@@ -166,8 +186,8 @@ export function AnalysisForm() {
               id="privacy-note"
               className="mt-4 text-xs leading-5 text-slate-400"
             >
-              Public PR contents are sent to Claude to produce your review. We do
-              not store submitted PR contents.{" "}
+              Public PR contents are sent to Claude to produce your review. We
+              do not store submitted PR contents.{" "}
               <Link
                 href="/privacy"
                 className="text-slate-300 underline decoration-slate-600 underline-offset-2 hover:text-white"
@@ -176,6 +196,13 @@ export function AnalysisForm() {
               </Link>
             </p>
           </form>
+          <noscript>
+            <p className="mt-4 text-sm text-amber-200">
+              Enable JavaScript to submit a pull request for analysis. Company
+              information, feedback and evidence links are available without
+              JavaScript.
+            </p>
+          </noscript>
           {error && (
             <div
               id="analysis-error"
@@ -214,7 +241,7 @@ export function AnalysisForm() {
           ref={resultRef}
           tabIndex={-1}
           aria-label="Completed release review"
-          className="mt-8 min-w-0 rounded-2xl md:col-span-2"
+          className="completed-report min-w-0 rounded-2xl"
         >
           <ReviewReport result={result} />
         </div>

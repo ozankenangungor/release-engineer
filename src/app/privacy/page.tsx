@@ -7,10 +7,17 @@ const description =
 export const metadata: Metadata = {
   title,
   description,
+  alternates: { canonical: "/privacy" },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: ["/opengraph-image"],
+  },
   openGraph: {
     title,
     description,
-    url: "./",
+    url: "/privacy",
     siteName: "Release Engineer",
     type: "website",
   },
@@ -18,13 +25,13 @@ export const metadata: Metadata = {
 
 export default function Privacy() {
   return (
-    <main id="main" className="mx-auto max-w-2xl px-5 py-14 sm:px-8">
+    <main id="main" className="page-shell legal-page">
       <p className="font-mono text-xs text-emerald-300">
         RELEASE ENGINEER / BETA
       </p>
-      <h1 className="mt-4 text-4xl font-semibold tracking-tight">Privacy</h1>
+      <h1 className="page-title">Privacy</h1>
       <p className="mt-4 text-xs text-slate-400">
-        Last updated: <time dateTime="2026-10-07">October 7, 2026</time>
+        Last updated: <time dateTime="2026-10-08">October 8, 2026</time>
       </p>
       <div className="mt-8 space-y-7 text-sm leading-7 text-slate-300">
         <section>
@@ -37,6 +44,30 @@ export default function Privacy() {
             a bounded selection of those contents to Anthropic’s Claude API to
             produce your review. Submit only public pull requests you are
             comfortable having processed this way.
+          </p>
+        </section>
+        <section>
+          <h2 className="mb-2 text-base font-medium text-white">
+            Operational usage evidence
+          </h2>
+          <p>
+            When a valid, configured analysis starts, the server records
+            structured operational events in hosting logs: start, success or
+            failure; timestamp; environment; product commit when available;
+            duration; file counts and partial-context status on success; or a
+            high-level error code on failure. A random analysis ID links events
+            for one attempt and helps deduplicate exported logs. It is not a
+            user or session identifier and is never stored in a cookie.
+          </p>
+          <p className="mt-3">
+            These application events do not contain the PR URL, repository or
+            owner, patches, descriptions, reports, model output, emails, user
+            identity, IP addresses, request headers or secrets. Hosting
+            providers may separately record request metadata under their own
+            policies. Operational events are retained according to the hosting
+            plan; selected event records may be preserved privately to
+            substantiate a dated aggregate analysis count. Such counts are not
+            user counts.
           </p>
         </section>
         <section>
@@ -68,6 +99,15 @@ export default function Privacy() {
               rel="noopener noreferrer"
             >
               GitHub privacy statement
+            </a>{" "}
+            ·{" "}
+            <a
+              href="https://vercel.com/legal/privacy-policy"
+              className="text-emerald-200 underline underline-offset-4"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Vercel privacy policy
             </a>
           </p>
         </section>
