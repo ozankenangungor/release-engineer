@@ -89,6 +89,16 @@ export default function Home() {
         A review to inform your decision. Verify findings, run your tests, and
         use human judgment before merging.
       </p>
+      <p className="mt-3 text-center text-xs leading-5 text-slate-400">
+        Trying the early beta?{" "}
+        <Link
+          href="/about#beta"
+          className="text-emerald-200 underline underline-offset-4"
+        >
+          Share what was useful, wrong or missing
+        </Link>
+        .
+      </p>
     </main>
   );
 }
