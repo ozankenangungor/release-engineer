@@ -22,7 +22,7 @@ function ReviewList({
   empty: string;
 }) {
   return (
-    <section className="rounded-xl border border-white/10 bg-[#10171e] p-5 sm:p-6">
+    <section className="surface-card rounded-2xl border border-white/10 p-5 sm:p-6">
       <h3 className="text-sm font-semibold text-white">
         {title}{" "}
         <span className="ml-2 font-mono text-xs font-normal text-slate-500">
@@ -55,7 +55,7 @@ function Finding({
   index: number;
 }) {
   return (
-    <article className="rounded-xl border border-white/10 bg-[#10171e] p-5 sm:p-6">
+    <article className="surface-card rounded-2xl border border-white/10 p-5 sm:p-6">
       <div className="flex flex-wrap items-center gap-2">
         <span
           className={`rounded border px-2 py-1 font-mono text-[10px] uppercase ${riskStyles[finding.severity]}`}
@@ -109,7 +109,7 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
           {pr.owner}/{pr.repository} #{pr.number} ↗
         </a>
       </div>
-      <div className="rounded-2xl border border-white/10 bg-[#111a20] p-6 sm:p-8">
+      <div className="workspace-card rounded-3xl border border-emerald-200/15 p-6 sm:p-8">
         <div className="flex flex-wrap items-center gap-3">
           <span
             className={`rounded-full border px-3 py-1.5 font-mono text-[11px] uppercase ${riskStyles[review.overallRisk]}`}
@@ -205,7 +205,7 @@ export function ReviewReport({ result }: { result: AnalysisResponse }) {
         />
       </div>
       <details
-        className="mt-5 rounded-xl border border-white/10 bg-[#10171e] p-5"
+        className="surface-card mt-5 rounded-2xl border border-white/10 p-5"
         open
       >
         <summary className="cursor-pointer text-sm font-medium text-slate-300">
