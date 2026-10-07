@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
 import { Header, Footer } from "@/components/brand";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const title = "Release Engineer — Your AI Release Engineer";
+const inter = localFont({
+  src: "../fonts/inter-latin.woff2",
+  variable: "--font-inter",
+  display: "swap",
+  weight: "400 700",
+});
+const title = "Release Engineer — Claude-native release readiness";
 const description =
   "Claude-powered release-readiness reviews of bounded public GitHub pull-request metadata and patches, with explicit coverage limitations.";
 
@@ -20,6 +27,7 @@ const structuredData = {
       description:
         "Release Engineer is an early-stage, bootstrapped developer-tool startup founded in October 2026 in Ankara, Türkiye.",
       founder: { "@id": "https://releaseengineer.tech/#founder" },
+      sameAs: ["https://github.com/ozankenangungor/release-engineer"],
       address: {
         "@type": "PostalAddress",
         addressLocality: "Ankara",
@@ -45,6 +53,7 @@ const structuredData = {
       url: "https://releaseengineer.tech",
       description,
       applicationCategory: "DeveloperApplication",
+      operatingSystem: "Web",
       creator: { "@id": "https://releaseengineer.tech/#founder" },
       provider: { "@id": "https://releaseengineer.tech/#organization" },
       isPartOf: { "@id": "https://releaseengineer.tech/#website" },
@@ -57,6 +66,7 @@ const structuredData = {
       alternateName: "releaseengineer.tech",
       url: "https://releaseengineer.tech/",
       publisher: { "@id": "https://releaseengineer.tech/#organization" },
+      description,
     },
   ],
 };
@@ -75,6 +85,20 @@ export const metadata: Metadata = {
     url: "./",
     siteName: "Release Engineer",
     type: "website",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Release Engineer — Claude-native release readiness for GitHub pull requests",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: ["/opengraph-image"],
   },
 };
 
@@ -83,7 +107,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className="flex min-h-screen flex-col">
+      <body className={`${inter.variable} flex min-h-screen flex-col`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

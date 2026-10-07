@@ -36,6 +36,8 @@ Release Engineer currently accepts **public GitHub pull-request URLs**. Do not s
 
 Release Engineer does not intentionally persist submitted pull-request contents or generated reports in an application database. Requests may still be processed by GitHub, Anthropic, and the hosting provider as described by their applicable policies and terms.
 
+The server emits allowlisted, content-free operational events to hosting logs. A random ID links one analysis attempt; it does not identify a person or PR. Application events exclude PR identifiers/content, model output, IP addresses, request headers and secrets. See [the live usage evidence runbook](docs/live-usage-evidence.md) and the [Privacy notice](https://releaseengineer.tech/privacy) for fields and retention boundaries.
+
 The product is a release-readiness decision-support tool, not a security guarantee. Findings should be verified by maintainers and developers using their own testing and security processes.
 
 ## Responsible disclosure for analyzed repositories
