@@ -78,7 +78,7 @@
 .feedback-review-card {
   display: flex;
   flex-direction: column;
-  padding: clamp(26px, 2.2vw, 46px);
+  padding: clamp(26px, 2vw, 36px);
   min-width: 0;
   border: 1px solid #30394b;
   border-radius: 16px;
@@ -112,10 +112,11 @@
 }
 .feedback-review-card blockquote {
   flex: 1;
-  font-size: clamp(21px, 1.65vw, 30px);
+  font-size: clamp(19px, 1.4vw, 24px);
   line-height: 1.5;
   letter-spacing: -0.025em;
   font-weight: 450;
+  overflow-wrap: anywhere;
 }
 .feedback-card-author {
   display: flex;

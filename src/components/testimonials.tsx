@@ -1,9 +1,10 @@
+import Link from "next/link";
 import { testimonials } from "@/content/testimonials";
 
 export function Testimonials() {
   const approved = testimonials.filter(
     (item) => item.permission === "approved",
-  );
+  ).slice(0, 3);
   if (!approved.length) return null;
   return (
     <section
@@ -14,11 +15,11 @@ export function Testimonials() {
     >
       <div className="section-heading">
         <div>
-          <p className="section-kicker">FROM THE EARLY BETA</p>
-          <h2 id="feedback-title">Early developer feedback.</h2>
+          <p className="section-kicker">DEVELOPER PERSPECTIVES</p>
+          <h2 id="feedback-title">Developer feedback.</h2>
         </div>
         <p>
-          Qualitative feedback from developers who tried the early beta on
+          A selection of feedback from developers who tried Release Engineer on
           public pull requests.
         </p>
       </div>
@@ -44,7 +45,11 @@ export function Testimonials() {
                 <p className="quote-role">
                   {[item.role, item.organization].filter(Boolean).join(" · ")}
                 </p>
-                <p className="quote-attribution">External beta tester</p>
+                <p className="quote-attribution">
+                  {item.attribution === "external-beta"
+                    ? "External beta tester"
+                    : "Developer feedback"}
+                </p>
               </div>
             </figcaption>
             {item.publicPrUrl && (
@@ -61,10 +66,13 @@ export function Testimonials() {
         ))}
       </div>
       <p className="evidence-note">
-        Exact quotes published with permission. Display aliases are
-        publication-approved; private identities and PR links are not disclosed.
+        Exact quotes published with permission. Names, aliases and roles are
+        publication-approved; contact details and PR links are not disclosed.
         Informal feedback is not a measure of accuracy or a verified case study.
       </p>
+      <Link className="text-link mt-4 inline-block" href="/feedback">
+        Read all developer feedback →
+      </Link>
     </section>
   );
 }
