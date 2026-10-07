@@ -85,6 +85,16 @@ pnpm build
 
 For a production preview, run `pnpm build` then `pnpm start`. Deploy to a Node.js host that permits a 120-second route and set the server environment variables. No hosting infrastructure is included in this MVP.
 
+## Deployment safety
+
+The analysis endpoint is unauthenticated and each analysis can consume the operator's Claude credits. Before broad public exposure, configure:
+
+- Hosting/platform request protection or rate limiting for `/api/analyze`.
+- Anthropic organization spending limits.
+- Appropriate deployment access controls during the early beta.
+
+These protections must be configured outside the application. This MVP does not include authentication or distributed rate limiting.
+
 ## Current limitations
 
 - Public GitHub pull requests only. No GitHub Enterprise or arbitrary remote fetches.
