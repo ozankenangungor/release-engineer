@@ -45,7 +45,7 @@ export default function Home() {
         <div className="mx-auto mt-6 max-w-xl text-xs leading-5 text-slate-400">
           <p>
             Release Engineer is a bootstrapped developer-tool startup founded
-            in 2026 in Ankara, Türkiye by Ozan Kenan Güngör.
+            in October 2026 in Ankara, Türkiye by Ozan Kenan Güngör.
           </p>
           <p className="mt-2 flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
             <Link
