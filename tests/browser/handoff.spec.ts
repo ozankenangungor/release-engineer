@@ -5,6 +5,7 @@ import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { handoffResponse } from "../verification-fixtures";
 import { verificationRecordSchema } from "../../src/lib/verification-record";
+import { FREE_USAGE_KEY } from "../../src/lib/free-plan";
 
 // Intercept before navigation, including against production. No paid model call.
 test.beforeEach(async ({ context }) => {
@@ -72,7 +73,19 @@ for (const width of [1440, 360]) {
     await expect(page.locator(".handoff-status")).toContainText("Nothing was submitted");
     expect(postRequests).toHaveLength(1);
     expect(postRequests[0]).toMatch(/\/api\/analyze$/);
-    expect(await page.evaluate(() => ({ local: localStorage.length, session: sessionStorage.length }))).toEqual({ local: 0, session: 0 });
+    // Only the date/count allowance may persist; report and human notes stay
+    // in memory. Check all entries so accidental annotation storage fails.
+    expect(await page.evaluate(key => ({
+      local: Object.keys(localStorage).map(name => [name, JSON.parse(localStorage.getItem(name)!)]),
+      session: sessionStorage.length,
+      day: new Date().toISOString().slice(0, 10),
+      key,
+    }), FREE_USAGE_KEY)).toEqual({
+      local: [[FREE_USAGE_KEY, { day: new Date().toISOString().slice(0, 10), used: 1 }]],
+      session: 0,
+      day: new Date().toISOString().slice(0, 10),
+      key: FREE_USAGE_KEY,
+    });
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     expect((await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze()).violations).toEqual([]);
     expect(errors).toEqual([]);

@@ -37,6 +37,7 @@ export function Brand() {
 const navigation = [
   { href: "/#report-preview", label: "Product" },
   { href: "/#how-it-works", label: "How it works" },
+  { href: "/pricing", label: "Pricing" },
   { href: "/evidence", label: "Evidence" },
   { href: "/feedback", label: "Feedback" },
   { href: "/about", label: "About" },
@@ -84,6 +85,7 @@ export function Footer() {
           <div>
             <p className="footer-label">PRODUCT</p>
             <Link href="/#report-preview">Product</Link>
+            <Link href="/pricing">Pricing</Link>
             <Link href="/evidence">Evidence</Link>
             <Link href="/feedback">Feedback</Link>
             <Link href="/about">About</Link>

@@ -31,7 +31,7 @@ export default function Terms() {
       </p>
       <h1 className="page-title">Terms</h1>
       <p className="mt-4 text-xs text-muted">
-        Last updated: <time dateTime="2026-10-09">October 9, 2026</time>
+        Last updated: <time dateTime="2026-10-11">October 11, 2026</time>
       </p>
       <div className="mt-8 space-y-7 text-sm leading-7 text-muted">
         <section>
@@ -93,6 +93,15 @@ export default function Terms() {
             Anthropic availability, API limits and the context we can retrieve.
             Large or incomplete changes may be analyzed only in part, with
             warnings. The service may change or be unavailable during the beta.
+          </p>
+          <p className="mt-3">
+            Free homepage use allows 10 completed, validated reviews per UTC day
+            in each browser, tracked in local storage. Failed or interrupted
+            reviews do not count. Rate and concurrency limits also apply. The
+            Pro and Team plans on the <a href="/pricing" className="text-signal underline underline-offset-4">Pricing page</a>{" "}
+            are proposed offerings; paid checkout, private repository access and
+            the listed paid workflows are not available yet. Requesting access
+            does not create a subscription or authorize a charge.
           </p>
         </section>
         <section>

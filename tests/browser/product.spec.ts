@@ -268,6 +268,7 @@ for (const width of [1440, 360]) {
       "/pilot",
       "/evidence",
       "/feedback",
+      "/pricing",
       "/case-studies",
       "/case-studies/rails-doc-typo-58968",
       "/privacy",
@@ -398,6 +399,7 @@ test("robots, sitemap, social image and internal links are accessible", async ({
   expect(await sitemap.text()).toContain(
     "https://releaseengineer.tech/feedback",
   );
+  expect(await sitemap.text()).toContain("https://releaseengineer.tech/pricing");
   const image = await request.get("/opengraph-image");
   expect(image.status()).toBe(200);
   expect(image.headers()["content-type"]).toContain("image/png");
@@ -408,6 +410,7 @@ test("robots, sitemap, social image and internal links are accessible", async ({
     "/pilot",
     "/evidence",
     "/feedback",
+    "/pricing",
     "/case-studies",
     "/case-studies/rails-doc-typo-58968",
     "/privacy",
@@ -439,6 +442,7 @@ test.describe("server-rendered public content", () => {
       "/about",
       "/evidence",
       "/feedback",
+      "/pricing",
       "/pilot",
       "/case-studies",
       "/case-studies/rails-doc-typo-58968",

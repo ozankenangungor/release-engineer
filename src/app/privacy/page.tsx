@@ -31,7 +31,7 @@ export default function Privacy() {
       </p>
       <h1 className="page-title">Privacy</h1>
       <p className="mt-4 text-xs text-muted">
-        Last updated: <time dateTime="2026-10-09">October 9, 2026</time>
+        Last updated: <time dateTime="2026-10-11">October 11, 2026</time>
       </p>
       <div className="mt-8 space-y-7 text-sm leading-7 text-muted">
         <section>
@@ -119,6 +119,18 @@ export default function Privacy() {
             >
               Vercel privacy policy
             </a>
+          </p>
+        </section>
+        <section>
+          <h2 className="mb-2 text-base font-medium text-ink">Free review allowance</h2>
+          <p>
+            The homepage stores a UTC date and completed-review count in your
+            browser’s local storage to track 10 free reviews per day in that
+            browser. This counter contains no PR URL, code, report or identity
+            and is not sent to our server. It resets at 00:00 UTC; clearing site
+            storage removes it. It is a device-local allowance, not an account
+            quota. Browser storage must be available to submit through the
+            homepage. Server admission limits separately protect availability.
           </p>
         </section>
         <section>

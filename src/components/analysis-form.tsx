@@ -9,6 +9,8 @@ import {
 } from "@/lib/review-schema";
 import { ReviewReport } from "./review-report";
 import { createPortal } from "react-dom";
+import { completeFreeReview, FREE_DAILY_REVIEWS, FREE_REVIEW_LOCK, FreeLimitError, prepareFreeReview } from "@/lib/free-plan";
+import { notifyFreeUsageChanged, useFreeAllowance } from "./use-free-allowance";
 
 export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
   examplePrUrl?: string; interfaceRevision?: string | null;
@@ -23,6 +25,7 @@ export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
   const controllerRef = useRef<AbortController | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const resultRef = useRef<HTMLDivElement | null>(null);
+  const remaining = useFreeAllowance();
 
   useEffect(() => {
     if (!loading) return;
@@ -44,7 +47,7 @@ export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
 
   async function analyze(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (loading) return;
+    if (loading || controllerRef.current) return;
     setError(null);
     setInvalidUrl(false);
     setResult(null);
@@ -57,16 +60,24 @@ export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
       inputRef.current?.focus();
       return;
     }
+    const prUrl = parsed.url;
     const controller = new AbortController();
     controllerRef.current = controller;
     setElapsed(0);
     setLoading(true);
     const timeout = setTimeout(() => controller.abort(), 125_000);
-    try {
+    async function runReview() {
+      try {
+        prepareFreeReview(window.localStorage);
+      } catch (failure) {
+        if (failure instanceof FreeLimitError) throw failure;
+        throw new Error("Enable browser storage to track your free review allowance, then try again.");
+      }
+      notifyFreeUsageChanged();
       const response = await fetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: parsed.url }),
+        body: JSON.stringify({ url: prUrl }),
         signal: controller.signal,
       });
       let data: unknown;
@@ -97,8 +108,25 @@ export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
       const validated = analysisResponseSchema.safeParse(data);
       if (!validated.success)
         throw new Error("The report could not be validated. Please try again.");
+      try {
+        completeFreeReview(window.localStorage);
+      } catch {
+        // Keep the useful report if storage becomes unavailable mid-request.
+        setError("Your report is ready, but the free allowance could not be saved. Enable browser storage before your next review.");
+      }
+      notifyFreeUsageChanged();
       setReceivedAt(new Date().toISOString());
       setResult(validated.data);
+    }
+    try {
+      if (navigator.locks) {
+        await navigator.locks.request(FREE_REVIEW_LOCK, { ifAvailable: true }, async (lock) => {
+          if (!lock) throw new Error("Another review is running in this browser. Wait for it to finish, then try again.");
+          await runReview();
+        });
+      } else {
+        await runReview();
+      }
     } catch (failure) {
       if (controller.signal.aborted)
         setError(
@@ -134,7 +162,7 @@ export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
         <form onSubmit={analyze} aria-busy={loading} noValidate>
           <div className="analysis-label-row">
             <label htmlFor="pr-url">GitHub pull request URL</label>
-            <span>Public PRs · No account</span>
+            <span>Free · {FREE_DAILY_REVIEWS} reviews/day</span>
           </div>
           <div className="analysis-controls">
             <input
@@ -156,11 +184,11 @@ export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
               disabled={loading}
               aria-invalid={invalidUrl}
               aria-describedby={
-                error ? "analysis-error privacy-note" : "privacy-note"
+                error ? "analysis-error privacy-note free-allowance" : "privacy-note free-allowance"
               }
               placeholder="https://github.com/owner/repo/pull/123"
             />
-            <button type="submit" disabled={loading} className="primary-action">
+            <button type="submit" disabled={loading || remaining === 0 || remaining === null} className="primary-action">
               {loading ? (
                 <>
                   <span className="loading-spinner" aria-hidden="true" />
@@ -172,6 +200,18 @@ export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
                 </>
               )}
             </button>
+          </div>
+          <div className="free-allowance-row">
+            <p id="free-allowance" aria-live="polite" aria-atomic="true">
+              <span className="allowance-signal" aria-hidden="true" />
+              {remaining === null
+                ? "Enable browser storage to track free reviews."
+                : remaining === 0
+                  ? "Daily limit reached. Resets at 00:00 UTC."
+                  : `${remaining} of ${FREE_DAILY_REVIEWS} free reviews left today`}
+              <span className="allowance-scope"> · This browser</span>
+            </p>
+            <Link href="/pricing">View plans <span aria-hidden="true">↗︎</span></Link>
           </div>
           <div className="analysis-support">
             <p id="privacy-note">
@@ -212,7 +252,7 @@ export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
             aria-label="Analysis error"
             className="analysis-error"
           >
-            <p>Review could not be completed</p>
+            <p>{result ? "Review ready · allowance notice" : "Review could not be completed"}</p>
             <p>{error}</p>
           </div>
         )}
