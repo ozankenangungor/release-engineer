@@ -19,21 +19,30 @@ export const metadata: Metadata = {
 
 export default function About() {
   return (
-    <main id="main" className="mx-auto max-w-5xl px-5 py-12 sm:px-8 sm:py-16">
-      <p className="section-kicker">
-        RELEASE ENGINEER / EARLY BETA
-      </p>
-      <h1 className="mt-4 text-balance text-4xl font-semibold tracking-[-0.04em] sm:text-5xl">
-        About Release Engineer
-      </h1>
-      <div className="mt-10 grid items-start gap-8 text-sm leading-7 text-slate-300 lg:grid-cols-[.8fr_1.2fr] lg:gap-12">
-        <section className="surface-card rounded-2xl border border-white/10 p-6 sm:p-7">
+    <main id="main" className="mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-20">
+      <div className="mb-10 border-b border-white/10 pb-9 sm:mb-14 sm:pb-12">
+        <p className="section-kicker">
+          RELEASE ENGINEER / EARLY BETA
+        </p>
+        <h1 className="mt-5 max-w-2xl text-balance text-4xl leading-[1.1] font-semibold tracking-[-0.05em] sm:text-6xl">
+          About Release Engineer
+        </h1>
+      </div>
+      <div className="grid items-start gap-10 text-sm leading-7 text-slate-300 lg:grid-cols-[.8fr_1.2fr] lg:gap-16">
+        <section className="about-founder surface-card rounded-2xl p-6 sm:p-8">
+          <div className="relative mb-8 flex items-center gap-4">
+            <span aria-hidden="true" className="founder-monogram flex size-14 items-center justify-center rounded-2xl font-mono text-sm text-emerald-200">OKG</span>
+            <div>
+              <p className="section-kicker">FOUNDER-LED</p>
+              <p className="mt-1 text-xs text-slate-400">Ankara, Türkiye</p>
+            </div>
+          </div>
           <p>
             Release Engineer is an early-stage, bootstrapped developer-tool
             startup founded in <time dateTime="2026-10">October 2026</time> in
             Ankara, Türkiye. No external funding has been raised.
           </p>
-          <p className="mt-3">Founder: Ozan Kenan Güngör.</p>
+          <p className="mt-6 border-t border-white/10 pt-5 font-medium text-slate-100">Founder: Ozan Kenan Güngör.</p>
           <p className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
             <a
               href="https://github.com/ozankenangungor"
@@ -53,8 +62,9 @@ export default function About() {
               Founder on LinkedIn
             </a>
           </p>
+          <a href="mailto:founder@releaseengineer.tech" className="mt-6 inline-block break-all text-xs text-emerald-200 underline decoration-emerald-200/30 underline-offset-4">founder@releaseengineer.tech</a>
         </section>
-        <div className="space-y-8 [&>section+section]:border-t [&>section+section]:border-white/10 [&>section+section]:pt-8">
+        <div className="about-sections space-y-9 [&>section+section]:border-t [&>section+section]:border-white/10 [&>section+section]:pt-9">
           <section>
             <h2 className="mb-2 text-base font-medium text-white">The product</h2>
             <p>
@@ -120,7 +130,7 @@ export default function About() {
             <p className="mt-3">
               <a
                 href="https://github.com/ozankenangungor/release-engineer/blob/main/docs/live-evaluation-evidence.md"
-                className="text-emerald-200 underline underline-offset-4"
+                className="about-evidence-link text-emerald-200 underline decoration-emerald-200/30 underline-offset-4"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -130,7 +140,7 @@ export default function About() {
             <p className="mt-3">
               <a
                 href="https://github.com/ozankenangungor/release-engineer/blob/main/evals/README.md"
-                className="text-emerald-200 underline underline-offset-4"
+                className="about-evidence-link text-emerald-200 underline decoration-emerald-200/30 underline-offset-4"
                 target="_blank"
                 rel="noopener noreferrer"
               >
