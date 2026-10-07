@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { AnalysisForm } from "@/components/analysis-form";
 
 const features = [
@@ -41,6 +42,27 @@ export default function Home() {
           Review pull requests for regressions, testing gaps, breaking changes
           and release risks before they reach production.
         </p>
+        <div className="mx-auto mt-6 max-w-xl text-xs leading-5 text-slate-400">
+          <p>
+            Release Engineer is a bootstrapped developer-tool startup founded
+            in 2026 in Ankara, Türkiye by Ozan Kenan Güngör.
+          </p>
+          <p className="mt-2 flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+            <Link
+              href="/about"
+              className="text-emerald-200 underline underline-offset-4"
+            >
+              About Release Engineer
+            </Link>
+            <span aria-hidden="true">·</span>
+            <a
+              href="mailto:founder@releaseengineer.tech"
+              className="text-emerald-200 underline underline-offset-4"
+            >
+              founder@releaseengineer.tech
+            </a>
+          </p>
+        </div>
       </section>
       <section aria-label="Pull request analysis" className="mt-10 sm:mt-12">
         <AnalysisForm />
