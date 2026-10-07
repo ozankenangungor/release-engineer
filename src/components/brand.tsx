@@ -9,7 +9,7 @@ export function Brand() {
     >
       <span
         aria-hidden="true"
-        className="flex size-8 items-center justify-center rounded-lg border border-emerald-300/25 bg-emerald-300/10 text-emerald-300"
+        className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-emerald-300/25 bg-linear-to-b from-emerald-300/15 to-emerald-300/5 text-emerald-200 shadow-[inset_0_1px_0_#ffffff0a]"
       >
         <svg
           width="18"
@@ -34,23 +34,29 @@ export function Brand() {
 
 export function Header() {
   return (
-    <header className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-5 py-6 sm:px-8">
+    <header className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 border-b border-white/8 px-5 py-5 sm:px-8">
       <Brand />
-      <span className="font-mono text-[10px] tracking-widest text-slate-400 sm:text-xs">
-        PUBLIC GITHUB PRS{" "}
-        <span className="ml-2 rounded border border-white/10 px-1.5 py-1 text-slate-300">
-          BETA
+      <nav aria-label="Main" className="flex shrink-0 items-center gap-6 text-xs text-slate-400">
+        <Link href="/about" className="hidden transition hover:text-white sm:block">About</Link>
+        <a href="https://github.com/ozankenangungor/release-engineer" target="_blank" rel="noopener noreferrer" className="hidden transition hover:text-white md:block">
+          Source <span aria-hidden="true">↗</span>
+        </a>
+        <span className="rounded-full border border-emerald-300/15 bg-emerald-300/5 px-3 py-1.5 font-mono text-[10px] tracking-wide text-emerald-200">
+          EARLY BETA
         </span>
-      </span>
+      </nav>
     </header>
   );
 }
 
 export function Footer() {
   return (
-    <footer className="mx-auto flex w-full max-w-6xl flex-col justify-between gap-4 border-t border-white/8 px-5 py-7 text-xs text-slate-400 sm:flex-row sm:px-8">
-      <p>Release Engineer · A second perspective before you ship.</p>
-      <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-3">
+    <footer className="mx-auto flex w-full max-w-7xl flex-col justify-between gap-8 border-t border-white/10 px-5 py-9 text-xs text-slate-400 sm:px-8 lg:flex-row lg:items-center">
+      <div>
+        <Brand />
+        <p className="mt-3 leading-6">A second perspective before you ship.</p>
+      </div>
+      <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-4">
         <Link className="transition hover:text-white" href="/about">
           About
         </Link>
