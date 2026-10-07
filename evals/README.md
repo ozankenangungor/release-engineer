@@ -1,8 +1,10 @@
 # Release review evaluations
 
-This harness measures release-risk detection, false positives, grounding, coverage honesty and output reliability against a versioned, local dataset. It uses the current production prompt, context builder, official Anthropic SDK request, production Zod schema and coverage policy. It does not fetch GitHub or run fixture code.
+This harness supports measuring release-risk detection, false positives, grounding, coverage honesty and output reliability against **32 original synthetic PR cases** in a versioned, local dataset. It uses the current production prompt, context builder, official Anthropic SDK request, production Zod schema and coverage policy. It does not fetch GitHub or run fixture code.
 
-**An evaluation score is evidence about the tested dataset and rubric, not proof that Release Engineer is correct on arbitrary real-world pull requests.** No live quality baseline was recorded during implementation. Handwritten responses in unit tests test the grader; they are not Claude evaluation results.
+**Validation status:** deterministic tests validate the dataset, context pipeline, safety rules and grader. They do not measure Claude's risk-detection quality. No live Claude quality baseline has been recorded; handwritten responses in unit tests test the grader and are not Claude evaluation results. Measuring model behavior requires an explicitly authorized live run and inspection of its artifacts.
+
+**An evaluation score is evidence about the tested dataset and rubric, not proof that Release Engineer is correct on arbitrary real-world pull requests.** Synthetic cases and deterministic grading cannot establish production accuracy.
 
 ## Commands
 

@@ -4,7 +4,7 @@ import "./globals.css";
 
 const title = "Release Engineer — Your AI Release Engineer";
 const description =
-  "Review public GitHub pull requests for regressions, testing gaps, breaking changes and release risks. Powered by Claude.";
+  "Claude-powered release-readiness reviews of bounded public GitHub pull-request metadata and patches, with explicit coverage limitations.";
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -16,9 +16,9 @@ const structuredData = {
       url: "https://releaseengineer.tech",
       logo: "https://releaseengineer.tech/release-engineer-logo.svg",
       email: "founder@releaseengineer.tech",
-      foundingDate: "2026",
+      foundingDate: "2026-10",
       description:
-        "Release Engineer is an early-stage, bootstrapped developer-tool startup founded in 2026 in Ankara, Türkiye.",
+        "Release Engineer is an early-stage, bootstrapped developer-tool startup founded in October 2026 in Ankara, Türkiye.",
       founder: { "@id": "https://releaseengineer.tech/#founder" },
       address: {
         "@type": "PostalAddress",
