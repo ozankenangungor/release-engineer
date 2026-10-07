@@ -9,3 +9,4 @@ coverage/
 *.log
 .eval-build/
 evals/results/
+.private-evidence/

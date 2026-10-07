@@ -70,6 +70,28 @@ describe("analysis endpoint", () => {
     expect((await response.json()).error.code).toBe("SERVICE_NOT_CONFIGURED");
     expect(githubMock).not.toHaveBeenCalled();
   });
+  it.each([undefined, "1"])("bounds chunked input with Content-Length %s and cancels the body", async contentLength => {
+    const cancel = vi.fn();
+    const body = new ReadableStream<Uint8Array>({
+      start(controller) {
+        controller.enqueue(new Uint8Array(1_024));
+        controller.enqueue(new Uint8Array(1_025));
+        controller.enqueue(new Uint8Array(1));
+        controller.close();
+      },
+      cancel,
+    });
+    const init: RequestInit & { duplex: "half" } = {
+      method: "POST", body, duplex: "half",
+      headers: { "Content-Type": "application/json", ...(contentLength ? { "Content-Length": contentLength } : {}) },
+    };
+    const response = await POST(new Request("http://localhost/api/analyze", init));
+    expect(response.status).toBe(413);
+    expect(cancel).toHaveBeenCalledTimes(1);
+    expect(githubMock).not.toHaveBeenCalled();
+    expect(claudeMock).not.toHaveBeenCalled();
+    expect(response.headers.get("cache-control")).toBe("no-store");
+  });
   it("maps upstream errors without leaking internal details", async () => {
     githubMock.mockRejectedValueOnce(
       new AnalysisError("PR_NOT_FOUND", "Check the URL.", 404),

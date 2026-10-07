@@ -20,7 +20,7 @@ Claude is the core reasoning engine. The server uses the official Anthropic Type
 
 ## Early validation
 
-External developers have tested the beta on real public GitHub pull requests. This is early product feedback, not a measured accuracy result.
+The early beta is available for testing on public GitHub pull requests. External testing, user counts and quality outcomes are not established by the repository's automated tests. Completed, consented feedback records are needed before publishing beta-validation claims; a [private feedback template](docs/beta-feedback-template.md) is provided.
 
 The project also includes a [versioned offline evaluation harness](evals/README.md) with **32 original synthetic PR cases**. Deterministic checks exercise fixture integrity, schema handling, grading, grounding rules, uncertainty rules, prompt-injection checks and partial-context safeguards. They do not establish Claude's risk-detection quality. No live Claude quality baseline has been recorded.
 
@@ -109,6 +109,12 @@ For a production preview, run `pnpm build` then `pnpm start`. Deploy to a Node.j
 The [evaluation harness](evals/README.md) includes 32 versioned, original synthetic PR cases, evidence-based rubrics, separate risk-recall/false-positive/safety metrics and compatible baseline comparisons. `pnpm test` tests the evaluator offline; `pnpm eval:validate` validates fixtures against the real context builder without a key or network. These checks are not a Claude quality baseline.
 
 `pnpm eval:live` is separate and fails closed unless `EVAL_LIVE=1` and `ANTHROPIC_API_KEY` are explicitly supplied in the process environment. It defaults to one small case, uses the production review engine without automatic retries, and writes ignored local artifacts. It never runs in CI or automatically loads environment files. See the evaluation documentation for spend caps, comparison commands, dataset versioning and grading limitations.
+
+The [review evidence runbook](docs/review-readiness.md) explains reproducible offline checks, the optional one-request smoke run and evidence handling. The [real-world evaluation plan](docs/evaluation-real-world-plan.md) describes how pinned public PR cases could be admitted using defensible labels; no such dataset or results are included yet.
+
+## Reporting security issues
+
+Report suspected vulnerabilities privately to [founder@releaseengineer.tech](mailto:founder@releaseengineer.tech). See [SECURITY.md](SECURITY.md) for scope, responsible disclosure and third-party boundaries. Do not include secrets or personal data in public issues or pull requests.
 
 ## Deployment safety
 

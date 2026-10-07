@@ -74,6 +74,14 @@ export function Footer() {
         <Link className="transition hover:text-white" href="/terms">
           Terms
         </Link>
+        <a
+          className="transition hover:text-white"
+          href="https://github.com/ozankenangungor/release-engineer/blob/main/SECURITY.md"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Security
+        </a>
       </nav>
     </footer>
   );
