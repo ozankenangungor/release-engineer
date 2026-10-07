@@ -51,6 +51,9 @@ export function Footer() {
     <footer className="mx-auto flex w-full max-w-6xl flex-col justify-between gap-4 border-t border-white/8 px-5 py-7 text-xs text-slate-400 sm:flex-row sm:px-8">
       <p>Release Engineer · A second perspective before you ship.</p>
       <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-3">
+        <Link className="transition hover:text-white" href="/about">
+          About
+        </Link>
         <a
           className="transition hover:text-white"
           href="https://github.com/ozankenangungor/release-engineer"

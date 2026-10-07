@@ -1,5 +1,20 @@
 import type { Metadata } from "next";
-export const metadata: Metadata = { title: "Privacy — Release Engineer" };
+
+const title = "Privacy — Release Engineer";
+const description =
+  "Privacy and data handling for Release Engineer’s public GitHub pull-request reviews.";
+
+export const metadata: Metadata = {
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    url: "./",
+    siteName: "Release Engineer",
+    type: "website",
+  },
+};
 
 export default function Privacy() {
   return (
@@ -8,6 +23,9 @@ export default function Privacy() {
         RELEASE ENGINEER / BETA
       </p>
       <h1 className="mt-4 text-4xl font-semibold tracking-tight">Privacy</h1>
+      <p className="mt-4 text-xs text-slate-400">
+        Last updated: <time dateTime="2026-10-07">October 7, 2026</time>
+      </p>
       <div className="mt-8 space-y-7 text-sm leading-7 text-slate-300">
         <section>
           <h2 className="mb-2 text-base font-medium text-white">
@@ -61,6 +79,15 @@ export default function Privacy() {
             update it if the product’s data handling changes.
           </p>
         </section>
+        <p>
+          Contact:{" "}
+          <a
+            href="mailto:founder@releaseengineer.tech"
+            className="text-emerald-200 underline underline-offset-4"
+          >
+            founder@releaseengineer.tech
+          </a>
+        </p>
       </div>
     </main>
   );
