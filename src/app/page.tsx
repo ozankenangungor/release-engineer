@@ -46,12 +46,13 @@ export default function Home() {
             RELEASE READINESS
           </p>
           <h1 id="hero-title" className="hero-title">
-            <span>Clarity before</span>
-            <span className="hero-wordmark">you ship.</span>
+            <span>See the change.</span>
+            <span>Know the risk.</span>
+            <span className="hero-wordmark">Own the release.</span>
           </h1>
           <p className="hero-description">
-            A structured Claude review of your public GitHub pull request, with
-            release risks, next steps and explicit limits.
+            Turn a public pull request into a structured Claude review. Release
+            risks, next steps, and the limits of what was reviewed.
           </p>
           <div className="hero-credentials">
             <span>Public PRs only</span>
@@ -73,13 +74,33 @@ export default function Home() {
         <ReleaseIntelligenceScene />
         <AnalysisForm />
       </section>
-      <div className="founder-strip">
+      <div className="hero-pipeline" aria-label="Review workflow">
+        <p className="section-kicker">FROM CHANGE TO PERSPECTIVE</p>
+        <ol>
+          <li>
+            <span>01</span> Public PR changes
+          </li>
+          <li>
+            <span>02</span> Bounded context
+          </li>
+          <li>
+            <span>03</span> Claude reasoning
+          </li>
+          <li>
+            <span>04</span> Structured review
+          </li>
+        </ol>
+      </div>
+      <div className="founder-strip" data-reveal="0">
         <div className="flex items-start gap-4">
           <span className="founder-monogram" aria-hidden="true">
             OKG
           </span>
           <div>
-            <p className="section-kicker">INDEPENDENT · FOUNDER-LED</p>
+            <p className="section-kicker">AN INDEPENDENT PRODUCT COMPANY</p>
+            <h2 className="founder-strip-title">
+              Real founder. Open engineering.
+            </h2>
             <p className="mt-2 text-sm leading-6 text-slate-300">
               Founded in October 2026 in Ankara, Türkiye by Ozan Kenan Güngör.
               <br className="hidden sm:block" /> Bootstrapped. No external
@@ -90,7 +111,10 @@ export default function Home() {
         <Link href="/about" className="text-link">
           Meet Release Engineer <span aria-hidden="true">→</span>
         </Link>
-        <a className="sr-only" href="mailto:founder@releaseengineer.tech">
+        <a
+          className="founder-contact text-link"
+          href="mailto:founder@releaseengineer.tech"
+        >
           founder@releaseengineer.tech
         </a>
       </div>
@@ -98,6 +122,7 @@ export default function Home() {
         id="how-it-works"
         aria-labelledby="workflow-title"
         className="content-section"
+        data-reveal="0"
       >
         <div className="section-heading">
           <div>
@@ -111,10 +136,23 @@ export default function Home() {
         </div>
         <div className="workflow-grid">
           {workflow.map((item) => (
-            <article className="workflow-step" key={item.number}>
+            <article
+              className="workflow-step"
+              key={item.number}
+              data-reveal={String(Number(item.number) * 70)}
+            >
               <div className="workflow-step-top">
                 <span className="step-number">{item.number}</span>
                 <span aria-hidden="true">↗︎</span>
+              </div>
+              <div
+                className={`workflow-diagram workflow-diagram-${item.number}`}
+                aria-hidden="true"
+              >
+                <i />
+                <i />
+                <i />
+                <i />
               </div>
               <h3>{item.title}</h3>
               <p>{item.description}</p>
@@ -128,6 +166,7 @@ export default function Home() {
       <section
         aria-labelledby="evidence-title"
         className="trust-section section-stage"
+        data-reveal="0"
       >
         <div className="trust-intro">
           <p className="section-kicker">SOURCE, SCOPE & EVIDENCE</p>
@@ -203,7 +242,7 @@ export default function Home() {
           </a>
         </div>
       </section>
-      <div className="decision-banner">
+      <div className="decision-banner" data-reveal="0">
         <div>
           <p className="section-kicker">HUMAN JUDGMENT, ALWAYS</p>
           <h2>Your release decision stays yours.</h2>
