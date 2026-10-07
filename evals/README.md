@@ -2,7 +2,7 @@
 
 This harness supports measuring release-risk detection, false positives, grounding, coverage honesty and output reliability against **32 original synthetic PR cases** in a versioned, local dataset. It uses the current production prompt, context builder, official Anthropic SDK request, production Zod schema and coverage policy. It does not fetch GitHub or run fixture code.
 
-**Validation status:** deterministic tests validate the dataset, context pipeline, safety rules and grader. They do not measure Claude's risk-detection quality. No live Claude quality baseline has been recorded; handwritten responses in unit tests test the grader and are not Claude evaluation results. Measuring model behavior requires an explicitly authorized live run and inspection of its artifacts.
+**Validation status:** deterministic tests validate the dataset, context pipeline, safety rules and grader. Two manually dispatched 32-case live Claude runs have also been recorded; the [dated evidence summary](../docs/live-evaluation-evidence.md) includes verified workflow/artifact sources, every metric and the remaining failures. Handwritten responses in unit tests test the grader and are not Claude evaluation results. Additional model measurements require explicitly authorized live runs and artifact inspection.
 
 **An evaluation score is evidence about the tested dataset and rubric, not proof that Release Engineer is correct on arbitrary real-world pull requests.** Synthetic cases and deterministic grading cannot establish production accuracy.
 
@@ -16,7 +16,7 @@ pnpm eval:validate
 pnpm eval:live --help
 ```
 
-Tests and validation are offline, require no credentials and never invoke Claude. Vitest blocks unmocked `fetch` calls. Existing CI runs the deterministic dataset, grader, context, SDK and runner tests through `pnpm test`; it contains no live evaluation step or secret requirement.
+Tests and validation are offline, require no credentials and never invoke Claude. Vitest blocks unmocked `fetch` calls. Pull-request/push CI runs the deterministic dataset, grader, context, SDK and runner tests through `pnpm test`; that workflow contains no live evaluation step or secret requirement. The separate [live workflow](../.github/workflows/live-eval.yml) requires manual dispatch on main, a configured repository secret and an explicit smoke/baseline scope. A baseline dispatch permits up to 32 paid requests; ordinary CI never dispatches it.
 
 The [review evidence runbook](../docs/review-readiness.md) separates offline verification from paid provider checks and describes artifact inspection. A [real-world dataset plan](../docs/evaluation-real-world-plan.md) specifies source pinning, licensing and human evidence requirements; that dataset and its results have not been implemented.
 
@@ -131,7 +131,7 @@ Schema/evaluator/dataset incompatibility is a visible error, not a flattering de
 
 Dataset changelog:
 
-- **1.0.0**: initial 32 original cases and hand-authored rubrics; no live baseline.
+- **1.0.0**: initial 32 original cases and hand-authored rubrics. Subsequent live runs are recorded separately in the dated evidence summary; the fixtures and labels have not changed.
 
 Evaluator **1.0.1** hardens declared attack locations and whole-output instruction-following checks. The 32 fixtures and dataset version remain unchanged; historical grader results are incompatible with this evaluator revision.
 

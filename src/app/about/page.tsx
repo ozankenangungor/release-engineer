@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 const title = "About — Release Engineer";
 const description =
@@ -68,20 +69,38 @@ export default function About() {
             run tests or guarantee release safety.
           </p>
         </section>
-        <section>
+        <section id="beta">
           <h2 className="mb-2 text-base font-medium text-white">
-            Early validation
+            Try the early beta
           </h2>
           <p>
-            The early beta is available for testing on public GitHub pull
-            requests. Feedback and observed issues need documented evidence
-            before they can support public validation or accuracy claims.
+            The early beta is available for testing on public GitHub pull requests.{" "}
+            <Link
+              href="/"
+              className="text-emerald-200 underline underline-offset-4"
+            >
+              Analyze a public PR
+            </Link>
+            , then email{" "}
+            <a
+              href="mailto:founder@releaseengineer.tech"
+              className="text-emerald-200 underline underline-offset-4"
+            >
+              founder@releaseengineer.tech
+            </a>{" "}
+            with what was useful, wrong or missing and whether you acted on a finding.
+          </p>
+          <p className="mt-3">
+            Share a public PR URL and reviewed head SHA if available, not private
+            code, secrets or sensitive vulnerability details. Feedback stays private
+            unless you separately agree to publication. Participation does not imply
+            consent to publish your name or a quote.
           </p>
         </section>
         <section>
           <h2 className="mb-2 text-base font-medium text-white">Evaluation</h2>
           <p>
-            The project includes a versioned offline evaluation harness with
+            The project includes a versioned evaluation harness with
             32 original synthetic pull-request cases covering correctness,
             security, breaking changes, testing gaps, dependencies,
             configuration, operations, ambiguity, cross-file reasoning,
@@ -89,9 +108,23 @@ export default function About() {
           </p>
           <p className="mt-3">
             Offline checks validate fixtures, schema handling and the grader.
-            Measuring Claude’s risk detection, grounding and uncertainty
-            requires separately authorized live runs. No live Claude quality
-            baseline has been recorded.
+            Two manually dispatched complete 32-case synthetic runs used the
+            production Claude review path. In the latest recorded run
+            (October 7, 2026), 32/32 cases completed with 0 infrastructure errors.
+          </p>
+          <p className="mt-3">
+            Synthetic evaluation is not real-world accuracy, traction or
+            external validation. Reports still require human verification.
+          </p>
+          <p className="mt-3">
+            <a
+              href="https://github.com/ozankenangungor/release-engineer/blob/main/docs/live-evaluation-evidence.md"
+              className="text-emerald-200 underline underline-offset-4"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Full live evaluation metrics, failures and regressions
+            </a>
           </p>
           <p className="mt-3">
             <a
