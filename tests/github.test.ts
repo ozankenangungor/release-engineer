@@ -133,4 +133,30 @@ describe("GitHub retrieval", () => {
     });
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
+  it("shares the retrieval deadline across pages and stops on an upstream abort", async () => {
+    const deadline = new AbortController();
+    const abortReceived = vi.fn();
+    const timeout = vi.spyOn(AbortSignal, "timeout").mockReturnValue(deadline.signal);
+    fetchMock.mockResolvedValueOnce(json(githubMetadata()));
+    fetchMock.mockImplementationOnce((_url, options) =>
+      new Promise((_, reject) => {
+        options!.signal!.addEventListener("abort", () => {
+          abortReceived();
+          reject(new DOMException("Aborted", "AbortError"));
+        }, { once: true });
+        deadline.abort();
+      }),
+    );
+    try {
+      await expect(getPullRequest(reference)).rejects.toMatchObject({ code: "GITHUB_UNAVAILABLE", status: 504 });
+      expect(timeout).toHaveBeenCalledWith(30_000);
+      expect(fetchMock.mock.calls[0]?.[1]?.signal).toBeInstanceOf(AbortSignal);
+      expect(fetchMock.mock.calls[0]?.[1]?.signal).toBe(fetchMock.mock.calls[1]?.[1]?.signal);
+      expect(fetchMock.mock.calls[1]?.[1]?.signal?.aborted).toBe(true);
+      expect(abortReceived).toHaveBeenCalledTimes(1);
+      expect(fetchMock).toHaveBeenCalledTimes(2);
+    } finally {
+      timeout.mockRestore();
+    }
+  });
 });

@@ -61,4 +61,13 @@ describe("public identity", () => {
     );
     expect(page).toMatch(/<time datetime="2026-10">October 2026<\/time>/i);
   });
+
+  it("exposes the existing security policy without publishing unsupported beta evidence", () => {
+    expect(html).toContain(
+      'href="https://github.com/ozankenangungor/release-engineer/blob/main/SECURITY.md" target="_blank" rel="noopener noreferrer"',
+    );
+    const page = renderToStaticMarkup(createElement(About));
+    expect(page).toContain("The early beta is available for testing");
+    expect(page).not.toContain("External developers have tested");
+  });
 });

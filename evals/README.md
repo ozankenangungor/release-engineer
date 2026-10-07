@@ -18,6 +18,8 @@ pnpm eval:live --help
 
 Tests and validation are offline, require no credentials and never invoke Claude. Vitest blocks unmocked `fetch` calls. Existing CI runs the deterministic dataset, grader, context, SDK and runner tests through `pnpm test`; it contains no live evaluation step or secret requirement.
 
+The [review evidence runbook](../docs/review-readiness.md) separates offline verification from paid provider checks and describes artifact inspection. A [real-world dataset plan](../docs/evaluation-real-world-plan.md) specifies source pinning, licensing and human evidence requirements; that dataset and its results have not been implemented.
+
 The CLI compiles TypeScript into ignored `.eval-build/` with the existing compiler, then runs Node with the `react-server` condition. Production `server-only` guards remain in place. The CLI does **not** load `.env`, `.env.local` or any other environment file.
 
 ### Explicit live runs
@@ -48,6 +50,8 @@ Outputs go to unique, ignored `evals/results/<label>-<timestamp>-*/` directories
 - `report.md`: model/delivered metrics, denominators, failures and critical failures, without large responses.
 
 Checkpoints are written before requests and after every attempt. Files use owner-only permissions and atomic replacement. Error messages, credentials, authorization headers and request bodies are not stored. Known process credentials and recognizable token patterns are redacted. Reviews are omitted by default; `--include-reviews` stores the validated model and delivered reviews for manual adjudication. It never stores unvalidated provider text. Treat opt-in responses as sensitive local artifacts, inspect them before sharing, and do not commit generated results. Redaction is an additional precaution, not a guarantee against every possible sensitive string.
+
+For public evidence, prepare a separate, manually inspected summary with the commit, fingerprints, case IDs, completion/status counts, critical failures and actual usage/timing fields. Check for credentials, personal information and third-party content even when fixtures are public. Do not publish raw responses automatically; schema validity and redaction do not establish that an output is safe to share. Keep tester records outside the checkout or in ignored `.private-evidence/`, using the [feedback template](../docs/beta-feedback-template.md).
 
 Input/output and cache creation/read token counts are recorded when the provider supplies them; unknown values are `null`. Per-case duration and requested/served model IDs are retained. No dollar cost is invented. The terminal identifies the planned request count before execution.
 

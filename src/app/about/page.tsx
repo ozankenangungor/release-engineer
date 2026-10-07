@@ -73,9 +73,9 @@ export default function About() {
             Early validation
           </h2>
           <p>
-            External developers have tested the beta on real public GitHub
-            pull requests. This early feedback is not a measured accuracy
-            result.
+            The early beta is available for testing on public GitHub pull
+            requests. Feedback and observed issues need documented evidence
+            before they can support public validation or accuracy claims.
           </p>
         </section>
         <section>
