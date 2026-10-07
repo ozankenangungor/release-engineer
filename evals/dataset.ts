@@ -6,6 +6,55 @@ import { datasetSchema, type EvaluationCase } from "./schema";
 
 export type PreparedCase = { fixture: EvaluationCase; context: ReviewContext };
 
+function patchSources(patch: string): string[] {
+  return patch.split(/^@@[^\n]*$/m).flatMap(hunk => ["-", "+"].map(side =>
+    hunk.split(/\r?\n/).filter(line => (line.startsWith(side) || line.startsWith(" ")) &&
+      !line.startsWith("---") && !line.startsWith("+++"))
+      .map(line => line.slice(1)).join("\n")));
+}
+
+function sourceContainsMarker(source: string, marker: string, location: "comment" | "string", hashComments: boolean): boolean {
+  for (let index = 0; index < source.length;) {
+    const char = source[index];
+    if (char === '"' || char === "'") {
+      const start = ++index;
+      while (index < source.length && source[index] !== char && source[index] !== "\n") {
+        if (source[index] === "\\") index++;
+        index++;
+      }
+      if (source[index] === char && location === "string" && source.slice(start, index).includes(marker)) return true;
+      index++;
+    } else if (!hashComments && source.startsWith("//", index) || hashComments && char === "#") {
+      const end = source.indexOf("\n", index);
+      const boundary = end === -1 ? source.length : end;
+      if (location === "comment" && source.slice(index, boundary).includes(marker)) return true;
+      index = boundary;
+    } else if (!hashComments && source.startsWith("/*", index)) {
+      const end = source.indexOf("*/", index + 2);
+      const boundary = end === -1 ? source.length : end;
+      if (location === "comment" && source.slice(index + 2, boundary).includes(marker)) return true;
+      index = end === -1 ? source.length : end + 2;
+    } else index++;
+  }
+  return false;
+}
+
+function attackIsLocated(fixture: EvaluationCase): boolean {
+  if (!fixture.attack) return true;
+  const { location, marker } = fixture.attack;
+  const { title, description, files } = fixture.pullRequest;
+  if (location === "title") return title.includes(marker);
+  if (location === "description") return description.includes(marker);
+  if (location === "filename") return files.some(file => file.filename.includes(marker));
+  if (location === "documentation")
+    return files.some(file => /\.(?:md|mdx|txt)$/i.test(file.filename) && file.patch?.includes(marker));
+  return files.some(file => {
+    const hashComments = /\.(?:py|sh|bash|rb|ya?ml|toml)$/i.test(file.filename);
+    if (!hashComments && !/\.(?:js|jsx|ts|tsx|mjs|cjs|mts|cts)$/i.test(file.filename)) return false;
+    return patchSources(file.patch ?? "").some(source => sourceContainsMarker(source, marker, location, hashComments));
+  });
+}
+
 export function fixturePullRequest(fixture: EvaluationCase): PullRequest {
   const files = fixture.pullRequest.files;
   return {
@@ -45,15 +94,8 @@ export function prepareCase(fixture: EvaluationCase): PreparedCase {
         throw new Error(`Evidence not present in fixture: ${fixture.id}/${risk.id}`);
     }
   }
-  if (fixture.attack) {
-    const { location, marker } = fixture.attack;
-    const inputs = location === "title" ? [pr.title]
-      : location === "description" ? [pr.body]
-      : location === "filename" ? pr.files.map(file => file.filename)
-      : pr.files.map(file => file.patch ?? "");
-    if (!inputs.some(value => value.includes(marker)))
-      throw new Error(`Attack marker is missing: ${fixture.id}`);
-  }
+  if (!attackIsLocated(fixture))
+    throw new Error(`Attack marker is absent from the declared location: ${fixture.id}`);
   return { fixture, context };
 }
 

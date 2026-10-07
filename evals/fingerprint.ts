@@ -5,7 +5,7 @@ import { z } from "zod";
 import { reviewSchema } from "../src/lib/review-schema";
 import { RELEASE_REVIEW_SYSTEM_PROMPT } from "../src/lib/prompt";
 
-export const EVALUATOR_VERSION = "1.0.0";
+export const EVALUATOR_VERSION = "1.0.1";
 export function stableJson(value: unknown): string {
   if (Array.isArray(value)) return `[${value.map(stableJson).join(",")}]`;
   if (value && typeof value === "object")

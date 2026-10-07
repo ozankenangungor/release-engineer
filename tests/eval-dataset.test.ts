@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { prepareCase } from "../evals/dataset";
 import { datasetSchema, evaluationCaseSchema, tagsSchema } from "../evals/schema";
 import { evaluationDataset, evaluationCase } from "./eval-helpers";
+import type { EvaluationCase } from "../evals/schema";
 
 describe("evaluation fixture integrity", () => {
   it("validates 32 original cases with every declared coverage category", () => {
@@ -63,5 +64,84 @@ describe("evaluation fixture integrity", () => {
     expect(JSON.parse(prepared.context.json).files[0].filename).toBe(".github/workflows/check.yml");
     expect(prepared.context.json).not.toContain('"filename":"src/auth.ts"');
     expect(prepared.fixture.expected.requiredRisks).toHaveLength(1);
+  });
+});
+
+describe("declared attack locations", () => {
+  const attacks = evaluationDataset.prepared.filter(test => test.fixture.attack);
+  it.each(attacks.map(test => [test.fixture.attack!.location, test.fixture] as const))(
+    "accepts the existing valid %s fixture", (_, fixture) => {
+      expect(() => prepareCase(fixture)).not.toThrow();
+    },
+  );
+  it.each(attacks.flatMap(test => attacks.filter(other => other.fixture.attack!.location !== test.fixture.attack!.location)
+    .map(other => [test.fixture.attack!.location, other.fixture.attack!.location, test.fixture] as const)))(
+    "rejects a %s marker declared as %s", (_, location, source) => {
+      const fixture = structuredClone(source);
+      fixture.attack!.location = location;
+      expect(() => prepareCase(fixture)).toThrow("declared location");
+    },
+  );
+
+  function withAttack(location: NonNullable<EvaluationCase["attack"]>["location"], lines: string, filename = "src/attack.ts") {
+    const fixture = structuredClone(evaluationCase("security-secret-comment-injection").fixture);
+    const marker = fixture.attack!.marker;
+    fixture.attack!.location = location;
+    fixture.pullRequest.files.forEach(file => { file.patch = file.patch?.replaceAll(marker, "REMOVED_SENTINEL"); });
+    fixture.pullRequest.files.push({ filename, status: "added", additions: 1, deletions: 0, patch: `@@ -0,0 +1,1 @@\n${lines.replaceAll("MARKER", marker)}` });
+    return fixture;
+  }
+
+  it.each([
+    ["line comment", '+// MARKER', "src/attack.ts"],
+    ["inline comment", '+const safe = 1; // MARKER', "src/attack.ts"],
+    ["block comment", '+/* MARKER */', "src/attack.ts"],
+    ["multiline block comment", '+/*\n+ MARKER\n+ */', "src/attack.ts"],
+    ["hash comment", '+# MARKER', "src/attack.py"],
+    ["quotes inside a comment", '+// "MARKER"', "src/attack.ts"],
+    ["removed comment", '-// MARKER', "src/attack.ts"],
+  ])("accepts a marker in a %s", (_, lines, filename) => {
+    expect(() => prepareCase(withAttack("comment", lines, filename))).not.toThrow();
+  });
+  it.each([
+    '+const message = "MARKER";', "+const message = 'MARKER';",
+    '+const message = "say \\"MARKER\\"";',
+    '+const message = "// MARKER";', '+const message = "/* MARKER */";',
+  ])("accepts a quoted string marker: %s", lines => {
+    expect(() => prepareCase(withAttack("string", lines))).not.toThrow();
+  });
+  it.each([
+    ["comment", '+const MARKER = true;'],
+    ["comment", '+const message = "// MARKER";'],
+    ["comment", '+const message = "/* MARKER */";'],
+    ["comment", '+# MARKER'],
+    ["string", '+const MARKER = true;'],
+    ["string", '+// "MARKER"'],
+    ["string", '+/* "MARKER" */'],
+    ["string", '+const message = "MARKER;'],
+  ] as const)("rejects %s markers outside that lexical location: %s", (location, lines) => {
+    expect(() => prepareCase(withAttack(location, lines))).toThrow("declared location");
+  });
+  it("does not turn a string's trailing code into a comment", () => {
+    const fixture = withAttack("comment", '+const message = "//"; const MARKER = true;');
+    expect(() => prepareCase(fixture)).toThrow("declared location");
+  });
+  it("separates the old and new patch sources", () => {
+    const fixture = withAttack("comment", '-const old = "\n+// MARKER');
+    expect(() => prepareCase(fixture)).not.toThrow();
+  });
+  it("does not mistake Python floor division for a comment", () => {
+    expect(() => prepareCase(withAttack("comment", '+value = count // MARKER', "src/attack.py"))).toThrow("declared location");
+  });
+  it.each(["docs/readme.md", "docs/readme.mdx", "docs/notes.txt", "docs/README.MD"])("accepts documentation in %s", filename => {
+    expect(() => prepareCase(withAttack("documentation", '+MARKER', filename))).not.toThrow();
+  });
+  it.each(["src/attack.ts", "src/attack.py", "assets/notes.png", "config.json"])("rejects documentation markers in %s", filename => {
+    expect(() => prepareCase(withAttack("documentation", '+MARKER', filename))).toThrow("declared location");
+  });
+  it("requires the documentation marker inside its patch, not just its filename", () => {
+    const fixture = withAttack("documentation", '+No marker here.', "docs/MARKER.md");
+    fixture.pullRequest.files.at(-1)!.filename = `docs/${fixture.attack!.marker}.md`;
+    expect(() => prepareCase(fixture)).toThrow("declared location");
   });
 });
