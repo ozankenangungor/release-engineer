@@ -99,8 +99,10 @@ export default function Terms() {
             in each browser, tracked in local storage. Failed or interrupted
             reviews do not count. Rate and concurrency limits also apply. The
             Pro plan at $9/month on the <a href="/pricing" className="text-signal underline underline-offset-4">Pricing page</a>{" "}
-            is a proposed offering; live paid checkout, private repository access and
-            the listed paid workflows are not available yet. Requesting access
+            lists a 100-review daily subscription allowance, resetting at 00:00 UTC.
+            Account registration and server-verified billing activation are being
+            connected; the production Pro allowance is not available yet. Both
+            plans support public repositories only. Requesting access
             does not create a subscription or authorize a charge.
           </p>
         </section>
@@ -111,7 +113,7 @@ export default function Terms() {
             cards only. The $9/month sandbox price matches the proposed Pro
             price. Completing a sandbox transaction does not collect real
             payment, establish a paid service subscription, increase your free
-            review allowance or activate any planned feature. Paddle may create
+            review allowance or activate production Pro access. Paddle may create
             simulated transactions and subscriptions in its sandbox account.
             Pro will have confirmed prices and terms before paid access opens.
           </p>

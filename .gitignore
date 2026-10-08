@@ -13,3 +13,4 @@ evals/results/
 .private-evidence/
 test-results/
 playwright-report/
+.vercel

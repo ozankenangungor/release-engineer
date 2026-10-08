@@ -70,7 +70,7 @@ test("completion is a demo confirmation and grants no allowance or paid access",
   await expect(page.locator(".checkout-status")).toContainText("No payment was taken and no paid plan was activated.");
   await expect(page.getByRole("button", { name: "Preview checkout", exact: true })).toBeFocused();
   expect(await page.evaluate(key => localStorage.getItem(key), FREE_USAGE_KEY)).toBe(before);
-  await expect(page.getByRole("article", { name: "Pro", exact: true })).toContainText("Planned");
+  await expect(page.getByRole("article", { name: "Pro", exact: true })).toContainText("Sandbox preview");
   await page.reload();
   await expect(page.locator(".checkout-status")).toBeEmpty();
 });

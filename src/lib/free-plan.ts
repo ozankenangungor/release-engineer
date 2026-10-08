@@ -1,6 +1,7 @@
 // Anonymous, device-local allowance for the homepage. This is not an account
 // entitlement or a server-side abuse boundary; API admission remains separate.
 export const FREE_DAILY_REVIEWS = 10;
+export const PRO_DAILY_REVIEWS = 100;
 export const FREE_USAGE_KEY = "release-engineer:free-usage:v1";
 export const FREE_REVIEW_LOCK = "release-engineer:free-review";
 

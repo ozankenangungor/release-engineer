@@ -98,8 +98,8 @@ export function CheckoutPreview() {
       <button ref={button} type="button" className="pricing-plan-action pricing-checkout-action" onClick={openCheckout} aria-describedby="checkout-preview-note" aria-disabled={busy} aria-busy={status === "loading"}>
         {status === "loading" ? "Loading checkout…" : status === "open" ? "Checkout is open" : status === "error" ? "Retry checkout preview" : "Preview checkout"}<span aria-hidden="true">↗︎</span>
       </button>
-      <p id="checkout-preview-note" className="checkout-preview-note"><span>Sandbox checkout · {PADDLE_SANDBOX.demoPrice}</span>No real charge or paid access. Use test cards only.</p>
-      <details className="checkout-test-details"><summary>Test card details</summary><p>Card: <code>4242 4242 4242 4242</code><br />Expiry: any future date · CVC: <code>100</code><br />Use an email address you own. Details entered in checkout are processed by Paddle.</p></details>
+      <p id="checkout-preview-note" className="checkout-preview-note"><span>Sandbox checkout · {PADDLE_SANDBOX.demoPrice}</span>Use test cards in this checkout preview.</p>
+      <details className="checkout-test-details"><summary>Test card details</summary><p>Card: <code>4242 4242 4242 4242</code><br />Expiry: any future date · CVC: <code>100</code><br />Sandbox transactions simulate payment and do not activate a production subscription.<br />Use an email address you own. Details entered in checkout are processed by Paddle.</p></details>
       <div className="checkout-status" role="status" aria-live="polite" aria-atomic="true">{status === "complete" ? "Sandbox checkout complete. No payment was taken and no paid plan was activated." : status === "loading" ? "Opening the Paddle test checkout…" : ""}</div>
       {status === "error" && <p className="checkout-error" role="alert" aria-label="Checkout error">{errorText}</p>}
     </div>
