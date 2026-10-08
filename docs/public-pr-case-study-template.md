@@ -1,6 +1,6 @@
 # Public PR case-study workflow
 
-**Process and blank template only. No completed case study or external validation is asserted.** Start with one small, public PR; prepare up to three cases only when real observations support them. A case study is a human-adjudicated observation, not a model-quality benchmark.
+**Process and blank template only.** Published observations live in `src/content/case-studies.ts`; at the time of this update the public record includes a founder-run Rails PR observation and does not relabel it as external validation. Use this workflow for additional cases only when real observations support them. A case study is a human-adjudicated observation, not a model-quality benchmark.
 
 ## Capture and publication gates
 

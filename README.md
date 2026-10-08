@@ -48,7 +48,7 @@ Browser: PR input → POST /api/analyze → validated report
 - `src/lib/review-schema.ts`: strict Zod review and API-response contracts, shared with the browser.
 - `src/app/api/analyze/route.ts`: bounded JSON request, orchestration and uncached responses.
 - `src/components/`: accessible form/loading/error states and readable report sections. React renders plain text; raw model output is never rendered as a report.
-- `src/components/three/`: dynamically imported Three.js / React Three Fiber sculpture of the review pipeline. DPR is capped at 1.5; rendering is on demand, pauses offscreen/hidden and stops after a five-second entrance signal. Mobile, reduced motion, forced colors, WebGL failure and JavaScript-disabled browsers use a server-rendered static illustration. Product copy and form are server-rendered independently.
+- `src/components/three/`: dynamically imported Three.js / React Three Fiber sculpture of the review pipeline. DPR is capped at 1.5; the visible reactor uses bounded demand scheduling and pauses when the scene is offscreen, the document is hidden, or motion is explicitly paused. Mobile, reduced motion, forced colors, WebGL failure and JavaScript-disabled browsers use a server-rendered static illustration. Product copy and form are server-rendered independently.
 - `src/lib/live-usage.ts`: allowlisted, content-free operational events; no browser/session identity or PR content. `scripts/summarize-live-usage.mjs` counts preserved, sanitized production outcomes without network calls.
 
 Built with Next.js 16.4 App Router, React 19, strict TypeScript, Tailwind CSS, Zod and Vitest. All GitHub and Anthropic requests happen on the server. `server-only` imports guard credential-bearing modules.
