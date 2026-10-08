@@ -61,8 +61,9 @@ export function Testimonials() {
         ))}
       </div>
       <p className="evidence-note">
-        Published with permission, using approved display names. Informal
-        feedback is not a measure of accuracy or a verified case study.
+        Exact quotes published with permission. Display aliases are
+        publication-approved; private identities and PR links are not disclosed.
+        Informal feedback is not a measure of accuracy or a verified case study.
       </p>
     </section>
   );

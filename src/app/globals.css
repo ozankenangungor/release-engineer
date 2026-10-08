@@ -634,6 +634,125 @@ body {
 .content-section {
   padding-block: 105px;
 }
+.reviewer-overview {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 60px;
+  align-items: start;
+  padding-block: 64px;
+}
+.reviewer-overview > section {
+  min-width: 0;
+}
+.reviewer-overview .section-heading {
+  margin-bottom: 18px;
+}
+.reviewer-intro,
+.reviewer-engine > p:not(.section-kicker) {
+  color: #b2bfd3;
+  font-size: 14px;
+  line-height: 1.9;
+}
+.audience-list {
+  margin-top: 20px;
+}
+.audience-list > div {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 20px;
+  padding-block: 15px;
+  border-top: 1px solid #b7c0fa25;
+  font-size: 13px;
+  line-height: 1.75;
+}
+.audience-list dt {
+  color: #e4e8f5;
+}
+.audience-list dd {
+  color: #b2bfd3;
+}
+.reviewer-engine {
+  padding: 32px;
+  border: 1px solid #b7c0fa33;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #19223a, #10182b);
+}
+.reviewer-engine h2,
+.featured-observation h2 {
+  margin-block: 16px 20px;
+  font-size: clamp(28px, 2.8vw, 40px);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+}
+.reviewer-engine h3 {
+  margin-top: 24px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.reviewer-engine ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-block: 14px 28px;
+  list-style: none;
+}
+.reviewer-engine li {
+  padding: 6px 9px;
+  border: 1px solid #b7c0fa25;
+  border-radius: 4px;
+  font-size: 11px;
+  color: #c8cfea;
+}
+.featured-observation {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 60px;
+  align-items: center;
+  padding-block: 60px;
+}
+.featured-observation > div {
+  min-width: 0;
+}
+.observation-label {
+  color: #d4d5ff;
+  font-size: 13px;
+  font-weight: 500;
+}
+.observation-summary {
+  margin-block: 16px 24px;
+  color: #b2bfd3;
+  font-size: 15px;
+  line-height: 1.9;
+}
+.observation-context {
+  padding: 28px;
+  border: 1px solid #b7c0fa33;
+  border-radius: 12px;
+  background: #131e33;
+}
+.observation-sha {
+  display: block;
+  margin-block: 12px 20px;
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+.observation-context > p:not(.section-kicker) {
+  color: #b2bfd3;
+  font-size: 12px;
+  line-height: 1.85;
+}
+.observation-context > p + p {
+  margin-top: 12px;
+}
+.beta-questions {
+  margin-top: 16px;
+  padding-left: 20px;
+  list-style: disc;
+}
+.beta-questions li + li {
+  margin-top: 8px;
+}
 .section-stage {
   border-top: 1px solid #b7c0fa21;
 }
@@ -1325,6 +1444,34 @@ body {
   border: 1px solid #b7c0fa36;
   border-radius: 5px;
   width: fit-content;
+}
+.deployment-provenance {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: 26px;
+  padding: 20px;
+  border: 1px solid #b7c0fa33;
+  border-radius: 8px;
+  background: #131e3380;
+  overflow-wrap: anywhere;
+}
+.deployment-provenance > div {
+  min-width: 0;
+}
+.deployment-provenance code {
+  display: block;
+  margin-block: 10px 5px;
+  font-size: 14px;
+  color: #e4e8f5;
+}
+.deployment-provenance p {
+  font-size: 12px;
+}
+.deployment-provenance .text-link {
+  margin-top: 0;
 }
 .case-record {
   padding: 32px;
@@ -2323,6 +2470,31 @@ button:not(:disabled) {
 .skip-link:focus {
   top: 16px;
 }
+@media (max-width: 900px) {
+  .reviewer-overview,
+  .featured-observation {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 30px;
+    padding-block: 48px;
+  }
+}
+@media (max-width: 767px) {
+  .reviewer-engine,
+  .observation-context {
+    padding: 22px;
+  }
+  .audience-list > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 5px;
+  }
+  .reviewer-engine h2,
+  .featured-observation h2 {
+    font-size: 30px;
+  }
+  .deployment-provenance {
+    padding: 16px;
+  }
+}
 @media (forced-colors: active) {
   body {
     background-image: none;
@@ -2356,6 +2528,10 @@ button:not(:disabled) {
   .case-record,
   .evidence-status,
   .evidence-entry,
+  .reviewer-engine,
+  .reviewer-engine li,
+  .observation-context,
+  .deployment-provenance,
   .workflow-step,
   .report-navigation a {
     background: Canvas;

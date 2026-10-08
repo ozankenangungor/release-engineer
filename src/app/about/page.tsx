@@ -37,11 +37,19 @@ export default function About() {
           </h1>
         </div>
         <p className="page-intro">
-          An independent developer-tool company, building a clearer second
-          perspective on the release decision.
+          A Claude-native second review of public GitHub PRs: release risks,
+          testing gaps, breaking changes and what still needs human
+          verification. Built for maintainers, engineering leads and small teams
+          shipping through pull requests.
         </p>
         <Link href="/evidence" className="secondary-action">
-          Evidence & engineering ↗︎
+          Inspect the public record ↗︎
+        </Link>
+        <Link
+          href="/"
+          className="text-link relative z-10 ml-6 inline-block mt-4"
+        >
+          Try the live beta →
         </Link>
         <div className="company-visual" aria-hidden="true">
           <div className="company-orbit" />
@@ -131,17 +139,28 @@ export default function About() {
             </p>
           </section>
           <section data-reveal="0">
-            <h2>Why Release Engineer</h2>
+            <h2>Who it is for</h2>
             <p>
-              A release decision needs more than a summary of the diff. The
-              product is designed to give maintainers a structured second
-              perspective: what may need attention, what to verify next, and
-              what the supplied context cannot establish.
+              Maintainers and engineering leads making merge decisions,
+              developers reviewing unfamiliar changes, and small product teams
+              without dedicated release engineering staff. These are intended
+              users for the early beta.
+            </p>
+            <p className="mt-3">
+              A diff summary alone does not tell a reviewer what to verify
+              before merging. Release Engineer is designed for a second pass on
+              testing gaps, breaking changes and visible configuration,
+              migration and operational risks, with the context limits in view.
             </p>
           </section>
           <section data-reveal="0">
             <h2>Claude at the core</h2>
             <p>
+              Claude handles reasoning across the supplied changes,
+              distinguishing evidence from inference, and producing structured
+              findings with explicit uncertainty.
+            </p>
+            <p className="mt-3">
               The server retrieves public changes from GitHub, selects context
               within deterministic byte limits, and sends it to Claude through
               the official Anthropic SDK. Structured output is validated before
@@ -156,6 +175,51 @@ export default function About() {
             >
               Inspect the production review engine ↗︎
             </a>
+          </section>
+          <section data-reveal="0">
+            <h2>Real-world evidence</h2>
+            <p>
+              Three founder-supplied, publication-approved quotes from external
+              beta testers appear on the{" "}
+              <Link href="/#developer-feedback" className="text-link">
+                homepage
+              </Link>
+              . Exact quotes are published with permission. Display aliases and
+              roles are publication-approved; private identities and PR links
+              are not disclosed. They are informal qualitative feedback. They do
+              not establish product accuracy, verified findings, unique
+              developer counts or customer traction.
+            </p>
+            <p className="mt-3">
+              One founder-run public PR observation is published for{" "}
+              <Link
+                className="text-link"
+                href="/case-studies/rails-doc-typo-58968"
+              >
+                Rails PR #58968
+              </Link>
+              , with a pinned reviewed head, public verification sources,
+              upstream outcome and explicit limitations. It is founder testing,
+              not external validation. No verified production analysis count is
+              published. The{" "}
+              <Link className="text-link" href="/evidence">
+                evidence index
+              </Link>{" "}
+              explains the current record and usage methodology.
+            </p>
+          </section>
+          <section data-reveal="0">
+            <h2>What we are validating</h2>
+            <p>The early beta is focused on five product questions:</p>
+            <ul className="beta-questions">
+              <li>Is a second review useful on real public PRs?</li>
+              <li>Which findings create false-positive noise?</li>
+              <li>
+                Does context selection retain the information reviewers need?
+              </li>
+              <li>Are explicit uncertainty and coverage limits useful?</li>
+              <li>Do findings change what maintainers verify before merge?</li>
+            </ul>
           </section>
           <section id="beta">
             <h2>Try the early beta</h2>
@@ -181,36 +245,6 @@ export default function About() {
               stays private unless you separately agree to publication.
               Participation does not imply consent to publish your name or a
               quote.
-            </p>
-          </section>
-          <section data-reveal="0">
-            <h2>Real-world evidence</h2>
-            <p>
-              Three founder-supplied, publication-approved quotes from external
-              beta testers appear on the{" "}
-              <Link href="/#developer-feedback" className="text-link">
-                homepage
-              </Link>
-              , using approved display names and roles. They are informal
-              qualitative feedback. They do not establish product accuracy,
-              verified findings, unique developer counts or customer traction.
-            </p>
-            <p className="mt-3">
-              One founder-run public PR observation is published for{" "}
-              <Link
-                className="text-link"
-                href="/case-studies/rails-doc-typo-58968"
-              >
-                Rails PR #58968
-              </Link>
-              , with a pinned reviewed head, public verification sources,
-              upstream outcome and explicit limitations. It is founder testing,
-              not external validation. No verified production analysis count is
-              published. The{" "}
-              <Link className="text-link" href="/evidence">
-                evidence index
-              </Link>{" "}
-              explains the current record and usage methodology.
             </p>
           </section>
           <section data-reveal="0">
