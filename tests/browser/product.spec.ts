@@ -1,6 +1,7 @@
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect } from "./test";
+import type { Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { pullRequest, review } from "../fixtures";
 
@@ -33,8 +34,23 @@ for (const [width, height] of [
     await page.setViewportSize({ width, height });
     const errors: string[] = [];
     const failures: string[] = [];
+    let abortedAccountReads = 0;
+    let completedAccountReads = 0;
     page.on("pageerror", (error) => errors.push(error.message));
-    page.on("requestfailed", (request) => failures.push(request.url()));
+    page.on('response', response => {
+      if (new URL(response.url()).pathname === '/api/account' && [200,401].includes(response.status())) completedAccountReads++;
+    });
+    page.on("requestfailed", (request) => {
+      const url = new URL(request.url());
+      // Clerk's security SDK intentionally probes connection availability; a
+      // closed probe port is not a failed product request. Its real API/CDN
+      // requests remain subject to the no-failure assertion below.
+      if (url.protocol === 'https:' && url.hostname.endsWith('.client.protect.clerk.com') && /^\/ins_[a-zA-Z0-9]+\/probe$/.test(url.pathname)) return;
+      // The development SDK can reload once to initialize its browser cookie.
+      // A canceled account read is allowed only if an actual read completes.
+      if (url.pathname === '/api/account' && request.failure()?.errorText === 'net::ERR_ABORTED') { abortedAccountReads++; return; }
+      failures.push(url.origin + url.pathname);
+    });
     let calls = 0;
     page.on("request", (request) => {
       if (request.url().endsWith("/api/analyze")) calls++;
@@ -83,6 +99,7 @@ for (const [width, height] of [
     expect(a11y.violations).toEqual([]);
     expect(errors).toEqual([]);
     expect(failures).toEqual([]);
+    if (abortedAccountReads) expect(completedAccountReads).toBeGreaterThan(0);
     if (process.env.AUDIT_SCREENSHOT_DIR) {
       mkdirSync(process.env.AUDIT_SCREENSHOT_DIR, { recursive: true });
       await page.screenshot({
@@ -274,7 +291,10 @@ for (const width of [1440, 360]) {
       "/privacy",
       "/terms",
     ]) {
-      const response = await page.goto(path, { waitUntil: "networkidle" });
+      // Auth/session and security connections can continue after usable page
+      // content. Verify the actual route, metadata and accessibility directly.
+      const response = await page.goto(path, { waitUntil: "domcontentloaded" });
+      await page.evaluate(() => document.fonts.ready);
       expect(response!.status()).toBe(200);
       await expect(page.locator("h1")).toHaveCount(1);
       await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
@@ -605,7 +625,10 @@ test("the response playground checks every example contract and clears stale res
 }) => {
   let requests = 0;
   page.on("request", (request) => {
-    if (request.url().includes("/api/")) requests++;
+    const path = new URL(request.url()).pathname;
+    // Account initialization is a global read. The illustrative playground
+    // must still make no analysis, billing, annotation or other API request.
+    if (path.startsWith('/api/') && !(path === '/api/account' && request.method() === 'GET')) requests++;
   });
   await page.goto("/");
   await page

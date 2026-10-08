@@ -18,7 +18,7 @@ export default defineConfig({
         ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE }
         : {}),
     },
-    trace: "retain-on-failure",
+    trace: process.env.CLERK_TESTING_TOKEN ? "off" : "retain-on-failure",
   },
   webServer: externalBase
     ? undefined

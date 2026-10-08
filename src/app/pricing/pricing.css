@@ -130,3 +130,7 @@
   .pricing-hero h1 > span, .pricing-final h2 > span { -webkit-text-fill-color: CanvasText; background: none; }
   .pricing-plan, .pricing-final, .pricing-plan-action, .pricing-final-action { border-color: CanvasText; }
 }
+
+.pricing-plan-actions .pricing-account-action { background: var(--action-gradient);margin-bottom:12px; }
+.pricing-plan-actions:has(.pricing-account-action) .pricing-checkout-action { background:#182030;border-color:#3a4c6d;color:#c7d3e8; }
+.pricing-availability-note a { color:#a9bfff;text-underline-offset:4px; }

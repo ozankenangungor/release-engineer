@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
+import { AccountLink } from './account-link';
 export function MobileNavigation({
   items,
 }: {
@@ -60,6 +61,7 @@ export function MobileNavigation({
           </span>
           GitHub<span aria-hidden="true">↗︎</span>
         </a>
+        <AccountLink className="mobile-account-link" />
         <Link href="/#analyze" className="mobile-analyze">
           Analyze a public PR →
         </Link>

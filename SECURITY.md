@@ -36,6 +36,16 @@ Release Engineer currently accepts **public GitHub pull-request URLs**. Do not s
 
 Release Engineer does not intentionally persist submitted pull-request contents or generated reports in an application database. Requests may still be processed by GitHub, Anthropic, and the hosting provider as described by their applicable policies and terms.
 
+Optional accounts use Clerk for verified sessions and Neon for account IDs,
+durable daily quotas and subscription state. Account and billing handlers require
+an active session and enforce resource ownership on the server. Billing mutations
+reject cross-site browser origins. Paddle notifications verify the exact raw-body
+signature and timestamp, retrieve current provider state and check server-created
+transaction ownership. Client callbacks and sandbox transactions cannot grant
+production Pro allowance. Account storage does not contain PR contents, reports,
+card data or billing addresses. See [accounts and billing](docs/accounts-and-billing.md)
+and the Privacy notice for configuration and retention boundaries.
+
 The server emits allowlisted, content-free operational events to hosting logs. A random ID links one analysis attempt; it does not identify a person or PR. Application events exclude PR identifiers/content, model output, IP addresses, request headers and secrets. See [the live usage evidence runbook](docs/live-usage-evidence.md) and the [Privacy notice](https://releaseengineer.tech/privacy) for fields and retention boundaries.
 
 The product is a release-readiness decision-support tool, not a security guarantee. Findings should be verified by maintainers and developers using their own testing and security processes.

@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./test";
 import AxeBuilder from "@axe-core/playwright";
 import { handoffResponse } from "../verification-fixtures";
 import { FREE_USAGE_KEY } from "../../src/lib/free-plan";

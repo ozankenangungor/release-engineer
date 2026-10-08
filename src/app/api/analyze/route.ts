@@ -12,6 +12,8 @@ import {
   assertBrowserOrigin,
 } from "@/lib/analysis-admission";
 import { startUsageRecord } from "@/lib/live-usage";
+import { accountIdentity } from "@/lib/account-auth";
+import { reserveAccountReview, finishAccountReview } from "@/lib/accounts";
 
 export const runtime = "nodejs";
 export const maxDuration = 120;
@@ -81,8 +83,11 @@ async function readInput(request: Request): Promise<unknown> {
 }
 
 export async function POST(request: Request) {
+  const startedAt = Date.now();
   let releaseSlot: (() => void) | undefined;
   let usage: ReturnType<typeof startUsageRecord> | undefined;
+  let reservation: Awaited<ReturnType<typeof reserveAccountReview>> | undefined;
+  let recorded = false;
   try {
     assertBrowserOrigin(request);
     const input = requestSchema.safeParse(await readInput(request));
@@ -95,11 +100,17 @@ export async function POST(request: Request) {
     }
     getClaudeConfig();
     releaseSlot = acquireAnalysisSlot();
+    const userId = await accountIdentity();
+    if (userId) reservation = await reserveAccountReview(userId);
     usage = startUsageRecord();
     const signal = AbortSignal.any([
       request.signal,
-      AbortSignal.timeout(115_000),
+      // Leave time inside the 120s route deadline to finalize account usage.
+      reservation
+        ? AbortSignal.timeout(Math.max(1, 105_000 - (Date.now() - startedAt)))
+        : AbortSignal.timeout(115_000),
     ]);
+    signal.throwIfAborted();
     const pr = await getPullRequest(reference, signal);
     const context = buildReviewContext(pr);
     const review = await reviewPullRequest(context, signal);
@@ -122,6 +133,12 @@ export async function POST(request: Request) {
       coverage: context.coverage,
       warnings: context.warnings,
     });
+    signal.throwIfAborted();
+    if (reservation) {
+      await finishAccountReview(reservation, true);
+      signal.throwIfAborted();
+      recorded = true;
+    }
     const response = NextResponse.json(result, { headers: responseHeaders });
     usage.succeeded({
       changedFileCount: pr.changedFileCount,
@@ -146,6 +163,14 @@ export async function POST(request: Request) {
       502,
     );
   } finally {
+    if (reservation && !recorded) {
+      // A crashed invocation's reservation expires after three minutes.
+      try {
+        await finishAccountReview(reservation, false);
+      } catch {
+        /* fail closed until expiry */
+      }
+    }
     releaseSlot?.();
   }
 }

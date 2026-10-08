@@ -100,8 +100,10 @@ export default function Terms() {
             reviews do not count. Rate and concurrency limits also apply. The
             Pro plan at $9/month on the <a href="/pricing" className="text-signal underline underline-offset-4">Pricing page</a>{" "}
             lists a 100-review daily subscription allowance, resetting at 00:00 UTC.
-            Account registration and server-verified billing activation are being
-            connected; the production Pro allowance is not available yet. Both
+            Account registration is optional for Free reviews. Signed-in usage is
+            enforced on the server across devices. Pro requires a verified active
+            live subscription; sandbox subscriptions do not grant the production
+            Pro allowance. Both
             plans support public repositories only. Requesting access
             does not create a subscription or authorize a charge.
           </p>

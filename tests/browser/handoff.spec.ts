@@ -1,7 +1,8 @@
 import { mkdirSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect } from "./test";
+import type { Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { handoffResponse } from "../verification-fixtures";
 import { verificationRecordSchema } from "../../src/lib/verification-record";
@@ -32,9 +33,17 @@ async function capture(page: Page, name: string) {
 for (const width of [1440, 360]) {
   test(`downloads pinned reports and local human verification at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
-    const errors: string[] = [], postRequests: string[] = [];
+    const errors: string[] = [], postRequests: string[] = [], authPostBodies: string[] = [];
     page.on("pageerror", (error) => errors.push(error.message));
-    page.on("request", (request) => { if (request.method() === "POST") postRequests.push(request.url()); });
+    page.on("request", (request) => {
+      if (request.method() !== "POST") return;
+      const url = new URL(request.url());
+      // Clerk's anonymous SDK initialization is separate from report/annotation
+      // transport. Keep every other mutation counted, and inspect auth bodies.
+      const clerkHost = url.hostname.endsWith('.clerk.accounts.dev') || url.hostname === 'clerk.releaseengineer.tech';
+      if (clerkHost && ['/v1/dev_browser', '/v1/environment'].includes(url.pathname)) authPostBodies.push(request.postData() ?? '');
+      else postRequests.push(url.origin + url.pathname);
+    });
     await analyzeStub(page);
     const reportDownload = page.waitForEvent("download");
     await page.getByRole("button", { name: "Download report" }).click();
@@ -73,10 +82,15 @@ for (const width of [1440, 360]) {
     await expect(page.locator(".handoff-status")).toContainText("Nothing was submitted");
     expect(postRequests).toHaveLength(1);
     expect(postRequests[0]).toMatch(/\/api\/analyze$/);
-    // Only the date/count allowance may persist; report and human notes stay
-    // in memory. Check all entries so accidental annotation storage fails.
+    for (const body of authPostBodies) {
+      expect(body).not.toContain('Offline browser test: checked the authored fixture');
+      expect(body).not.toContain('Offline browser fixture; useful but missing caller context');
+      expect(body).not.toContain(handoffResponse().review.findings[0]!.title);
+    }
+    // Clerk may persist public instance configuration and anti-abuse state.
+    // Every other key is still checked: report and human notes stay in memory.
     expect(await page.evaluate(key => ({
-      local: Object.keys(localStorage).map(name => [name, JSON.parse(localStorage.getItem(name)!)]),
+      local: Object.keys(localStorage).filter(name => !['__clerk_environment', '__clerk_protect_pid', '__clerk_protect_st'].includes(name)).map(name => [name, JSON.parse(localStorage.getItem(name)!)]),
       session: sessionStorage.length,
       day: new Date().toISOString().slice(0, 10),
       key,
@@ -86,6 +100,10 @@ for (const width of [1440, 360]) {
       day: new Date().toISOString().slice(0, 10),
       key: FREE_USAGE_KEY,
     });
+    const stored = await page.evaluate(() => [...Object.values(localStorage), ...Object.values(sessionStorage)].join('\n'));
+    expect(stored).not.toContain('Offline browser test: checked the authored fixture');
+    expect(stored).not.toContain('Offline browser fixture; useful but missing caller context');
+    expect(stored).not.toContain(handoffResponse().review.findings[0]!.title);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     expect((await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze()).violations).toEqual([]);
     expect(errors).toEqual([]);

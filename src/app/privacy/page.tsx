@@ -87,11 +87,18 @@ export default function Privacy() {
           <p>
             The application does not persist submitted PR contents or review
             reports. They are held in memory while processing and displayed in
-            your browser. There are no accounts, application database, analytics
-            vendors or application tracking cookies. Our hosting provider, GitHub and
+            your browser. Optional accounts use Clerk for identity, verification,
+            passwords, recovery and session cookies, and Neon for account IDs,
+            daily review usage and subscription state. There are no application
+            advertising trackers. Our hosting provider, GitHub and
             Anthropic may process request metadata or contents under their own
             policies; this application does not control their retention.
           </p>
+          <p className="mt-3">Clerk may also store its public instance configuration
+            and security state in browser storage, including for signed-out
+            visitors while its sign-in SDK initializes. This is separate from
+            report or verification-note storage; those notes remain in page
+            memory and local downloads.</p>
           <p className="mt-3">
             <a
               href="https://www.anthropic.com/legal/privacy"
@@ -132,9 +139,11 @@ export default function Privacy() {
             No PR contents or review reports are passed to Paddle.
           </p>
           <p className="mt-3">
-            Sandbox checkout does not collect real payment or activate a paid
-            plan. The application does not save checkout details or callback
-            contents in a database, browser storage or operational logs. Paddle
+            Sandbox checkout does not collect real payment or grant production Pro
+            access. An account checkout stores only the account ID, transaction ID,
+            subscription and customer IDs, environment, status and billing-period
+            dates. Card and address details remain with Paddle. Browser callbacks
+            never grant access. Paddle
             may retain sandbox records in the operator’s Paddle account and
             generate test subscription emails. The on-page completion message
             stays in page memory and clears on navigation or reload. See the{" "}
@@ -144,14 +153,31 @@ export default function Privacy() {
         <section>
           <h2 className="mb-2 text-base font-medium text-ink">Free review allowance</h2>
           <p>
-            The homepage stores a UTC date and completed-review count in your
+            When you are signed out, the homepage stores a UTC date and completed-review count in your
             browser’s local storage to track 10 free reviews per day in that
             browser. This counter contains no PR URL, code, report or identity
             and is not sent to our server. It resets at 00:00 UTC; clearing site
             storage removes it. It is a device-local allowance, not an account
             quota. Browser storage must be available to submit through the
-            homepage. Server admission limits separately protect availability.
+            homepage as a guest. For signed-in users, the server stores an opaque
+            review reservation ID, UTC date, completion status and expiry against
+            the account ID; it does not store the PR URL or report. This enforces
+            one daily account allowance across devices. Server admission limits
+            separately protect availability.
           </p>
+        </section>
+        <section>
+          <h2 className="mb-2 text-base font-medium text-ink">Account retention and requests</h2>
+          <p>Detailed usage records older than 31 days are removed when the account
+            starts another review. Checkout association records and notification
+            deduplication IDs older than 90 days are removed during billing event
+            processing. Account and subscription records remain until an account
+            deletion request is handled; provider retention and database backups
+            follow their own policies. To request access, correction or deletion,
+            contact founder@releaseengineer.tech from your account email. Cancel
+            any active subscription through Manage subscription before requesting
+            deletion; deletion alone does not cancel provider billing.</p>
+          <p className="mt-3"><a href="https://clerk.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="text-signal underline underline-offset-4">Clerk privacy policy</a>{' · '}<a href="https://neon.com/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-signal underline underline-offset-4">Neon privacy policy</a></p>
         </section>
         <section>
           <h2 className="mb-2 text-base font-medium text-ink">MVP notice</h2>

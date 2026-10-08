@@ -11,6 +11,7 @@ import { ReviewReport } from "./review-report";
 import { createPortal } from "react-dom";
 import { completeFreeReview, FREE_DAILY_REVIEWS, FREE_REVIEW_LOCK, FreeLimitError, prepareFreeReview } from "@/lib/free-plan";
 import { notifyFreeUsageChanged, useFreeAllowance } from "./use-free-allowance";
+import { useAccount } from './account-context';
 
 export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
   examplePrUrl?: string; interfaceRevision?: string | null;
@@ -25,7 +26,9 @@ export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
   const controllerRef = useRef<AbortController | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const resultRef = useRef<HTMLDivElement | null>(null);
-  const remaining = useFreeAllowance();
+  const browserRemaining = useFreeAllowance();
+  const { account, refresh: refreshAccount } = useAccount();
+  const remaining = account ? account.usage.remaining : browserRemaining;
 
   useEffect(() => {
     if (!loading) return;
@@ -67,7 +70,7 @@ export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
     setLoading(true);
     const timeout = setTimeout(() => controller.abort(), 125_000);
     async function runReview() {
-      try {
+      if (!account) try {
         prepareFreeReview(window.localStorage);
       } catch (failure) {
         if (failure instanceof FreeLimitError) throw failure;
@@ -108,13 +111,14 @@ export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
       const validated = analysisResponseSchema.safeParse(data);
       if (!validated.success)
         throw new Error("The report could not be validated. Please try again.");
-      try {
+      if (!account) try {
         completeFreeReview(window.localStorage);
       } catch {
         // Keep the useful report if storage becomes unavailable mid-request.
         setError("Your report is ready, but the free allowance could not be saved. Enable browser storage before your next review.");
       }
       notifyFreeUsageChanged();
+      void refreshAccount();
       setReceivedAt(new Date().toISOString());
       setResult(validated.data);
     }
@@ -139,6 +143,7 @@ export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
             : "Could not connect to the analysis service. Check your connection and try again.",
         );
     } finally {
+      void refreshAccount();
       clearTimeout(timeout);
       setLoading(false);
       controllerRef.current = null;
@@ -162,7 +167,7 @@ export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
         <form onSubmit={analyze} aria-busy={loading} noValidate>
           <div className="analysis-label-row">
             <label htmlFor="pr-url">GitHub pull request URL</label>
-            <span>Free · {FREE_DAILY_REVIEWS} reviews/day</span>
+            <span>{account?.usage.plan === 'pro' ? 'Pro' : 'Free'} · {account?.usage.limit ?? FREE_DAILY_REVIEWS} reviews/day</span>
           </div>
           <div className="analysis-controls">
             <input
@@ -208,8 +213,8 @@ export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
                 ? "Enable browser storage to track free reviews."
                 : remaining === 0
                   ? "Daily limit reached. Resets at 00:00 UTC."
-                  : `${remaining} of ${FREE_DAILY_REVIEWS} free reviews left today`}
-              <span className="allowance-scope"> · This browser</span>
+                  : `${remaining} of ${account?.usage.limit ?? FREE_DAILY_REVIEWS} ${account?.usage.plan === 'pro' ? 'Pro' : 'free'} reviews left today`}
+              <span className="allowance-scope"> · {account ? 'Your account' : 'This browser'}</span>
             </p>
             <Link href="/pricing">View plans <span aria-hidden="true">↗︎</span></Link>
           </div>

@@ -1,7 +1,7 @@
 import type { Paddle, PaddleEventData } from "@paddle/paddle-js";
 
 // Public sandbox configuration. This client-side token is not an API secret.
-// This integration deliberately has no live environment or entitlement path.
+// The public pricing preview stays sandbox. Accounts use server-created transactions.
 export const PADDLE_SANDBOX = {
   token: "test_4e531de093dbde40e3d26df5e5b",
   priceId: "pri_01m4m6t655rp43w5cghy7d72r9",
@@ -56,4 +56,13 @@ export async function loadSandboxCheckout(eventCallback: (event: PaddleEventData
   });
   if (!paddle?.Initialized) throw new Error("Checkout could not initialize");
   return paddle;
+}
+
+export async function loadAccountCheckout(config: { environment: 'sandbox' | 'live'; token: string }, eventCallback: (event: PaddleEventData) => void): Promise<Paddle> {
+  if (!config.token.startsWith(config.environment === 'sandbox' ? 'test_' : 'live_')) throw new Error('Checkout environment mismatch');
+  await loadScript();
+  const { initializePaddle } = await import('@paddle/paddle-js');
+  const instance = await initializePaddle({ environment: config.environment === 'sandbox' ? 'sandbox' : 'production', token: config.token, eventCallback, checkout: { settings: { displayMode: 'overlay', theme: 'dark', locale: 'en', showAddDiscounts: false, showAddTaxId: false } } });
+  if (!instance?.Initialized) throw new Error('Checkout could not initialize');
+  return instance;
 }

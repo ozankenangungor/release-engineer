@@ -5,6 +5,13 @@ import { reviewPullRequest } from "@/lib/claude";
 import { acquireAnalysisSlot } from "@/lib/analysis-admission";
 import { AnalysisError } from "@/lib/errors";
 import { pullRequest, review } from "./fixtures";
+import { accountIdentity } from "@/lib/account-auth";
+import { reserveAccountReview, finishAccountReview } from "@/lib/accounts";
+vi.mock("@/lib/account-auth", () => ({ accountIdentity: vi.fn() }));
+vi.mock("@/lib/accounts", () => ({
+  reserveAccountReview: vi.fn(),
+  finishAccountReview: vi.fn(),
+}));
 
 vi.mock("@/lib/analysis-admission", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@/lib/analysis-admission")>()),
@@ -15,6 +22,14 @@ vi.mock("@/lib/claude", () => ({ reviewPullRequest: vi.fn() }));
 const githubMock = vi.mocked(getPullRequest);
 const claudeMock = vi.mocked(reviewPullRequest);
 beforeEach(() => {
+  vi.mocked(accountIdentity).mockReset().mockResolvedValue(null);
+  vi.mocked(reserveAccountReview)
+    .mockReset()
+    .mockResolvedValue({
+      userId: "user_test",
+      id: "00000000-0000-4000-a000-000000000001",
+    });
+  vi.mocked(finishAccountReview).mockReset().mockResolvedValue(undefined);
   vi.stubEnv("ANTHROPIC_API_KEY", "test-only-api-key");
   vi.mocked(acquireAnalysisSlot).mockReset();
   vi.mocked(acquireAnalysisSlot).mockReturnValue(vi.fn());
@@ -34,6 +49,91 @@ function request(body: string, contentType = "application/json") {
 }
 
 describe("analysis endpoint", () => {
+  it("reserves signed-in usage before paid inference and completes only a validated report", async () => {
+    vi.mocked(accountIdentity).mockResolvedValue("user_test");
+    const response = await POST(
+      request(JSON.stringify({ url: pullRequest().url })),
+    );
+    expect(response.status).toBe(200);
+    expect(reserveAccountReview).toHaveBeenCalledWith("user_test");
+    expect(
+      vi.mocked(reserveAccountReview).mock.invocationCallOrder[0],
+    ).toBeLessThan(claudeMock.mock.invocationCallOrder[0]!);
+    expect(finishAccountReview).toHaveBeenCalledExactlyOnceWith(
+      { userId: "user_test", id: "00000000-0000-4000-a000-000000000001" },
+      true,
+    );
+  });
+  it.each(["DAILY_LIMIT", "ACCOUNT_BUSY"])(
+    "rejects %s before retrieval and inference",
+    async (code) => {
+      vi.mocked(accountIdentity).mockResolvedValue("user_test");
+      vi.mocked(reserveAccountReview).mockRejectedValue(
+        new AnalysisError(code, "Limit", 429),
+      );
+      expect(
+        (await POST(request(JSON.stringify({ url: pullRequest().url }))))
+          .status,
+      ).toBe(429);
+      expect(githubMock).not.toHaveBeenCalled();
+      expect(claudeMock).not.toHaveBeenCalled();
+    },
+  );
+  it("releases failed and invalid reports without completing account usage", async () => {
+    vi.mocked(accountIdentity).mockResolvedValue("user_test");
+    claudeMock.mockResolvedValueOnce({ ...review(), summary: "" });
+    expect(
+      (await POST(request(JSON.stringify({ url: pullRequest().url })))).status,
+    ).toBe(502);
+    expect(finishAccountReview).toHaveBeenCalledExactlyOnceWith(
+      expect.objectContaining({ userId: "user_test" }),
+      false,
+    );
+  });
+  it("does not perform paid inference for an already interrupted request", async () => {
+    vi.mocked(accountIdentity).mockResolvedValue("user_test");
+    const controller = new AbortController();
+    controller.abort();
+    const req = new Request("http://localhost/api/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url: pullRequest().url }),
+      signal: controller.signal,
+    });
+    expect((await POST(req)).status).toBe(502);
+    expect(claudeMock).not.toHaveBeenCalled();
+    expect(finishAccountReview).toHaveBeenCalledWith(expect.anything(), false);
+  });
+  it("does not return a report if durable completion could not be recorded", async () => {
+    vi.mocked(accountIdentity).mockResolvedValue("user_test");
+    vi.mocked(finishAccountReview).mockRejectedValueOnce(
+      new AnalysisError("ACCOUNT_UNAVAILABLE", "Unavailable", 503),
+    );
+    const response = await POST(
+      request(JSON.stringify({ url: pullRequest().url })),
+    );
+    expect(response.status).toBe(503);
+    expect(await response.text()).not.toContain(review().summary);
+  });
+  it("releases completion if the request is interrupted during the database round trip", async () => {
+    vi.mocked(accountIdentity).mockResolvedValue("user_test");
+    const controller = new AbortController();
+    vi.mocked(finishAccountReview).mockImplementationOnce(async () => {
+      controller.abort();
+    });
+    const req = new Request("http://localhost/api/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url: pullRequest().url }),
+      signal: controller.signal,
+    });
+    expect((await POST(req)).status).toBe(502);
+    expect(finishAccountReview).toHaveBeenCalledTimes(2);
+    expect(finishAccountReview).toHaveBeenLastCalledWith(
+      expect.anything(),
+      false,
+    );
+  });
   it("rejects cross-site browser requests before upstream access", async () => {
     for (const headers of [
       { Origin: "https://other.example" },

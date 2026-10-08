@@ -1,4 +1,5 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "./test";
+import type { Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { CHECKOUT_TIMEOUT_MS, PADDLE_SCRIPT_URL, PADDLE_SANDBOX } from "../../src/lib/paddle-sandbox";
 import { FREE_USAGE_KEY } from "../../src/lib/free-plan";

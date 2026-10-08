@@ -4,6 +4,13 @@ import { MotionSurfaces } from "@/components/motion-surfaces";
 import localFont from "next/font/local";
 import "./globals.css";
 import "./experience.css";
+import {
+  AccountProvider,
+  AccountSessionSync,
+} from "@/components/account-context";
+import "./account.css";
+import { ClerkProvider } from "@clerk/nextjs";
+import { ui } from "@clerk/ui";
 
 const inter = localFont({
   src: "../fonts/inter-latin.woff2",
@@ -98,6 +105,16 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const content = (
+    <AccountProvider>
+      {process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && <AccountSessionSync />}
+      <Header />
+      <div className="flex-1">
+        <MotionSurfaces>{children}</MotionSurfaces>
+      </div>
+      <Footer />
+    </AccountProvider>
+  );
   return (
     <html lang="en">
       <body className={`${inter.variable} flex min-h-screen flex-col`}>
@@ -110,11 +127,32 @@ export default function RootLayout({
         <a href="#main" className="skip-link">
           Skip to content
         </a>
-        <Header />
-        <div className="flex-1">
-          <MotionSurfaces>{children}</MotionSurfaces>
-        </div>
-        <Footer />
+        {process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ? (
+          <ClerkProvider
+            ui={ui}
+            signInUrl="/sign-in"
+            signUpUrl="/sign-up"
+            signInForceRedirectUrl="/account"
+            signUpForceRedirectUrl="/account"
+            localization={{
+              signIn: { start: { title: "Sign in to Release Engineer" } },
+            }}
+            appearance={{
+              variables: {
+                colorPrimary: "#668bff",
+                colorBackground: "#121720",
+                colorForeground: "#edf1fa",
+                colorMutedForeground: "#b1bed1",
+                borderRadius: "10px",
+                fontFamily: "var(--font-inter), sans-serif",
+              },
+            }}
+          >
+            {content}
+          </ClerkProvider>
+        ) : (
+          content
+        )}
       </body>
     </html>
   );

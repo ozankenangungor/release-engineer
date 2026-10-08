@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MobileNavigation } from "./mobile-navigation";
+import { AccountLink } from './account-link';
 
 // Source branches cross a release boundary and resolve into one signal.
 export function ReleaseMark({ className }: { className?: string }) {
@@ -62,9 +63,9 @@ export function Header() {
             GitHub <span aria-hidden="true">↗︎</span>
           </a>
         </nav>
-        <Link href="/#analyze" className="header-action">
+        <div className="header-account-actions"><AccountLink /><Link href="/#analyze" className="header-action">
           Analyze a PR <span aria-hidden="true">↗︎</span>
-        </Link>
+        </Link></div>
         <MobileNavigation items={navigation} />
       </div>
     </header>
@@ -86,6 +87,7 @@ export function Footer() {
             <p className="footer-label">PRODUCT</p>
             <Link href="/#report-preview">Product</Link>
             <Link href="/pricing">Pricing</Link>
+            <Link href="/account" prefetch={false}>Account</Link>
             <Link href="/evidence">Evidence</Link>
             <Link href="/feedback">Feedback</Link>
             <Link href="/about">About</Link>
