@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Header, Footer } from "@/components/brand";
+import { MotionSurfaces } from "@/components/motion-surfaces";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -118,7 +119,9 @@ export default function RootLayout({
           Skip to content
         </a>
         <Header />
-        <div className="flex-1">{children}</div>
+        <div className="flex-1">
+          <MotionSurfaces>{children}</MotionSurfaces>
+        </div>
         <Footer />
       </body>
     </html>

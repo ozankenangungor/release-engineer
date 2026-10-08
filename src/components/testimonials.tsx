@@ -10,6 +10,7 @@ export function Testimonials() {
       id="developer-feedback"
       aria-labelledby="feedback-title"
       className="feedback-section section-stage"
+      data-reveal="0"
     >
       <div className="section-heading">
         <div>
@@ -26,6 +27,7 @@ export function Testimonials() {
           <figure
             className={`quote-card ${index === 0 ? "quote-featured" : ""}`}
             key={item.id}
+            data-reveal={String(index * 100)}
           >
             <span className="quote-mark" aria-hidden="true">
               “
