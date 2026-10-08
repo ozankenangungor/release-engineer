@@ -10,13 +10,14 @@ import {
 import { ReviewReport } from "./review-report";
 import { ReleaseMark } from "./brand";
 
-export function AnalysisForm() {
+export function AnalysisForm({ examplePrUrl }: { examplePrUrl?: string }) {
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<AnalysisResponse | null>(null);
   const controllerRef = useRef<AbortController | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const resultRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -123,16 +124,34 @@ export function AnalysisForm() {
           </div>
           <p className="console-description">
             A bounded Claude review. Your release call.
+            <span className="mt-1 block">
+              No account required · Public PRs only · Early beta
+            </span>
           </p>
           <form onSubmit={analyze} aria-busy={loading}>
-            <label
-              htmlFor="pr-url"
-              className="mb-3 block text-xs text-slate-300"
-            >
-              Public GitHub pull request URL
-            </label>
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+              <label htmlFor="pr-url" className="text-xs text-slate-300">
+                Public GitHub pull request URL
+              </label>
+              {examplePrUrl && (
+                <button
+                  type="button"
+                  disabled={loading}
+                  className="text-link min-h-6 text-xs disabled:cursor-wait disabled:opacity-60"
+                  title="Prefill a public example: Rails PR #58968. Analysis starts only when you choose Analyze PR."
+                  onClick={() => {
+                    setUrl(examplePrUrl);
+                    setError(null);
+                    inputRef.current?.focus();
+                  }}
+                >
+                  Load example PR
+                </button>
+              )}
+            </div>
             <div className="flex flex-col gap-3">
               <input
+                ref={inputRef}
                 id="pr-url"
                 type="url"
                 name="url"
