@@ -7,7 +7,8 @@ import {
   getPublishedCaseStudies,
 } from "@/content/case-studies";
 import { Testimonials } from "@/components/testimonials";
-import { CaseStudiesPreview } from "@/components/case-studies";
+import { FeaturedPublicObservation } from "@/components/case-studies";
+import Evidence from "@/app/evidence/page";
 import sitemap from "@/app/sitemap";
 
 describe("publication boundaries", () => {
@@ -36,6 +37,9 @@ describe("publication boundaries", () => {
       expect(html).toContain(item.displayName);
     }
     expect(html).not.toMatch(/href=|@|stars|Trusted by|Loved by/);
+    expect(html).toContain("Exact quotes published with permission");
+    expect(html).toContain("Display aliases are publication-approved");
+    expect(html).toContain("private identities and PR links are not disclosed");
   });
   it("publishes the pinned founder-run Rails observation without calling it external validation", () => {
     const studies = getPublishedCaseStudies();
@@ -49,9 +53,14 @@ describe("publication boundaries", () => {
       publishedWithPermission: true,
     });
     expect(studies[0]?.productCommit).toBeUndefined();
-    const html = renderToStaticMarkup(createElement(CaseStudiesPreview));
-    expect(html).toContain("Rails documentation typo fix");
-    expect(html).toContain("FOUNDER TEST");
+    const html = renderToStaticMarkup(createElement(FeaturedPublicObservation));
+    expect(html).toContain("rails/rails #58968");
+    expect(html).toContain("Founder test — not external validation.");
+    expect(html).toContain(studies[0]!.reviewedHeadSha);
+    expect(html).toContain(
+      "The upstream merge does not establish model accuracy",
+    );
+    expect(html).toContain("original report and exact product revision");
     expect(html).not.toContain("EXTERNAL TESTER");
     const urls = sitemap().map((item) => item.url);
     expect(urls).toContain("https://releaseengineer.tech/case-studies");
@@ -59,6 +68,25 @@ describe("publication boundaries", () => {
       "https://releaseengineer.tech/case-studies/rails-doc-typo-58968",
     );
     expect(urls).toContain("https://releaseengineer.tech/evidence");
+  });
+  it("introduces public evidence before synthetic evaluation without hiding failures", () => {
+    const html = renderToStaticMarkup(createElement(Evidence));
+    const headings = Array.from(
+      html.matchAll(/<h2[^>]*>(.*?)<\/h2>/g),
+      (match) => match[1],
+    );
+    expect(headings).toEqual([
+      "Working software, inspectable engineering.",
+      "Approved early developer feedback.",
+      "rails/rails #58968",
+      "Claude reasons. Application code sets the scope.",
+      "Evaluation with failures in view.",
+      "How live usage is measured.",
+      "A founder, a public record, a way to contact us.",
+    ]);
+    expect(html).toContain("22 PASS / 10 FAIL");
+    expect(html).toContain("one critical violation remaining");
+    expect(html).toContain("Metrics, failures, source runs &amp; provenance");
   });
   it("requires consent, matching pinned public PR identity, human verification and limitations", () => {
     // Synthetic schema input only, never production content or a real observation.
