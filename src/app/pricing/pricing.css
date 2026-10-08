@@ -15,7 +15,7 @@
 .pricing-orbit i { position: absolute; left: 50%; top: -200px; width: 1050px; height: 1050px; transform: translateX(-50%) rotateX(65deg) rotateZ(-20deg); border: 1px solid #8eb2ff25; border-radius: 50%; }
 .pricing-orbit i:nth-child(2) { width: 1200px; height: 1200px; top: -230px; }
 .pricing-orbit i:nth-child(3) { width: 1380px; height: 1380px; top: -270px; }
-.pricing-plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.pricing-plans { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
 .pricing-plan { position: relative; padding: clamp(24px, 2.4vw, 48px); background: linear-gradient(155deg, #161c28, #0c0e14 52%); border: 1px solid #313947; border-radius: 14px; display: flex; flex-direction: column; }
 .pricing-plan-pro { background: radial-gradient(ellipse at 50% 0, #315dff26, transparent 65%), linear-gradient(155deg, #161c2b, #0c0e14 65%); border-color: #5b72aa; box-shadow: 0 10px 80px -40px #315dff66; }
 .pricing-plan-heading { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
@@ -26,6 +26,9 @@
 .pricing-price { display: flex; gap: 6px; align-items: baseline; font-size: clamp(64px, 5.6vw, 108px); font-weight: 550; letter-spacing: -.07em; line-height: 1; }
 .pricing-currency { font-size: .45em; align-self: flex-start; margin-top: .24em; }
 .pricing-price-unit { margin-top: 10px; color: var(--muted); font-size: 14px; }
+.pricing-plan-actions { margin-top: 28px; }
+.pricing-plan-actions .pricing-plan-action { margin-top: 0; }
+.pricing-free-note { font-size: 13px; line-height: 1.7; color: #acbad2; margin-top: 12px; }
 .pricing-plan-action { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 52px; padding: 12px 16px; margin-top: 28px; border: 1px solid #44526c; border-radius: 6px; text-decoration: none; background: #182033; color: #e3eaff; font-size: 15px; font-weight: 550; transition: border-color .2s, background .2s; }
 .pricing-plan-action:hover { background: #212d48; border-color: #91aafa; }
 .pricing-checkout-action { width: 100%; cursor: pointer; background: var(--action-gradient); border-color: #6b8aff; color: #fff; text-align: left; }
@@ -37,7 +40,7 @@
 .checkout-test-details summary { cursor: pointer; width: fit-content; color: #b3c7f5; }
 .checkout-test-details p { margin-top: 8px; }
 .checkout-test-details code { color: #d7e4fc; white-space: nowrap; }
-.checkout-access-link { font-size: 13px; color: #b3c7f5; margin-top: 14px; text-underline-offset: 4px; width: fit-content; }
+.checkout-access-link { display: inline-block; font-size: 13px; color: #b3c7f5; margin-top: 14px; text-underline-offset: 4px; width: fit-content; }
 .checkout-status:not(:empty), .checkout-error { font-size: 13px; line-height: 1.7; margin-top: 13px; padding: 12px; border-radius: 6px; }
 .checkout-status:not(:empty) { color: #b5e7db; background: #35d7c40c; border: 1px solid #35d7c43b; }
 .checkout-error { color: #ffbfad; background: #ff795d0b; border: 1px solid #ff795d45; }
@@ -62,9 +65,9 @@
 .pricing-section-heading { display: flex; justify-content: space-between; align-items: end; gap: 30px; margin-bottom: 40px; }
 .pricing-section-heading > p { color: var(--muted); font-size: 14px; line-height: 1.7; }
 .pricing-table-scroll { max-width: 100%; overflow-x: auto; scrollbar-color: #495c85 #141922; }
-.pricing-table-scroll table { width: 100%; min-width: 760px; border-collapse: collapse; text-align: left; font-size: 15px; }
-.pricing-table-scroll th, .pricing-table-scroll td { padding: 22px 20px; border-bottom: 1px solid var(--rule); width: 22%; }
-.pricing-table-scroll th:first-child { width: 34%; padding-left: 0; }
+.pricing-table-scroll table { width: 100%; min-width: 580px; border-collapse: collapse; text-align: left; font-size: 15px; }
+.pricing-table-scroll th, .pricing-table-scroll td { padding: 22px 20px; border-bottom: 1px solid var(--rule); width: 30%; }
+.pricing-table-scroll th:first-child { width: 40%; padding-left: 0; }
 .pricing-table-scroll thead th { font-size: 19px; font-weight: 550; padding-bottom: 28px; }
 .pricing-table-scroll thead th:first-child { font-size: 14px; color: var(--muted); }
 .pricing-table-scroll thead th span { display: block; margin-top: 8px; color: var(--muted); font: 11px var(--font-mono); }

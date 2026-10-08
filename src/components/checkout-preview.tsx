@@ -5,7 +5,17 @@ import type { Paddle, PaddleEventData } from "@paddle/paddle-js";
 import { CHECKOUT_TIMEOUT_MS, loadSandboxCheckout, PADDLE_SANDBOX } from "@/lib/paddle-sandbox";
 
 type Status = "idle" | "loading" | "open" | "complete" | "error";
-const DEFAULT_ERROR = "The test checkout could not open. Check your connection or content blocker, then retry. Free PR analysis is still available.";
+const DEFAULT_ERROR = "Checkout preview is temporarily unavailable. Please retry or request Pro access below. Free PR analysis is still available.";
+
+function isConfigurationError(event: PaddleEventData): boolean {
+  const code = "transaction_default_checkout_url_not_set";
+  // The checkout service can wrap this error in a validation event. The SDK
+  // types omit that errors array, so narrow it before reading its message.
+  const errors: unknown = "errors" in event ? event.errors : undefined;
+  return event.code === code || (Array.isArray(errors) && errors.some(error =>
+    error !== null && typeof error === "object" && "message" in error && error.message === code
+  ));
+}
 
 export function CheckoutPreview() {
   const [status, setStatus] = useState<Status>("idle");
@@ -48,7 +58,7 @@ export function CheckoutPreview() {
       setStatus("idle");
       button.current?.focus();
     } else if (event.name === "checkout.error" || event.name === "checkout.failed") {
-      failCheckout(event.code === "transaction_default_checkout_url_not_set"
+      failCheckout(isConfigurationError(event)
         ? "Checkout preview is being configured. Please try again later or request Pro access below. Free PR analysis is still available."
         : DEFAULT_ERROR);
     }
@@ -88,7 +98,7 @@ export function CheckoutPreview() {
       <button ref={button} type="button" className="pricing-plan-action pricing-checkout-action" onClick={openCheckout} aria-describedby="checkout-preview-note" aria-disabled={busy} aria-busy={status === "loading"}>
         {status === "loading" ? "Loading checkout…" : status === "open" ? "Checkout is open" : status === "error" ? "Retry checkout preview" : "Preview checkout"}<span aria-hidden="true">↗︎</span>
       </button>
-      <p id="checkout-preview-note" className="checkout-preview-note"><span>Sandbox demo · {PADDLE_SANDBOX.demoPrice} test amount</span>No real charge or paid access. Use test cards only.</p>
+      <p id="checkout-preview-note" className="checkout-preview-note"><span>Sandbox checkout · {PADDLE_SANDBOX.demoPrice}</span>No real charge or paid access. Use test cards only.</p>
       <details className="checkout-test-details"><summary>Test card details</summary><p>Card: <code>4242 4242 4242 4242</code><br />Expiry: any future date · CVC: <code>100</code><br />Use an email address you own. Details entered in checkout are processed by Paddle.</p></details>
       <div className="checkout-status" role="status" aria-live="polite" aria-atomic="true">{status === "complete" ? "Sandbox checkout complete. No payment was taken and no paid plan was activated." : status === "loading" ? "Opening the Paddle test checkout…" : ""}</div>
       {status === "error" && <p className="checkout-error" role="alert" aria-label="Checkout error">{errorText}</p>}

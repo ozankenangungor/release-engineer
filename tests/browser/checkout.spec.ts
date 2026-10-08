@@ -83,7 +83,7 @@ test("a blocked CDN load shows an accessible error and retry works without reloa
   });
   await page.goto("/pricing");
   await page.getByRole("button", { name: "Preview checkout", exact: true }).click();
-  await expect(page.getByRole("alert", { name: "Checkout error" })).toContainText("Check your connection or content blocker");
+  await expect(page.getByRole("alert", { name: "Checkout error" })).toContainText("Checkout preview is temporarily unavailable");
   await expect(page.getByRole("button", { name: "Retry checkout preview" })).toBeFocused();
   await page.getByRole("button", { name: "Retry checkout preview" }).click();
   await expect(page.getByRole("button", { name: "Checkout is open" })).toBeVisible();
@@ -98,7 +98,7 @@ test("an iframe that never becomes ready times out and can be retried", async ({
   await page.getByRole("button", { name: "Preview checkout", exact: true }).click();
   await expect.poll(async () => (await calls(page)).opened?.length).toBe(1);
   await page.clock.fastForward(CHECKOUT_TIMEOUT_MS + 1);
-  await expect(page.getByRole("alert", { name: "Checkout error" })).toContainText("The test checkout could not open");
+  await expect(page.getByRole("alert", { name: "Checkout error" })).toContainText("Checkout preview is temporarily unavailable");
   await page.getByRole("button", { name: "Retry checkout preview" }).click();
   await expect.poll(async () => (await calls(page)).opened?.length).toBe(2);
   await page.evaluate(() => window.dispatchEvent(new CustomEvent("paddle-test-event", { detail: { name: "checkout.loaded" } })));
@@ -136,13 +136,20 @@ test("mobile preview and test instructions remain accessible with reduced motion
   await expect(page.getByRole("button", { name: "Checkout is open" })).toBeVisible();
 });
 
-test("a missing provider configuration directs visitors to access requests", async ({ page }) => {
+for (const providerError of [
+  { name: "checkout.error", code: "transaction_default_checkout_url_not_set" },
+  // Actual sandbox startup response observed on the deployed site.
+  { name: "checkout.error", type: "api_error", code: "validation", errors: [{ message: "transaction_default_checkout_url_not_set" }] },
+]) test(`missing provider configuration (${providerError.code}) recovers before checkout loads`, async ({ page }) => {
+  await page.route(PADDLE_SCRIPT_URL, route => route.fulfill({ contentType: "application/javascript", body: fixture(false) }));
   await page.goto("/pricing");
   await page.getByRole("button", { name: "Preview checkout", exact: true }).click();
-  await expect(page.getByRole("button", { name: "Checkout is open" })).toBeVisible();
-  await page.evaluate(() => window.dispatchEvent(new CustomEvent("paddle-test-event", { detail: { name: "checkout.error", code: "transaction_default_checkout_url_not_set" } })));
+  await expect.poll(async () => (await calls(page)).opened?.length).toBe(1);
+  await page.evaluate(detail => window.dispatchEvent(new CustomEvent("paddle-test-event", { detail })), providerError);
   await expect(page.getByRole("alert", { name: "Checkout error" })).toContainText("Checkout preview is being configured");
   await expect(page.getByRole("link", { name: "Request Pro access" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Retry checkout preview" })).toBeFocused();
+  await expect(page.locator("body")).not.toContainText("transaction_default_checkout_url_not_set");
 });
 
 test("the pricing offers remain readable when JavaScript is disabled", async ({ browser, baseURL }) => {

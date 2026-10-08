@@ -98,8 +98,8 @@ export default function Terms() {
             Free homepage use allows 10 completed, validated reviews per UTC day
             in each browser, tracked in local storage. Failed or interrupted
             reviews do not count. Rate and concurrency limits also apply. The
-            Pro and Team plans on the <a href="/pricing" className="text-signal underline underline-offset-4">Pricing page</a>{" "}
-            are proposed offerings; live paid checkout, private repository access and
+            Pro plan at $9/month on the <a href="/pricing" className="text-signal underline underline-offset-4">Pricing page</a>{" "}
+            is a proposed offering; live paid checkout, private repository access and
             the listed paid workflows are not available yet. Requesting access
             does not create a subscription or authorize a charge.
           </p>
@@ -108,12 +108,12 @@ export default function Terms() {
           <h2 className="mb-2 text-base font-medium text-ink">Sandbox checkout</h2>
           <p>
             Preview checkout on Pricing opens a Paddle test checkout. Use test
-            cards only. Its separate $9/month demo amount is not a live price
-            offer. Completing a sandbox transaction does not collect real
+            cards only. The $9/month sandbox price matches the proposed Pro
+            price. Completing a sandbox transaction does not collect real
             payment, establish a paid service subscription, increase your free
             review allowance or activate any planned feature. Paddle may create
             simulated transactions and subscriptions in its sandbox account.
-            Paid plans will have confirmed prices and terms before launch.
+            Pro will have confirmed prices and terms before paid access opens.
           </p>
         </section>
         <section>
