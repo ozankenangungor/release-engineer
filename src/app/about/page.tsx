@@ -196,8 +196,17 @@ export default function About() {
               verified findings, unique developer counts or customer traction.
             </p>
             <p className="mt-3">
-              No pinned, human-checked public PR case study or verified
-              production analysis count is published yet. The{" "}
+              One founder-run public PR observation is published for{" "}
+              <Link
+                className="text-link"
+                href="/case-studies/rails-doc-typo-58968"
+              >
+                Rails PR #58968
+              </Link>
+              , with a pinned reviewed head, public verification sources,
+              upstream outcome and explicit limitations. It is founder testing,
+              not external validation. No verified production analysis count is
+              published. The{" "}
               <Link className="text-link" href="/evidence">
                 evidence index
               </Link>{" "}

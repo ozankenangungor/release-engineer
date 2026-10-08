@@ -37,15 +37,28 @@ describe("publication boundaries", () => {
     }
     expect(html).not.toMatch(/href=|@|stars|Trusted by|Loved by/);
   });
-  it("publishes no unsupported case preview or sitemap route", () => {
-    expect(getPublishedCaseStudies()).toEqual([]);
-    expect(renderToStaticMarkup(createElement(CaseStudiesPreview))).toBe("");
-    expect(sitemap().map((item) => item.url)).not.toContain(
-      "https://releaseengineer.tech/case-studies",
+  it("publishes the pinned founder-run Rails observation without calling it external validation", () => {
+    const studies = getPublishedCaseStudies();
+    expect(studies).toHaveLength(1);
+    expect(studies[0]).toMatchObject({
+      slug: "rails-doc-typo-58968",
+      repository: "rails/rails",
+      prNumber: 58968,
+      reviewedHeadSha: "08dacc7fed6bd69e864ce66e00a5616f117c6427",
+      participationSource: "founder-test",
+      publishedWithPermission: true,
+    });
+    expect(studies[0]?.productCommit).toBeUndefined();
+    const html = renderToStaticMarkup(createElement(CaseStudiesPreview));
+    expect(html).toContain("Rails documentation typo fix");
+    expect(html).toContain("FOUNDER TEST");
+    expect(html).not.toContain("EXTERNAL TESTER");
+    const urls = sitemap().map((item) => item.url);
+    expect(urls).toContain("https://releaseengineer.tech/case-studies");
+    expect(urls).toContain(
+      "https://releaseengineer.tech/case-studies/rails-doc-typo-58968",
     );
-    expect(sitemap().map((item) => item.url)).toContain(
-      "https://releaseengineer.tech/evidence",
-    );
+    expect(urls).toContain("https://releaseengineer.tech/evidence");
   });
   it("requires consent, matching pinned public PR identity, human verification and limitations", () => {
     // Synthetic schema input only, never production content or a real observation.
