@@ -139,7 +139,7 @@ export default function About() {
             </p>
           </section>
           <section data-reveal="0">
-            <h2>Who it is for</h2>
+            <h2>Built for the release decision</h2>
             <p>
               Maintainers and engineering leads making merge decisions,
               developers reviewing unfamiliar changes, and small product teams
@@ -147,10 +147,11 @@ export default function About() {
               users for the early beta.
             </p>
             <p className="mt-3">
-              A diff summary alone does not tell a reviewer what to verify
-              before merging. Release Engineer is designed for a second pass on
+              The output is a release-readiness report for the person deciding
+              what to verify before shipping, rather than an automated stream of
+              comments on a pull request. It brings together regressions,
               testing gaps, breaking changes and visible configuration,
-              migration and operational risks, with the context limits in view.
+              migration and operational risks, with explicit context limits.
             </p>
           </section>
           <section data-reveal="0">
@@ -166,6 +167,14 @@ export default function About() {
               the official Anthropic SDK. Structured output is validated before
               display. Deterministic safeguards prevent an incomplete context
               from receiving a final merge recommendation.
+            </p>
+            <p className="mt-3">
+              The workflow around Claude remains necessary as models improve:
+              pin the reviewed PR head, bound the evidence, validate the
+              release-specific report and enforce coverage limits. A versioned
+              evaluation harness and documented beta observations help us
+              examine the resulting behavior instead of assuming a newer model
+              makes every review reliable.
             </p>
             <a
               className="about-evidence-link text-link mt-4"

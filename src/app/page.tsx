@@ -4,6 +4,7 @@ import { ReleaseIntelligenceScene } from "@/components/three/release-intelligenc
 import { ReleaseMark } from "@/components/brand";
 import { Testimonials } from "@/components/testimonials";
 import { FeaturedPublicObservation } from "@/components/case-studies";
+import { getPublishedCaseStudies } from "@/content/case-studies";
 
 const intendedUsers = [
   {
@@ -57,6 +58,9 @@ const workflow = [
 ];
 
 export default function Home() {
+  const example = getPublishedCaseStudies().find(
+    (study) => study.slug === "rails-doc-typo-58968",
+  );
   return (
     <main id="main" className="home-shell">
       <section aria-labelledby="hero-title" className="hero-stage">
@@ -96,7 +100,7 @@ export default function Home() {
           </div>
         </div>
         <ReleaseIntelligenceScene />
-        <AnalysisForm />
+        <AnalysisForm examplePrUrl={example?.prUrl} />
       </section>
       <div className="hero-pipeline" aria-label="Review workflow">
         <p className="section-kicker">FROM CHANGE TO PERSPECTIVE</p>
@@ -204,12 +208,12 @@ export default function Home() {
       >
         <div className="section-heading">
           <div>
-            <p className="section-kicker">THE CHANGE → THE DECISION</p>
+            <p className="section-kicker">BUILT FOR THE RELEASE DECISION</p>
             <h2 id="workflow-title">Engineering the second perspective.</h2>
           </div>
           <p>
-            A bounded workflow with Claude at its center. No claim to see beyond
-            the supplied changes.
+            A review for the human deciding what to verify before shipping:
+            release risks, testing gaps and coverage limits in one report.
           </p>
         </div>
         <div className="workflow-grid">
