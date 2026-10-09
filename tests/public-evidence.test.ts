@@ -77,6 +77,7 @@ describe("publication boundaries", () => {
     );
     expect(headings).toEqual([
       "Working software, inspectable engineering.",
+      "Public changes, checked against pinned sources.",
       "Approved early developer feedback.",
       "rails/rails #58968",
       "Claude reasons. Application code sets the scope.",
@@ -88,6 +89,9 @@ describe("publication boundaries", () => {
     expect(html).toContain("22 PASS / 10 FAIL");
     expect(html).toContain("one critical violation remaining");
     expect(html).toContain("Metrics, failures, source runs &amp; provenance");
+    expect(html).toContain("No Claude analysis or");
+    expect(html).toContain("external developer session was performed");
+    expect(html).toContain("/technical-walkthrough-kit.zip");
   });
   it("requires consent, matching pinned public PR identity, human verification and limitations", () => {
     // Synthetic schema input only, never production content or a real observation.

@@ -14,6 +14,10 @@ The [official program FAQ](https://claude.com/programs/startups) accepts bootstr
 
 Recheck these pages immediately before applying. Use the existing application/account if one exists; first determine its status rather than creating duplicate submissions.
 
+### Technical appendix — added 10 October 2026
+
+The [public PR technical verification walkthrough](technical-walkthrough/README.md) provides reproducible assistant-executed comparisons of Zod #6645 and Hono #5536. It records a before/after TypeScript 7.1 development-build circularity diagnostic, Bun FormData/JSON behavior and 106 passing tests from two selected upstream request-test files. An internal-extension example compiled in both revisions, so the proposed break was not established. Failed before-revision compiler checks are preserved. This appendix is engineering preparation, not a live Release Engineer report, external developer evidence, new model evaluation or traction. It must not be represented as developers using the product or bugs detected by Claude.
+
 ## Ready-to-adapt answers
 
 ### Product name, website and category
