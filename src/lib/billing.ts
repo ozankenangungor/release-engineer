@@ -8,7 +8,16 @@ import { PADDLE_SANDBOX } from "./paddle-sandbox";
 export function billingConfiguration() {
   const environment =
     process.env.PADDLE_ENVIRONMENT === "live" ? "live" : "sandbox";
-  const apiKey = process.env.PADDLE_API_KEY;
+  // Existing Vercel Secret names cannot be changed. Accept the founder's saved
+  // "a" key only when it is a Paddle server key for this billing environment.
+  const savedKey = process.env.a;
+  const apiKey =
+    process.env.PADDLE_API_KEY ||
+    (savedKey?.startsWith(
+      environment === "live" ? "pdl_live_apikey_" : "pdl_sdbx_apikey_",
+    )
+      ? savedKey
+      : undefined);
   const priceId =
     environment === "sandbox"
       ? PADDLE_SANDBOX.priceId

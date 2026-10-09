@@ -24,6 +24,51 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
+describe("saved Paddle server key compatibility", () => {
+  beforeEach(() => {
+    vi.stubEnv("PADDLE_API_KEY", "");
+    vi.stubEnv("PADDLE_ENVIRONMENT", "sandbox");
+    vi.stubEnv("PADDLE_WEBHOOK_SECRET", syntheticSecret);
+  });
+  it("accepts the sandbox server key saved as a without exposing it in client configuration", () => {
+    vi.stubEnv("a", "pdl_sdbx_apikey_synthetic_only");
+    const config = billingConfiguration();
+    expect(config.apiKey).toBe("pdl_sdbx_apikey_synthetic_only");
+    expect(config.ready).toBe(true);
+    expect(config.token).toBe(PADDLE_SANDBOX.token);
+    expect(config.token).not.toBe(config.apiKey);
+  });
+  it.each([
+    "",
+    "unrelated-secret",
+    "test_client_token",
+    "pdl_live_apikey_synthetic_only",
+  ])("does not send the saved value %s to the sandbox API", (value) => {
+    vi.stubEnv("a", value);
+    expect(billingConfiguration().apiKey).toBeUndefined();
+    expect(billingConfiguration().ready).toBe(false);
+  });
+  it("keeps the standard server key ahead of the saved alias", () => {
+    vi.stubEnv("a", "pdl_sdbx_apikey_synthetic_only");
+    vi.stubEnv("PADDLE_API_KEY", "canonical-synthetic-key");
+    expect(billingConfiguration().apiKey).toBe("canonical-synthetic-key");
+  });
+  it("requires notification verification before the saved key can enable checkout", () => {
+    vi.stubEnv("a", "pdl_sdbx_apikey_synthetic_only");
+    vi.stubEnv("PADDLE_WEBHOOK_SECRET", "");
+    expect(billingConfiguration().ready).toBe(false);
+  });
+  it("accepts only the matching live server key when live billing is configured", () => {
+    vi.stubEnv("PADDLE_ENVIRONMENT", "live");
+    vi.stubEnv("PADDLE_PRICE_ID", "pri_synthetic");
+    vi.stubEnv("NEXT_PUBLIC_PADDLE_CLIENT_TOKEN", "live_synthetic_token");
+    vi.stubEnv("a", "pdl_sdbx_apikey_synthetic_only");
+    expect(billingConfiguration().ready).toBe(false);
+    vi.stubEnv("a", "pdl_live_apikey_synthetic_only");
+    expect(billingConfiguration().ready).toBe(true);
+  });
+});
+
 describe("Paddle signature boundary", () => {
   it("verifies exact raw bytes and rejects changes to spacing or payload", () => {
     expect(() =>
@@ -302,32 +347,51 @@ describe("checkout transaction ownership and reuse", () => {
     });
     expect(fetch).not.toHaveBeenCalled();
   });
-  it("reuses an unfinished account-owned transaction instead of making a second bill", async () => {
-    sql
-      .mockResolvedValueOnce([{ user_id: "user_test" }])
-      .mockResolvedValueOnce([])
-      .mockResolvedValueOnce([{ transaction_id: "txn_existing" }]);
-    const fetch = vi.fn().mockResolvedValue(
-      Response.json({
-        data: {
-          id: "txn_existing",
-          status: "ready",
-          custom_data: { release_engineer_user_id: "user_test" },
-        },
-      }),
-    );
-    vi.stubGlobal("fetch", fetch);
-    expect((await createAccountCheckout("user_test")).transactionId).toBe(
-      "txn_existing",
-    );
-    expect(fetch).toHaveBeenCalledOnce();
-    expect(String(fetch.mock.calls[0]![0])).toContain(
-      "/transactions/txn_existing",
-    );
-    expect(sql.mock.calls.at(-1)![0].join("")).toContain(
-      "checkout_lock_id=NULL",
-    );
-  });
+  it.each(["standard", "saved alias"])(
+    "reuses an unfinished account-owned transaction with the %s server key",
+    async (source) => {
+      const serverKey =
+        source === "saved alias"
+          ? "pdl_sdbx_apikey_synthetic_only"
+          : "synthetic-server-key";
+      if (source === "saved alias") {
+        vi.stubEnv("PADDLE_API_KEY", "");
+        vi.stubEnv("a", serverKey);
+      }
+      sql
+        .mockResolvedValueOnce([{ user_id: "user_test" }])
+        .mockResolvedValueOnce([])
+        .mockResolvedValueOnce([{ transaction_id: "txn_existing" }]);
+      const fetch = vi.fn().mockResolvedValue(
+        Response.json({
+          data: {
+            id: "txn_existing",
+            status: "ready",
+            custom_data: { release_engineer_user_id: "user_test" },
+          },
+        }),
+      );
+      vi.stubGlobal("fetch", fetch);
+      expect((await createAccountCheckout("user_test")).transactionId).toBe(
+        "txn_existing",
+      );
+      expect(fetch).toHaveBeenCalledWith(
+        "https://sandbox-api.paddle.com/transactions/txn_existing",
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            Authorization: `Bearer ${serverKey}`,
+          }),
+        }),
+      );
+      expect(fetch).toHaveBeenCalledOnce();
+      expect(String(fetch.mock.calls[0]![0])).toContain(
+        "/transactions/txn_existing",
+      );
+      expect(sql.mock.calls.at(-1)![0].join("")).toContain(
+        "checkout_lock_id=NULL",
+      );
+    },
+  );
   it("waits for verification after a paid checkout rather than accepting another payment", async () => {
     sql
       .mockResolvedValueOnce([{ user_id: "user_test" }])

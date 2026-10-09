@@ -29,9 +29,13 @@ Existing origin, admission, retrieval, prompt and validation safeguards remain.
 
    The script uses `DATABASE_URL_UNPOOLED`, runs statements in a transaction and
    can be rerun. Deployment does not automatically run migrations.
+
 4. Create a Paddle sandbox API key with price/transaction/subscription read,
    transaction write and customer-portal session write permissions. Store
    `PADDLE_API_KEY` in Vercel environment settings. Do not paste it in chat or git.
+   A server key already saved under the Secret name `a` is also supported. The
+   alias must have the Paddle server-key prefix for the configured environment;
+   `PADDLE_API_KEY` takes precedence. It remains server-only.
 5. Create a Paddle notification destination at
    `https://releaseengineer.tech/api/billing/webhook`. Subscribe to
    `subscription.created`, `subscription.updated`, `subscription.activated`,
