@@ -5,7 +5,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 
 // This hook stays in the lazy renderer chunk; the shell has no Three imports.
 // A scheduled demand loop gives visible motion at <=30fps and no offscreen work.
-export function useReactorClock(active: boolean, onReady: () => void) {
+export function useGraphClock(active: boolean, onReady: () => void) {
   const invalidate = useThree((state) => state.invalidate);
   const setDpr = useThree((state) => state.setDpr);
   const time = useRef(0);

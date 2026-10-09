@@ -18,9 +18,18 @@ export function useSceneVisibility(paused: boolean, enabled: boolean) {
       clearTimeout(timer);
       const allowed = !reduced.matches && !colors.matches;
       const shown = inView && document.visibilityState === "visible";
+      const device = navigator as Navigator & {
+        deviceMemory?: number;
+        connection?: { saveData?: boolean };
+      };
+      const constrained =
+        device.connection?.saveData ||
+        (device.deviceMemory !== undefined && device.deviceMemory < 4) ||
+        (navigator.hardwareConcurrency > 0 &&
+          navigator.hardwareConcurrency < 4);
       setMotionAllowed(allowed && desktop.matches);
       setVisible(shown);
-      if (!enabled || !allowed || !desktop.matches) {
+      if (!enabled || !allowed || !desktop.matches || constrained) {
         setEligible(false);
         return;
       }
@@ -39,8 +48,13 @@ export function useSceneVisibility(paused: boolean, enabled: boolean) {
             capability = false;
           }
         }
+        if (
+          capability &&
+          !performance.getEntriesByName("release-graph-request").length
+        )
+          performance.mark("release-graph-request");
         setEligible(capability);
-      }, 650);
+      }, 900);
     }
     const observer = new IntersectionObserver(
       ([entry]) => {

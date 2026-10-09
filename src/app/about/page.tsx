@@ -51,13 +51,13 @@ export default function About() {
           Try the live beta →
         </Link>
       </div>
-      <div className="about-body grid items-start gap-10 text-sm leading-7 text-slate-300 lg:grid-cols-[.8fr_1.2fr] lg:gap-16">
+      <div className="about-body grid items-start gap-10 text-sm leading-7 text-muted lg:grid-cols-[.8fr_1.2fr] lg:gap-16">
         <section aria-labelledby="founder-title" className="about-founder">
           <span className="founder-signature" aria-hidden="true">
             OKG<span>FOUNDER / RELEASE ENGINEER</span>
           </span>
           <p className="section-kicker">FOUNDER</p>
-          <h2 id="founder-title" className="founder-name mt-4 text-white">
+          <h2 id="founder-title" className="founder-name mt-4 text-ink">
             Ozan Kenan Güngör
           </h2>
           <p className="mt-5">

@@ -1,13 +1,19 @@
 export function SceneLights() {
   return (
     <>
-      <ambientLight intensity={1.5} />
-      <directionalLight position={[1, 7, 4]} intensity={4.2} color="#dde4ff" />
-      <directionalLight position={[-4, 2, -3]} intensity={3} color="#959dff" />
+      <ambientLight intensity={0.85} />
+      <directionalLight position={[-3, 6, 7]} intensity={3.8} color="#d5e5ff" />
+      <directionalLight position={[4, 2, -3]} intensity={3} color="#315dff" />
       <pointLight
-        position={[0, 1.1, 0]}
-        intensity={5}
-        color="#a7b2ff"
+        position={[2, 0, 2]}
+        intensity={8}
+        color="#35d7c4"
+        distance={9}
+      />
+      <pointLight
+        position={[2, -1, 0]}
+        intensity={3}
+        color="#ff795d"
         distance={5}
       />
     </>

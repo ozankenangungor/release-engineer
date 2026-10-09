@@ -41,7 +41,7 @@ for (const [width, height] of [
     });
     await page.goto("/", { waitUntil: "networkidle" });
     await expect(page.getByRole("heading", { level: 1 })).toContainText(
-      "Know what could break",
+      "Catch release",
     );
     const submit = page.getByRole("button", {
       name: "Analyze PR",
@@ -54,12 +54,23 @@ for (const [width, height] of [
         () => document.documentElement.scrollWidth <= innerWidth,
       ),
     ).toBe(true);
-    await expect(page.locator("canvas")).toHaveCount(0);
-    await expect(
-      page
-        .getByRole("navigation", { name: "Main", exact: true })
-        .getByRole("link", { name: "About", exact: true }),
-    ).toBeVisible();
+    await expect(page.locator(".hero-stage .scene-fallback")).toBeAttached();
+    if (width >= 1024) {
+      await expect(
+        page
+          .getByRole("navigation", { name: "Main", exact: true })
+          .getByRole("link", { name: "About", exact: true }),
+      ).toBeVisible();
+    } else {
+      await expect(page.locator("canvas")).toHaveCount(0);
+      await page.getByLabel("Toggle navigation").click();
+      await expect(
+        page
+          .getByRole("navigation", { name: "Mobile", exact: true })
+          .getByRole("link", { name: "About", exact: true }),
+      ).toBeVisible();
+      await page.keyboard.press("Escape");
+    }
     await page.getByRole("button", { name: "Load example PR" }).click();
     await expect(page.getByLabel("GitHub pull request URL")).toHaveValue(
       "https://github.com/rails/rails/pull/58968",
@@ -322,20 +333,20 @@ test("keyboard navigation, free preview and reduced motion work", async ({
   await expect(
     page.getByText("Illustrative example — not a live analysis."),
   ).toBeVisible();
+  await page.getByRole("tab", { name: "Next steps", exact: true }).click();
   await page
     .getByText("Missing tests & suggested human checks", { exact: true })
     .click();
   await expect(
     page.getByRole("heading", { name: "Missing test coverage", exact: true }),
   ).toBeVisible();
-  await page.getByText("Explore the review pipeline", { exact: true }).click();
   await expect(
     page.getByRole("button", { name: "Enable optional animation" }),
   ).toHaveCount(0);
   await expect(page.locator("canvas")).toHaveCount(0);
 });
 
-test("the optional scene falls back when WebGL is unavailable", async ({
+test("the visible graph falls back when WebGL is unavailable", async ({
   page,
 }) => {
   await page.addInitScript(() => {
@@ -351,15 +362,16 @@ test("the optional scene falls back when WebGL is unavailable", async ({
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
-  await page.getByText("Explore the review pipeline", { exact: true }).click();
-  await page.getByRole("button", { name: "Enable optional animation" }).click();
-  await page.waitForTimeout(800);
+  await page.waitForTimeout(1500);
   await expect(page.locator("[data-scene]")).toHaveAttribute(
     "data-scene",
     "static",
   );
   await expect(page.locator("canvas")).toHaveCount(0);
-  await page.getByRole("button", { name: "Pause animation" }).click();
+  await expect(page.locator(".scene-fallback")).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Analyze PR", exact: true }),
+  ).toBeEnabled();
   await expect(page.locator("[data-motion-active]")).toHaveAttribute(
     "data-motion-active",
     "false",
@@ -431,4 +443,196 @@ test.describe("server-rendered public content", () => {
       page.getByText("22 PASS / 10 FAIL", { exact: false }),
     ).toBeVisible();
   });
+});
+
+test("the diff connects to its finding and report tabs support keyboard navigation", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const changedLine = page.getByRole("button", {
+    name: "Select changed response line to inspect its risk",
+  });
+  await changedLine.click();
+  await expect(changedLine).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator(".risk-view")).toHaveAttribute(
+    "data-highlighted",
+    "true",
+  );
+  const risk = page.getByRole("tab", { name: "Risk", exact: true });
+  await risk.focus();
+  await page.keyboard.press("ArrowRight");
+  const evidence = page.getByRole("tab", { name: "Evidence", exact: true });
+  await expect(evidence).toBeFocused();
+  await expect(evidence).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tabpanel")).toContainText(
+    "Caller code and the intended API contract",
+  );
+  await page.keyboard.press("End");
+  await expect(
+    page.getByRole("tab", { name: "Next steps", exact: true }),
+  ).toBeFocused();
+  await expect(page.getByRole("tabpanel")).toContainText(
+    "Run a response compatibility test",
+  );
+  await page
+    .getByText("Missing tests & suggested human checks", { exact: true })
+    .click();
+  await expect(page.getByRole("tabpanel")).toContainText(
+    "does not establish that the repository has no such tests",
+  );
+  await expect(page.getByLabel("Example coverage limitation")).toContainText(
+    "tests were not run",
+  );
+  await changedLine.click();
+  await expect(changedLine).toHaveAttribute("aria-pressed", "false");
+  await expect(risk).toHaveAttribute("aria-selected", "true");
+});
+
+test("mobile menu closes on Escape and follows product and analyzer links", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  const toggle = page.getByLabel("Toggle navigation");
+  await toggle.focus();
+  await page.keyboard.press("Enter");
+  await expect(page.locator(".mobile-menu")).toHaveAttribute("open", "");
+  await page.keyboard.press("Escape");
+  await expect(toggle).toBeFocused();
+  await expect(page.locator(".mobile-menu")).not.toHaveAttribute("open", "");
+  await toggle.click();
+  await page
+    .getByRole("navigation", { name: "Mobile", exact: true })
+    .getByRole("link", { name: "Product", exact: true })
+    .click();
+  await expect(page).toHaveURL(/#report-preview$/);
+  await expect(page.locator(".mobile-menu")).not.toHaveAttribute("open", "");
+  await toggle.scrollIntoViewIfNeeded();
+  await toggle.click();
+  await page
+    .getByRole("navigation", { name: "Mobile", exact: true })
+    .getByRole("link", { name: "Analyze a public PR" })
+    .click();
+  await expect(page).toHaveURL(/#analyze$/);
+  await expect(
+    page.getByRole("button", { name: "Analyze PR", exact: true }),
+  ).toBeInViewport();
+});
+
+// CI may have only software GL. This fixture still exercises a real WebGL2
+// renderer, but allows the software driver and simulates an eligible desktop.
+// Production capability checks and browser-observation remain unmodified.
+async function capableDesktop(page: import("@playwright/test").Page) {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "hardwareConcurrency", { get: () => 8 });
+    Object.defineProperty(navigator, "deviceMemory", { get: () => 8 });
+    const original = HTMLCanvasElement.prototype.getContext as (
+      kind: string,
+      options?: Record<string, unknown>,
+    ) => RenderingContext | null;
+    HTMLCanvasElement.prototype.getContext = function (
+      this: HTMLCanvasElement,
+      ...args: [string, Record<string, unknown>?]
+    ) {
+      if (String(args[0]).startsWith("webgl"))
+        args[1] = { ...args[1], failIfMajorPerformanceCaveat: false };
+      return original.apply(this, args);
+    } as typeof HTMLCanvasElement.prototype.getContext;
+  });
+}
+
+test("the desktop graph renders, moves, pauses and suspends offscreen", async ({
+  page,
+}) => {
+  await capableDesktop(page);
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("/");
+  const graph = page.locator(".hero-stage");
+  await expect(graph).toHaveAttribute("data-scene", "webgl", {
+    timeout: 20_000,
+  });
+  const canvas = graph.locator("canvas");
+  await expect(canvas).toHaveCount(1);
+  await expect(
+    page.getByRole("button", { name: "Analyze PR", exact: true }),
+  ).toBeInViewport();
+  await page.getByRole("button", { name: "Load example PR" }).click();
+  await expect(page.getByLabel("GitHub pull request URL")).toBeFocused();
+  const first = await canvas.screenshot();
+  await page.waitForTimeout(400);
+  expect((await canvas.screenshot()).equals(first)).toBe(false);
+  await page.mouse.move(800, 300);
+  await page.waitForTimeout(200);
+  const left = await canvas.screenshot();
+  await page.mouse.move(1300, 650);
+  await page.waitForTimeout(300);
+  expect((await canvas.screenshot()).equals(left)).toBe(false);
+  await page
+    .getByRole("button", { name: "Pause animation", exact: true })
+    .click();
+  await expect(graph).toHaveAttribute("data-motion-active", "false");
+  await page.waitForTimeout(200);
+  const paused = await canvas.screenshot();
+  await page.waitForTimeout(350);
+  expect((await canvas.screenshot()).equals(paused)).toBe(true);
+  await page
+    .getByRole("button", { name: "Play animation", exact: true })
+    .click();
+  await page.locator("#engineering-trust").scrollIntoViewIfNeeded();
+  await expect(graph).toHaveAttribute("data-motion-active", "false");
+  await graph.scrollIntoViewIfNeeded();
+  await expect(graph).toHaveAttribute("data-motion-active", "true");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(canvas).toHaveCount(0);
+  await expect(graph).toHaveAttribute("data-scene", "static");
+  await expect(graph.locator(".scene-fallback")).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test("GPU context loss retains the analyzer and the graph can recover", async ({
+  page,
+}) => {
+  await capableDesktop(page);
+  await page.goto("/");
+  const graph = page.locator(".hero-stage");
+  await expect(graph).toHaveAttribute("data-scene", "webgl", {
+    timeout: 20_000,
+  });
+  const contextLost = await graph.locator("canvas").evaluate((node) => {
+    const extension = (node as HTMLCanvasElement)
+      .getContext("webgl2")
+      ?.getExtension("WEBGL_lose_context");
+    extension?.loseContext();
+    return Boolean(extension);
+  });
+  expect(contextLost).toBe(true);
+  await expect(graph).toHaveAttribute("data-scene", "fallback");
+  await expect(graph.locator(".scene-fallback")).toBeVisible();
+  await expect(graph.locator("canvas")).toHaveCount(0);
+  await page.getByRole("button", { name: "Load example PR" }).click();
+  await expect(page.getByLabel("GitHub pull request URL")).toBeFocused();
+  await page.getByRole("button", { name: "Retry visualization" }).click();
+  await expect(graph).toHaveAttribute("data-scene", "webgl", {
+    timeout: 20_000,
+  });
+});
+
+test("constrained desktops and forced colors preserve a static graph and working controls", async ({
+  page,
+}) => {
+  await page.addInitScript(() =>
+    Object.defineProperty(navigator, "deviceMemory", { get: () => 2 }),
+  );
+  await page.goto("/");
+  await page.waitForTimeout(1100);
+  await expect(page.locator("canvas")).toHaveCount(0);
+  await expect(page.locator(".scene-fallback")).toBeVisible();
+  await page.emulateMedia({ forcedColors: "active" });
+  await page.getByRole("button", { name: "Load example PR" }).click();
+  await expect(page.getByLabel("GitHub pull request URL")).toBeFocused();
+  await expect(
+    page.getByRole("button", { name: "Analyze PR", exact: true }),
+  ).toBeEnabled();
 });
