@@ -23,7 +23,7 @@ export function fingerprints(dataset: unknown, root = process.cwd()) {
     schemaFingerprint: fingerprint(z.toJSONSchema(reviewSchema, { target: "draft-7" })),
     pipelineFingerprint: fingerprint(sources([
       "src/lib/claude.ts", "src/lib/config.ts", "src/lib/context.ts", "src/lib/github.ts",
-      "src/lib/review-policy.ts", "src/lib/review-schema.ts", "src/lib/prompt.ts", "src/app/api/analyze/route.ts",
+      "src/lib/review-policy.ts", "src/lib/review-integrity.ts", "src/lib/review-schema.ts", "src/lib/prompt.ts", "src/app/api/analyze/route.ts",
     ])),
     evaluatorFingerprint: fingerprint(sources(evaluatorFiles)),
   };

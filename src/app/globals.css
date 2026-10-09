@@ -2775,6 +2775,152 @@ button:disabled {
     background: CanvasText;
   }
 }
+
+/* Report handoff and the public beta guide share the editorial visual system. */
+.review-handoff {
+  margin-top: 34px;
+  border-top: 2px solid var(--ink);
+  padding-top: 28px;
+}
+.handoff-heading {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: 28px;
+}
+.handoff-heading h3 {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.25;
+}
+.handoff-heading p:not(.section-kicker) {
+  max-width: 660px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.8;
+  margin-top: 12px;
+}
+.handoff-heading .section-kicker { margin-bottom: 14px; }
+.verification-details { margin-top: 26px; border-top: 1px solid var(--rule); }
+.verification-details > summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  cursor: pointer;
+  padding-block: 22px;
+  font-size: 16px;
+  font-weight: 550;
+  list-style: none;
+}
+.verification-details > summary::-webkit-details-marker { display: none; }
+.verification-details[open] > summary > span { transform: rotate(45deg); }
+.verification-details form { padding-bottom: 20px; }
+.verification-intro, .verification-empty {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.85;
+  max-width: 850px;
+  margin-bottom: 24px;
+}
+.verification-finding, .verification-overall {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  min-width: 0;
+  margin: 28px 0 0;
+  padding: 22px 0 0;
+}
+.verification-finding legend, .verification-overall legend {
+  padding: 0 15px 0 0;
+  font-weight: 600;
+  font-size: 16px;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+.verification-fields { display: grid; grid-template-columns: .8fr 1.2fr; gap: 20px; }
+.verification-fields > div { min-width: 0; }
+.verification-selects { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 20px; }
+.verification-details label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 9px;
+}
+.verification-details select, .verification-details textarea {
+  display: block;
+  border: 1px solid #b6c1d0;
+  background: white;
+  border-radius: 4px;
+  color: var(--ink);
+  font: 400 16px/1.6 var(--font-inter), sans-serif;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  padding: 11px 12px;
+}
+.verification-details textarea { resize: vertical; }
+.verification-details textarea::placeholder { color: #596575; }
+.verification-details select:focus-visible, .verification-details textarea:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+.verification-footer { display: flex; align-items: center; gap: 24px; margin-top: 25px; }
+.verification-footer > p { color: var(--muted); max-width: 470px; font-size: 13px; line-height: 1.8; }
+.verification-footer a { color: var(--blue); text-decoration: underline; text-underline-offset: 3px; }
+.handoff-error { color: #9a321f; font-size: 14px; line-height: 1.8; margin-top: 15px; }
+.handoff-status { color: var(--muted); font-size: 14px; line-height: 1.8; }
+.handoff-status:empty { display: none; }
+.pilot-hero { max-width: 950px; padding-bottom: 58px; }
+.pilot-hero .page-intro { margin-top: 27px; max-width: 740px; }
+.pilot-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; margin-top: 32px; }
+.pilot-sequence { list-style: none; padding: 0; margin: 0; }
+.pilot-sequence li {
+  display: grid;
+  grid-template-columns: 42px 1fr 1.15fr;
+  gap: 25px;
+  border-top: 1px solid var(--rule);
+  padding-block: 35px;
+}
+.pilot-step-number { color: var(--blue); font: 14px/1.7 var(--font-mono); }
+.pilot-sequence h2 { font-size: 26px; font-weight: 550; line-height: 1.35; letter-spacing: -.035em; }
+.pilot-sequence .section-kicker { margin-bottom: 13px; }
+.pilot-sequence li > p, .pilot-feedback > div > p, .pilot-boundaries > p {
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.85;
+}
+.pilot-feedback { display: grid; grid-template-columns: 1fr 1.15fr; gap: 65px; border-top: 2px solid var(--ink); padding-block: 55px; margin-top: 25px; }
+.pilot-feedback h2 { font-size: 44px; font-weight: 600; letter-spacing: -.04em; line-height: 1.15; }
+.pilot-feedback .text-link { margin-top: 22px; }
+.pilot-feedback > div > .pilot-privacy-note { font-size: 14px; margin-top: 23px; }
+.pilot-boundaries { border-top: 1px solid var(--rule); padding-top: 35px; max-width: 850px; }
+.pilot-boundaries h2 { font-size: 22px; font-weight: 550; margin-bottom: 17px; }
+.pilot-boundaries p + p { margin-top: 18px; }
+
+@media (max-width: 900px) {
+  .handoff-heading { grid-template-columns: 1fr; gap: 20px; }
+  .handoff-heading > button { justify-self: start; }
+  .verification-selects { grid-template-columns: 1fr; }
+  .verification-footer { flex-direction: column; align-items: start; gap: 16px; }
+  .pilot-sequence li { grid-template-columns: 27px 1fr; gap: 14px 20px; }
+  .pilot-sequence li > p { grid-column: 2; }
+  .pilot-feedback { grid-template-columns: 1fr; gap: 30px; }
+}
+@media (max-width: 600px) {
+  .handoff-heading h3 { font-size: 23px; }
+  .verification-fields { grid-template-columns: 1fr; }
+  .verification-footer > .primary-action { width: 100%; justify-content: center; white-space: normal; }
+  .pilot-hero { padding-bottom: 38px; }
+  .pilot-actions { align-items: start; flex-direction: column; gap: 18px; }
+  .pilot-sequence li { padding-block: 27px; }
+  .pilot-sequence h2 { font-size: 24px; }
+  .pilot-feedback { padding-block: 38px; }
+  .pilot-feedback h2 { font-size: 36px; }
+}
+@media (forced-colors: active) {
+  .verification-details select, .verification-details textarea { background: Canvas; color: CanvasText; border-color: CanvasText; }
+  .review-handoff, .verification-details, .verification-finding, .verification-overall, .pilot-sequence li, .pilot-feedback, .pilot-boundaries { border-color: CanvasText; }
+}
 .scene-intro {
   position: absolute;
   left: 44px;

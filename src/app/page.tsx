@@ -4,6 +4,7 @@ import { ReportPreview } from "@/components/report-preview";
 import { ReleaseIntelligenceScene } from "@/components/three/release-intelligence-scene";
 import { ReleaseMark } from "@/components/brand";
 import { getPublishedCaseStudies } from "@/content/case-studies";
+import { getDeploymentProvenance } from "@/lib/deployment-provenance";
 const repository = "https://github.com/ozankenangungor/release-engineer";
 const workflow = [
   {
@@ -62,6 +63,7 @@ const safeguards = [
   },
 ];
 export default function Home() {
+  const interfaceRevision = getDeploymentProvenance({ sha: process.env.VERCEL_GIT_COMMIT_SHA })?.sha ?? null;
   const example = getPublishedCaseStudies().find(
     (study) => study.slug === "rails-doc-typo-58968",
   );
@@ -86,7 +88,7 @@ export default function Home() {
               breaking changes, regressions and testing gaps — with evidence and
               honest limits.
             </p>
-            <AnalysisForm examplePrUrl={example?.prUrl} />
+            <AnalysisForm examplePrUrl={example?.prUrl} interfaceRevision={interfaceRevision} />
             <a className="hero-preview-link" href="#report-preview">
               See a sample report <span aria-hidden="true">↓</span>
             </a>

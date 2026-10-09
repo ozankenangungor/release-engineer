@@ -8,6 +8,7 @@ coverage/
 .DS_Store
 *.log
 .eval-build/
+.pilot-build/
 evals/results/
 .private-evidence/
 test-results/
