@@ -184,30 +184,6 @@ export default function Home() {
               </article>
             ))}
           </div>
-          <div className="evaluation-record">
-            <div>
-              <p className="section-kicker">
-                HISTORICAL SYNTHETIC EVALUATION / OCT 07, 2026
-              </p>
-              <p className="evaluation-result">
-                22 PASS <span>/</span> 10 FAIL
-              </p>
-            </div>
-            <div>
-              <p>
-                One documented critical violation remaining. Synthetic
-                observations are not real-world accuracy or external validation.
-              </p>
-              <a
-                className="text-link"
-                href={`${repository}/blob/main/docs/live-evaluation-evidence.md`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Methodology, failures & provenance ↗︎
-              </a>
-            </div>
-          </div>
         </div>
       </section>
       <section
