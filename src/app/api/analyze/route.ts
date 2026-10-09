@@ -7,6 +7,10 @@ import { reviewPullRequest } from "@/lib/claude";
 import { getClaudeConfig } from "@/lib/config";
 import { AnalysisError } from "@/lib/errors";
 import { analysisResponseSchema } from "@/lib/review-schema";
+import {
+  acquireAnalysisSlot,
+  assertBrowserOrigin,
+} from "@/lib/analysis-admission";
 import { startUsageRecord } from "@/lib/live-usage";
 
 export const runtime = "nodejs";
@@ -17,7 +21,13 @@ const responseHeaders = { "Cache-Control": "no-store" };
 function failure(code: string, message: string, status: number) {
   return NextResponse.json(
     { error: { code, message } },
-    { status, headers: responseHeaders },
+    {
+      status,
+      headers:
+        code === "SERVICE_BUSY"
+          ? { ...responseHeaders, "Retry-After": "60" }
+          : responseHeaders,
+    },
   );
 }
 
@@ -71,8 +81,10 @@ async function readInput(request: Request): Promise<unknown> {
 }
 
 export async function POST(request: Request) {
+  let releaseSlot: (() => void) | undefined;
   let usage: ReturnType<typeof startUsageRecord> | undefined;
   try {
+    assertBrowserOrigin(request);
     const input = requestSchema.safeParse(await readInput(request));
     if (!input.success) return failure("INVALID_URL", PR_URL_ERROR, 400);
     let reference;
@@ -82,6 +94,7 @@ export async function POST(request: Request) {
       return failure("INVALID_URL", PR_URL_ERROR, 400);
     }
     getClaudeConfig();
+    releaseSlot = acquireAnalysisSlot();
     usage = startUsageRecord();
     const signal = AbortSignal.any([
       request.signal,
@@ -132,5 +145,7 @@ export async function POST(request: Request) {
       "The review could not be completed. Please try again with a smaller PR.",
       502,
     );
+  } finally {
+    releaseSlot?.();
   }
 }
