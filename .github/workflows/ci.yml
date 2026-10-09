@@ -3,7 +3,7 @@ name: Verify application
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, feat/accounts-and-billing]
 
 permissions:
   contents: read
