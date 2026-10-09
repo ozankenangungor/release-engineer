@@ -3,7 +3,7 @@
 import { useEffect, useRef, type ReactNode } from "react";
 
 // Content is always visible in the server HTML. Enhance it only as it enters
-// the viewport, with no dependency on animation for access to the product.
+// the viewport. Preserve full text contrast throughout the entrance motion.
 export function MotionSurfaces({ children }: { children: ReactNode }) {
   const root = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -19,8 +19,8 @@ export function MotionSurfaces({ children }: { children: ReactNode }) {
           if (motion.matches || colors.matches) return;
           const animation = entry.target.animate(
             [
-              { opacity: 0.55, transform: "translateY(22px)" },
-              { opacity: 1, transform: "translateY(0)" },
+              { transform: "translateY(22px)" },
+              { transform: "translateY(0)" },
             ],
             {
               duration: 750,
