@@ -265,6 +265,7 @@ for (const width of [1440, 360]) {
     page.on("pageerror", (error) => errors.push(error.message));
     for (const path of [
       "/about",
+      "/pilot",
       "/evidence",
       "/case-studies",
       "/case-studies/rails-doc-typo-58968",
@@ -400,6 +401,7 @@ test("robots, sitemap, social image and internal links are accessible", async ({
   for (const path of [
     "/",
     "/about",
+    "/pilot",
     "/evidence",
     "/case-studies",
     "/case-studies/rails-doc-typo-58968",

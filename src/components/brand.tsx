@@ -87,7 +87,7 @@ export function Footer() {
             <Link href="/about">About</Link>
           </div>
           <div>
-            <p className="footer-label">OPEN SOURCE</p>
+            <p className="footer-label">PUBLIC SOURCE</p>
             <a
               href="https://github.com/ozankenangungor/release-engineer"
               target="_blank"
@@ -108,7 +108,7 @@ export function Footer() {
             <p className="footer-label">THE DETAILS</p>
             <Link href="/privacy">Privacy</Link>
             <Link href="/terms">Terms</Link>
-            <Link href="/about#beta">Beta feedback</Link>
+            <Link href="/pilot">Beta feedback</Link>
           </div>
         </nav>
       </div>

@@ -80,6 +80,21 @@ describe("Claude integration using the official SDK", () => {
     ).rejects.toMatchObject({ code: "SERVICE_NOT_CONFIGURED", status: 503 });
     expect(fetchMock).not.toHaveBeenCalled();
   });
+  it("rejects a schema-valid unsupported test result without retrying or exposing provider text", async () => {
+    fetchMock.mockResolvedValueOnce(message(JSON.stringify(review({ summary: "All tests passed. provider-private-detail" }))));
+    await expect(reviewPullRequest(buildReviewContext(pullRequest())))
+      .rejects.toMatchObject({ code: "INVALID_REVIEW", message: "Claude’s review claimed evidence or checks outside the supplied context. No report was accepted. Please try again." });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+  it("rejects a finding assigned to a file outside the selected evidence", async () => {
+    fetchMock.mockResolvedValueOnce(message(JSON.stringify(review({ findings: [{
+      severity: "medium", category: "correctness", title: "Unavailable evidence",
+      file: "src/not-retrieved.ts", explanation: "An unsupported file claim.", recommendation: "Inspect it.",
+    }] }))));
+    await expect(reviewPullRequest(buildReviewContext(pullRequest())))
+      .rejects.toMatchObject({ code: "INVALID_REVIEW" });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
   it("does not leak a provider error or retry billed requests", async () => {
     fetchMock.mockResolvedValueOnce(
       Response.json(

@@ -1,4 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { cpSync, mkdirSync, mkdtempSync, readdirSync, rmSync, appendFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { compareRuns, runArtifactSchema } from "../evals/artifacts";
 import { runEvaluation } from "../evals/runner";
 import { fingerprint, fingerprints } from "../evals/fingerprint";
@@ -82,5 +85,25 @@ describe("evaluation artifacts and regression comparisons", () => {
     expect(fingerprint(changed)).not.toBe(values.datasetFingerprint);
     expect(values.pipelineFingerprint).toMatch(/^[a-f0-9]{64}$/);
     expect(values.evaluatorFingerprint).toMatch(/^[a-f0-9]{64}$/);
+  });
+  it("records an integrity-gate source change as a pipeline change without altering grading provenance", () => {
+    const root = mkdtempSync(join(tmpdir(), "release-pipeline-"));
+    try {
+      mkdirSync(join(root, "src"));
+      cpSync("src/lib", join(root, "src/lib"), { recursive: true });
+      mkdirSync(join(root, "src/app/api/analyze"), { recursive: true });
+      cpSync("src/app/api/analyze/route.ts", join(root, "src/app/api/analyze/route.ts"));
+      mkdirSync(join(root, "evals"));
+      for (const filename of readdirSync("evals").filter((name) => /\.(?:ts|mjs)$/.test(name)))
+        cpSync(join("evals", filename), join(root, "evals", filename));
+      const before = fingerprints(evaluationDataset.dataset, root);
+      appendFileSync(join(root, "src/lib/review-integrity.ts"), "\n// Authored offline source-change fixture.\n");
+      const after = fingerprints(evaluationDataset.dataset, root);
+      expect(after.pipelineFingerprint).not.toBe(before.pipelineFingerprint);
+      expect(after.evaluatorFingerprint).toBe(before.evaluatorFingerprint);
+      expect(after.datasetFingerprint).toBe(before.datasetFingerprint);
+      expect(after.promptFingerprint).toBe(before.promptFingerprint);
+      expect(after.schemaFingerprint).toBe(before.schemaFingerprint);
+    } finally { rmSync(root, { recursive: true, force: true }); }
   });
 });

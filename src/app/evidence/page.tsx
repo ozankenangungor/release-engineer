@@ -62,10 +62,17 @@ export default function Evidence() {
               breaking changes, with explicit limits and human verification. The
               application source and CI history are public.
             </p>
+            <p className="mt-3">
+              Reports can be downloaded with the reviewed PR head and coverage
+              limitations. A local verification worksheet lets reviewers record
+              what they checked and did. These self-reported records become
+              evidence only after separate source, permission and human review.
+            </p>
             <div className="flex flex-wrap gap-x-6">
               <Link className="text-link" href="/">
                 Open the product →
               </Link>
+              <Link className="text-link" href="/pilot">Verification & beta feedback →</Link>
               <a
                 className="text-link"
                 href={repository}
