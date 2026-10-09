@@ -56,7 +56,7 @@ function ReviewList({
   );
 }
 
-function Finding({
+export function Finding({
   finding,
   index,
 }: {

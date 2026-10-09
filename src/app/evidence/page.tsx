@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getPublishedCaseStudies } from "@/content/case-studies";
+import { Testimonials } from "@/components/testimonials";
 import { DeploymentProvenance } from "@/components/deployment-provenance";
 import { getDeploymentProvenance } from "@/lib/deployment-provenance";
 
@@ -100,7 +101,7 @@ export default function Evidence() {
               verify findings, establish unique developer counts or demonstrate
               customer traction.
             </p>
-            <Link className="text-link" href="/#developer-feedback">
+            <Link className="text-link" href="#developer-feedback">
               Read the approved quotes →
             </Link>
           </div>
@@ -238,13 +239,15 @@ export default function Evidence() {
           <div>
             <h2>A founder, a public record, a way to contact us.</h2>
             <p>
-              Founded by Ozan Kenan Güngör in October 2026, in Ankara, Türkiye.
-              Bootstrapped and in early beta, with no external funding raised.
-              These company facts are founder-supplied.
+              Launched by Ozan Kenan Güngör in October 2026, in Ankara, Türkiye.
+              Independently built and operated, self-funded and in early beta.
+              No external investment has been raised. No legal company has been
+              incorporated or registered. These project facts are
+              founder-supplied.
             </p>
             <div className="flex flex-wrap gap-x-6">
               <Link className="text-link" href="/about">
-                Founder & company →
+                Founder & project →
               </Link>
               <a
                 className="text-link"
@@ -261,6 +264,7 @@ export default function Evidence() {
           </div>
         </section>
       </div>
+      <Testimonials />
     </main>
   );
 }

@@ -31,9 +31,19 @@ export default function Terms() {
       </p>
       <h1 className="page-title">Terms</h1>
       <p className="mt-4 text-xs text-slate-400">
-        Last updated: <time dateTime="2026-10-08">October 8, 2026</time>
+        Last updated: <time dateTime="2026-10-09">October 9, 2026</time>
       </p>
       <div className="mt-8 space-y-7 text-sm leading-7 text-slate-300">
+        <section>
+          <h2 className="mb-2 text-base font-medium text-white">
+            Who operates this product
+          </h2>
+          <p>
+            Release Engineer is built and operated by Ozan Kenan Güngör in
+            Ankara, Türkiye. It is an independent, self-funded project in early
+            beta. No legal company has been incorporated or registered.
+          </p>
+        </section>
         <section>
           <h2 className="mb-2 text-base font-medium text-white">
             Using the beta

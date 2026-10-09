@@ -1,5 +1,8 @@
 # Release Intelligence Reactor — visual release and verification
 
+> Historical QA for an earlier revision. The [October 9 product and trust audit](product-trust-release.md) supersedes current homepage and identity descriptions. Release Engineer is an independently operated project; no legal company has been incorporated or registered.
+
+
 Baseline: `3cfaef769de822b044c156b22d190ca34a322231`, fetched from `origin/main` before changes. Branch: `design/release-intelligence-reactor`. Production Home, About, Evidence and mobile layouts were inspected in a real browser before implementation. These observations describe interface engineering and browser QA, not product accuracy or traction.
 
 ## Executive summary

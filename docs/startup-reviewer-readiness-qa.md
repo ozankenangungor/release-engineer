@@ -1,5 +1,8 @@
 # Startup reviewer clarity — implementation and QA
 
+> Historical QA for an earlier revision. The [October 9 product and trust audit](product-trust-release.md) supersedes current homepage and identity descriptions. Release Engineer is an independently operated project; no legal company has been incorporated or registered.
+
+
 Date: October 8, 2026. Branch: `review/startup-reviewer-clarity`.
 
 Fetched baseline: `628d2f65affc2ad85e26fb8889e5993204c9b01b` (`main`). The worktree was clean before creating the branch. The production homepage, About, Evidence and Rails observation were inspected in Chromium before editing; all four returned HTTP 200 without application errors.
