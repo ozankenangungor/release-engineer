@@ -119,3 +119,19 @@ founder. Cancel the provider subscription first, then remove that exact account
 and its Clerk identity; deleting app rows alone cannot stop a provider charge.
 Provider backup/legal retention follows their policies. Account IDs are personal
 data and must not be included in public operational evidence.
+
+## Recorded sandbox verification — 11 October 2026
+
+A temporary development Clerk account completed the real Paddle sandbox checkout
+for the configured USD 9 monthly price. Signed notifications reached the production
+webhook and persisted the verified sandbox subscription in Neon. The account
+portal opened successfully, a second subscription attempt returned 409, and the
+test subscription's renewal was canceled in the customer portal before the owned
+Clerk identity and Neon account were removed. The mobile account view had no
+horizontal overflow at 390 × 844.
+
+The sandbox account retained its Free allowance of 10 reviews/day. No real payment
+or paid Claude call was made. This is integration verification, not customer
+traction or verification of live payment processing. Production signup/signin
+forms and the production Clerk SDK were checked; production signup email delivery
+was not exercised by this development-account test.

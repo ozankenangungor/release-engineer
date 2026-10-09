@@ -30,6 +30,7 @@ const browser = await chromium.launch({
 });
 let checks = 0;
 let activePage;
+let verificationResult;
 const check = (actual, expected) => {
   assert.deepEqual(actual, expected);
   checks++;
@@ -220,16 +221,14 @@ try {
     await page.evaluate(async () => (await fetch("/api/account")).status),
     200,
   );
-  console.log(
-    JSON.stringify({
-      result: "passed",
-      checks,
-      registeredThroughUI: true,
-      signedInAgain: true,
-      paidClaudeCalls: 0,
-      realPayments: 0,
-    }),
-  );
+  verificationResult = {
+    result: "passed",
+    checks,
+    registeredThroughUI: true,
+    signedInAgain: true,
+    paidClaudeCalls: 0,
+    realPayments: 0,
+  };
 } catch (error) {
   if (activePage && !activePage.isClosed()) {
     await activePage.screenshot({
@@ -249,11 +248,29 @@ try {
   );
   if (!response.ok)
     throw new Error("Could not locate verification account for cleanup.");
-  const { data } = await response.json();
-  for (const user of data ?? []) {
-    if (!user.email_addresses.some((a) => a.email_address === email)) continue;
+  // Raw BAPI returns an array; the Clerk SDK wraps it in { data }.
+  const users = await response.json();
+  if (!Array.isArray(users))
+    throw new Error("Unexpected verification-account lookup response.");
+  const matches = users.filter((user) =>
+    user.email_addresses.some((address) => address.email_address === email),
+  );
+  if (verificationResult && matches.length !== 1)
+    throw new Error("Could not uniquely identify the owned verification account.");
+  for (const user of matches) {
     await sql`DELETE FROM release_engineer.accounts WHERE user_id = ${user.id}`;
     const deleted = await backend("users/" + user.id, { method: "DELETE" });
     if (!deleted.ok) throw new Error("Verification account cleanup failed.");
+    check((await backend("users/" + user.id)).status, 404);
+    check(
+      (await sql`SELECT user_id FROM release_engineer.accounts WHERE user_id = ${user.id}`)
+        .length,
+      0,
+    );
   }
 }
+
+// A successful report includes cleanup; do not announce success before it.
+console.log(
+  JSON.stringify({ ...verificationResult, checks, ownedTestAccountDeleted: true }),
+);
