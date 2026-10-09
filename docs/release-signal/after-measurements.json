@@ -1,0 +1,491 @@
+[
+  {
+    "base": "http://localhost:3101",
+    "width": 1920,
+    "height": 1080,
+    "status": 200,
+    "lcp": 216,
+    "cls": 0,
+    "longTasks": [
+      156,
+      91
+    ],
+    "overflow": false,
+    "submitBottom": 735.78125,
+    "canvasCount": 1,
+    "scene": "webgl",
+    "graphRequest": 1172,
+    "graphReady": 1656.2000000029802,
+    "initialJs": 183407,
+    "deferredJs": 240951,
+    "js": [
+      {
+        "url": "http://localhost:3101/_next/static/chunks/2gop_dhndvo6c.js",
+        "bytes": 1973,
+        "transfer": 2273,
+        "start": 13.700000002980232
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/1zurx8o19uofw.js",
+        "bytes": 7756,
+        "transfer": 8056,
+        "start": 13.799999997019768
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/2d6w_if7s9u25.js",
+        "bytes": 46690,
+        "transfer": 46990,
+        "start": 13.799999997019768
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/0xngk6hlen_qv.js",
+        "bytes": 72728,
+        "transfer": 73028,
+        "start": 13.799999997019768
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/turbopack-2c3mg3r-05n1w.js",
+        "bytes": 4414,
+        "transfer": 4714,
+        "start": 13.899999998509884
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/1sqhj6ylf8mlv.js",
+        "bytes": 667,
+        "transfer": 967,
+        "start": 13.899999998509884
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/444z319-8k2o0.js",
+        "bytes": 4340,
+        "transfer": 4640,
+        "start": 13.899999998509884
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/42din88fm_9ju.js",
+        "bytes": 3521,
+        "transfer": 3821,
+        "start": 14
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/2l745fa9f4u5p.js",
+        "bytes": 41318,
+        "transfer": 41618,
+        "start": 14
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/0y_uesb_agabo.js",
+        "bytes": 240951,
+        "transfer": 241251,
+        "start": 1173.7000000029802
+      }
+    ],
+    "errors": [],
+    "failures": [],
+    "interceptedAnalysisRequests": 0
+  },
+  {
+    "base": "http://localhost:3101",
+    "width": 1440,
+    "height": 900,
+    "status": 200,
+    "lcp": 176,
+    "cls": 0,
+    "longTasks": [
+      127,
+      84
+    ],
+    "overflow": false,
+    "submitBottom": 692.40625,
+    "canvasCount": 1,
+    "scene": "webgl",
+    "graphRequest": 1130.7999999970198,
+    "graphReady": 1605.5,
+    "initialJs": 183407,
+    "deferredJs": 240951,
+    "js": [
+      {
+        "url": "http://localhost:3101/_next/static/chunks/2gop_dhndvo6c.js",
+        "bytes": 1973,
+        "transfer": 2273,
+        "start": 13.5
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/1zurx8o19uofw.js",
+        "bytes": 7756,
+        "transfer": 8056,
+        "start": 13.600000001490116
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/0xngk6hlen_qv.js",
+        "bytes": 72728,
+        "transfer": 73028,
+        "start": 13.600000001490116
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/turbopack-2c3mg3r-05n1w.js",
+        "bytes": 4414,
+        "transfer": 4714,
+        "start": 13.700000002980232
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/2d6w_if7s9u25.js",
+        "bytes": 46690,
+        "transfer": 46990,
+        "start": 13.700000002980232
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/1sqhj6ylf8mlv.js",
+        "bytes": 667,
+        "transfer": 967,
+        "start": 13.799999997019768
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/42din88fm_9ju.js",
+        "bytes": 3521,
+        "transfer": 3821,
+        "start": 13.799999997019768
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/444z319-8k2o0.js",
+        "bytes": 4340,
+        "transfer": 4640,
+        "start": 13.799999997019768
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/2l745fa9f4u5p.js",
+        "bytes": 41318,
+        "transfer": 41618,
+        "start": 13.799999997019768
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/0y_uesb_agabo.js",
+        "bytes": 240951,
+        "transfer": 241251,
+        "start": 1132.8999999985099
+      }
+    ],
+    "errors": [],
+    "failures": [],
+    "interceptedAnalysisRequests": 1
+  },
+  {
+    "base": "http://localhost:3101",
+    "width": 1366,
+    "height": 768,
+    "status": 200,
+    "lcp": 188,
+    "cls": 0,
+    "longTasks": [
+      124,
+      87
+    ],
+    "overflow": false,
+    "submitBottom": 590.96875,
+    "canvasCount": 1,
+    "scene": "webgl",
+    "graphRequest": 1136.9000000059605,
+    "graphReady": 1627.3000000044703,
+    "initialJs": 183407,
+    "deferredJs": 240951,
+    "js": [
+      {
+        "url": "http://localhost:3101/_next/static/chunks/2gop_dhndvo6c.js",
+        "bytes": 1973,
+        "transfer": 2273,
+        "start": 16.200000002980232
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/1zurx8o19uofw.js",
+        "bytes": 7756,
+        "transfer": 8056,
+        "start": 16.30000000447035
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/turbopack-2c3mg3r-05n1w.js",
+        "bytes": 4414,
+        "transfer": 4714,
+        "start": 16.30000000447035
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/1sqhj6ylf8mlv.js",
+        "bytes": 667,
+        "transfer": 967,
+        "start": 16.30000000447035
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/2d6w_if7s9u25.js",
+        "bytes": 46690,
+        "transfer": 46990,
+        "start": 16.30000000447035
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/444z319-8k2o0.js",
+        "bytes": 4340,
+        "transfer": 4640,
+        "start": 16.30000000447035
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/0xngk6hlen_qv.js",
+        "bytes": 72728,
+        "transfer": 73028,
+        "start": 16.30000000447035
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/42din88fm_9ju.js",
+        "bytes": 3521,
+        "transfer": 3821,
+        "start": 16.400000005960464
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/2l745fa9f4u5p.js",
+        "bytes": 41318,
+        "transfer": 41618,
+        "start": 16.400000005960464
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/0y_uesb_agabo.js",
+        "bytes": 240951,
+        "transfer": 241251,
+        "start": 1138.6000000014901
+      }
+    ],
+    "errors": [],
+    "failures": [],
+    "interceptedAnalysisRequests": 0
+  },
+  {
+    "base": "http://localhost:3101",
+    "width": 768,
+    "height": 1024,
+    "status": 200,
+    "lcp": 172,
+    "cls": 0,
+    "longTasks": [
+      121
+    ],
+    "overflow": false,
+    "submitBottom": 607.265625,
+    "canvasCount": 0,
+    "scene": "static",
+    "graphRequest": null,
+    "graphReady": null,
+    "initialJs": 183407,
+    "deferredJs": 0,
+    "js": [
+      {
+        "url": "http://localhost:3101/_next/static/chunks/2gop_dhndvo6c.js",
+        "bytes": 1973,
+        "transfer": 2273,
+        "start": 14
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/1zurx8o19uofw.js",
+        "bytes": 7756,
+        "transfer": 8056,
+        "start": 14
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/2d6w_if7s9u25.js",
+        "bytes": 46690,
+        "transfer": 46990,
+        "start": 14.100000001490116
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/0xngk6hlen_qv.js",
+        "bytes": 72728,
+        "transfer": 73028,
+        "start": 14.100000001490116
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/444z319-8k2o0.js",
+        "bytes": 4340,
+        "transfer": 4640,
+        "start": 14.100000001490116
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/turbopack-2c3mg3r-05n1w.js",
+        "bytes": 4414,
+        "transfer": 4714,
+        "start": 14.100000001490116
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/1sqhj6ylf8mlv.js",
+        "bytes": 667,
+        "transfer": 967,
+        "start": 14.200000002980232
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/42din88fm_9ju.js",
+        "bytes": 3521,
+        "transfer": 3821,
+        "start": 14.200000002980232
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/2l745fa9f4u5p.js",
+        "bytes": 41318,
+        "transfer": 41618,
+        "start": 14.200000002980232
+      }
+    ],
+    "errors": [],
+    "failures": [],
+    "interceptedAnalysisRequests": 0
+  },
+  {
+    "base": "http://localhost:3101",
+    "width": 390,
+    "height": 844,
+    "status": 200,
+    "lcp": 164,
+    "cls": 0,
+    "longTasks": [
+      118
+    ],
+    "overflow": false,
+    "submitBottom": 576.28125,
+    "canvasCount": 0,
+    "scene": "static",
+    "graphRequest": null,
+    "graphReady": null,
+    "initialJs": 183407,
+    "deferredJs": 0,
+    "js": [
+      {
+        "url": "http://localhost:3101/_next/static/chunks/2gop_dhndvo6c.js",
+        "bytes": 1973,
+        "transfer": 2273,
+        "start": 12.300000004470348
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/1zurx8o19uofw.js",
+        "bytes": 7756,
+        "transfer": 8056,
+        "start": 12.300000004470348
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/0xngk6hlen_qv.js",
+        "bytes": 72728,
+        "transfer": 73028,
+        "start": 12.300000004470348
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/2d6w_if7s9u25.js",
+        "bytes": 46690,
+        "transfer": 46990,
+        "start": 12.399999998509884
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/turbopack-2c3mg3r-05n1w.js",
+        "bytes": 4414,
+        "transfer": 4714,
+        "start": 12.5
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/1sqhj6ylf8mlv.js",
+        "bytes": 667,
+        "transfer": 967,
+        "start": 12.5
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/444z319-8k2o0.js",
+        "bytes": 4340,
+        "transfer": 4640,
+        "start": 12.5
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/42din88fm_9ju.js",
+        "bytes": 3521,
+        "transfer": 3821,
+        "start": 12.5
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/2l745fa9f4u5p.js",
+        "bytes": 41318,
+        "transfer": 41618,
+        "start": 12.5
+      }
+    ],
+    "errors": [],
+    "failures": [],
+    "interceptedAnalysisRequests": 1
+  },
+  {
+    "base": "http://localhost:3101",
+    "width": 360,
+    "height": 800,
+    "status": 200,
+    "lcp": 172,
+    "cls": 0,
+    "longTasks": [
+      121
+    ],
+    "overflow": false,
+    "submitBottom": 564.421875,
+    "canvasCount": 0,
+    "scene": "static",
+    "graphRequest": null,
+    "graphReady": null,
+    "initialJs": 183407,
+    "deferredJs": 0,
+    "js": [
+      {
+        "url": "http://localhost:3101/_next/static/chunks/2gop_dhndvo6c.js",
+        "bytes": 1973,
+        "transfer": 2273,
+        "start": 11.299999997019768
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/1zurx8o19uofw.js",
+        "bytes": 7756,
+        "transfer": 8056,
+        "start": 11.299999997019768
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/2d6w_if7s9u25.js",
+        "bytes": 46690,
+        "transfer": 46990,
+        "start": 11.299999997019768
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/0xngk6hlen_qv.js",
+        "bytes": 72728,
+        "transfer": 73028,
+        "start": 11.299999997019768
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/turbopack-2c3mg3r-05n1w.js",
+        "bytes": 4414,
+        "transfer": 4714,
+        "start": 11.399999998509884
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/1sqhj6ylf8mlv.js",
+        "bytes": 667,
+        "transfer": 967,
+        "start": 11.5
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/42din88fm_9ju.js",
+        "bytes": 3521,
+        "transfer": 3821,
+        "start": 11.5
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/444z319-8k2o0.js",
+        "bytes": 4340,
+        "transfer": 4640,
+        "start": 11.5
+      },
+      {
+        "url": "http://localhost:3101/_next/static/chunks/2l745fa9f4u5p.js",
+        "bytes": 41318,
+        "transfer": 41618,
+        "start": 11.5
+      }
+    ],
+    "errors": [],
+    "failures": [],
+    "interceptedAnalysisRequests": 0
+  }
+]

@@ -13,7 +13,7 @@ export function CaseStudyRecord({ study }: { study: CaseStudy }) {
           : "FOUNDER TEST · NOT EXTERNAL VALIDATION"}
       </p>
       <h2 className="mt-4 text-2xl tracking-tight">{study.title}</h2>
-      <p className="mt-3 text-slate-300">{study.summary}</p>
+      <p className="mt-3 text-muted">{study.summary}</p>
       <dl className="case-details">
         <div>
           <dt>Public PR</dt>
