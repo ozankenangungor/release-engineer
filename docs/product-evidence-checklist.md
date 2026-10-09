@@ -4,7 +4,7 @@
 
 ## Public identity and product sources
 
-These are founder-provided facts, published consistently in the [About page](https://releaseengineer.tech/about), [README](../README.md) and structured metadata. Public consistency is verifiable; it does not independently establish incorporation or legal registration.
+These are founder-provided facts, published consistently in the [About page](https://releaseengineer.tech/about), [README](../README.md) and structured metadata. Public consistency is verifiable. The founder has confirmed that no legal company is incorporated or registered; October 2026 is the project launch month.
 
 | Field | Public value / source |
 | --- | --- |
@@ -12,7 +12,7 @@ These are founder-provided facts, published consistently in the [About page](htt
 | Domain / live product | https://releaseengineer.tech |
 | Founder | Ozan Kenan Güngör |
 | Contact | founder@releaseengineer.tech |
-| Location / founded | Ankara, Türkiye / October 2026, no specific day asserted |
+| Location / launched | Ankara, Türkiye / October 2026, no specific day asserted |
 | Stage / funding | Early beta / bootstrapped, no external funding raised; founder-provided |
 | Source repository | https://github.com/ozankenangungor/release-engineer |
 | Founder GitHub | https://github.com/ozankenangungor |

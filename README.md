@@ -6,9 +6,9 @@ Live product: [releaseengineer.tech](https://releaseengineer.tech)
 
 Reports support human release decisions. They do not guarantee safe code or replace review and testing. An empty findings list is a valid result.
 
-## Startup
+## Project and operator
 
-Release Engineer was founded in **October 2026** in **Ankara, Türkiye** by **Ozan Kenan Güngör**. It is an early-stage, bootstrapped developer-tool startup in **early beta**, with no external funding raised. See the [About page](https://releaseengineer.tech/about) and the founder's [GitHub](https://github.com/ozankenangungor) and [LinkedIn](https://linkedin.com/in/ozan-kenan-gungor) profiles.
+Release Engineer is an independent, founder-built developer tool launched in **October 2026** in **Ankara, Türkiye**, built and operated by **Ozan Kenan Güngör**. It is a self-funded **early beta** with no external investment. **No legal company has been incorporated or registered.** See the [About page](https://releaseengineer.tech/about) and the founder's [GitHub](https://github.com/ozankenangungor) and [LinkedIn](https://linkedin.com/in/ozan-kenan-gungor) profiles.
 
 ## What it does
 
@@ -20,7 +20,7 @@ Claude is the core reasoning engine. The server uses the official Anthropic Type
 
 ## Early beta evidence
 
-The early beta is available for testing on public GitHub pull requests. [Try the beta](https://releaseengineer.tech/about#beta): analyze a public PR, then email [founder@releaseengineer.tech](mailto:founder@releaseengineer.tech) with what was useful, wrong or missing. Do not send private code, secrets or sensitive vulnerability details. Three exact, founder-supplied, publication-approved external beta quotes are rendered from [the public feedback content](src/content/testimonials.ts), using approved display names and roles. No tester PR links were approved. This is informal qualitative feedback, not accuracy, verified findings or a unique developer/customer count. Consent records remain private. Use the [private feedback workflow](docs/beta-feedback-template.md).
+The early beta is available for testing on public GitHub pull requests. [Try the beta](https://releaseengineer.tech/about#beta): analyze a public PR, then email [founder@releaseengineer.tech](mailto:founder@releaseengineer.tech) with what was useful, wrong or missing. Do not send private code, secrets or sensitive vulnerability details. Three exact, founder-supplied, publication-approved external beta quotes appear on the Evidence page, rendered from [the public feedback content](src/content/testimonials.ts), using approved display names and roles. No tester PR links were approved. This is informal qualitative feedback, not accuracy, verified findings or a unique developer/customer count. Consent records remain private. Use the [private feedback workflow](docs/beta-feedback-template.md).
 
 The [evidence index](https://releaseengineer.tech/evidence) links source, limitations and dated evaluations. One [founder-run public PR observation](https://releaseengineer.tech/case-studies/rails-doc-typo-58968) is published for Rails PR #58968 with its reviewed head SHA, public verification sources, upstream outcome and explicit limitations. It is labeled founder testing, not external validation. No verified production analysis count is published. [Case-study content](src/content/case-studies.ts) continues to fail closed for incomplete records.
 
@@ -28,7 +28,7 @@ The [evaluation harness](evals/README.md) contains **32 original synthetic PR ca
 
 ## MVP scope
 
-One responsive landing page and analysis interface, public PR retrieval, bounded change context, validated Claude reviews, About and Evidence pages, and brief [Privacy](https://releaseengineer.tech/privacy) and [Terms](https://releaseengineer.tech/terms) pages. There are no accounts, database, OAuth, billing, queues, analytics or telemetry vendors. PR contents and reports are held in memory for the request and browser session. Content-free operational events are written to hosting logs; [the usage evidence runbook](docs/live-usage-evidence.md) explains retention, private preservation, deduplication and the distinction between analyses and people. No public usage counter is displayed.
+One responsive landing page, illustrative report preview and analysis interface, public PR retrieval, bounded change context, validated Claude reviews, About and Evidence pages, and brief [Privacy](https://releaseengineer.tech/privacy) and [Terms](https://releaseengineer.tech/terms) pages. There are no accounts, database, OAuth, billing, queues, analytics or telemetry vendors. PR contents and reports are held in memory for the request and browser session. Content-free operational events are written to hosting logs; [the usage evidence runbook](docs/live-usage-evidence.md) explains retention, private preservation, deduplication and the distinction between analyses and people. No public usage counter is displayed.
 
 ## Architecture
 
@@ -48,7 +48,7 @@ Browser: PR input → POST /api/analyze → validated report
 - `src/lib/review-schema.ts`: strict Zod review and API-response contracts, shared with the browser.
 - `src/app/api/analyze/route.ts`: bounded JSON request, orchestration and uncached responses.
 - `src/components/`: accessible form/loading/error states and readable report sections. React renders plain text; raw model output is never rendered as a report.
-- `src/components/three/`: dynamically imported Three.js / React Three Fiber sculpture of the review pipeline. DPR is capped at 1.5; the visible reactor uses bounded demand scheduling and pauses when the scene is offscreen, the document is hidden, or motion is explicitly paused. Mobile, reduced motion, forced colors, WebGL failure and JavaScript-disabled browsers use a server-rendered static illustration. Product copy and form are server-rendered independently.
+- `src/components/three/`: optional Three.js / React Three Fiber illustration below the analyzer, inside a collapsed explanation. The renderer is imported only after explicit animation activation. DPR is capped at 1.5; the visible reactor uses bounded demand scheduling and pauses when the scene is offscreen, the document is hidden, or motion is explicitly paused. Mobile, reduced motion, forced colors, WebGL failure and JavaScript-disabled browsers use a server-rendered static illustration. Product copy and form are server-rendered independently.
 - `src/lib/live-usage.ts`: allowlisted, content-free operational events; no browser/session identity or PR content. `scripts/summarize-live-usage.mjs` counts preserved, sanitized production outcomes without network calls.
 
 Built with Next.js 16.4 App Router, React 19, strict TypeScript, Tailwind CSS, Zod and Vitest. All GitHub and Anthropic requests happen on the server. `server-only` imports guard credential-bearing modules.
@@ -103,10 +103,12 @@ pnpm typecheck
 pnpm test
 pnpm build
 pnpm eval:validate
+pnpm exec playwright install chromium
+pnpm test:browser
 git diff --check
 ```
 
-`pnpm test:watch` runs Vitest interactively. Tests cover safe URL parsing, exact serialized context budgets and Unicode, deterministic selection, structured result validation, GitHub pagination/visibility/errors, official SDK request/response handling, injection separation, partial-verdict enforcement and endpoint failures. Upstream services are mocked; tests never consume API credits. CI runs all commands above on pull requests and main.
+`pnpm test:watch` runs Vitest interactively. Tests cover safe URL parsing, exact serialized context budgets and Unicode, deterministic selection, structured result validation, GitHub pagination/visibility/errors, official SDK request/response handling, injection separation, partial-verdict enforcement and endpoint failures. Upstream services are mocked; tests never consume API credits. CI runs these checks on pull requests and main, with Chromium and axe accessibility checks. Browser tests intercept all analysis requests, even when PLAYWRIGHT_BASE_URL targets production; mocked responses are not live inference.
 
 For a production preview, run `pnpm build` then `pnpm start`. Deploy to a Node.js host that permits a 120-second route and set the server environment variables. No hosting infrastructure is included in this MVP.
 
@@ -130,7 +132,7 @@ The analysis endpoint is unauthenticated and each analysis can consume the opera
 - Anthropic organization spending limits.
 - Appropriate deployment access controls during the early beta.
 
-These protections must be configured outside the application. This MVP does not include authentication or distributed rate limiting.
+These protections must be configured outside the application. The endpoint rejects cross-origin browser submissions and bounds each warm server instance to two concurrent analyses and six starts per rolling minute. This does not include authentication or distributed rate limiting; serverless instances have independent budgets. Platform protection and provider spending limits remain necessary.
 
 ## Current limitations
 
@@ -138,7 +140,7 @@ These protections must be configured outside the application. This MVP does not 
 - Claude sees selected PR metadata and exposed patches, not the full repository, unchanged code, PR comments, linked issues, CI output or runtime behavior. GitHub can omit binary or large patches. GitHub's files endpoint itself has a 3,000-file ceiling; this application stops at 500.
 - Size caps mean large PRs are analyzed in part; lockfiles have low priority and dependency risk may be missed. Coverage warnings describe what was omitted.
 - A PR can change after retrieval. The report displays the retrieved head SHA and is not a persistent or live review.
-- No application-level persistence or centralized rate limiting. An unauthenticated deployment can consume the operator's Claude credits. Choose the deployment audience and API spending limits accordingly; no rate-limit infrastructure is added here.
+- No application-level persistence or centralized rate limiting. An unauthenticated deployment can consume the operator's Claude credits. Choose the deployment audience and API spending limits accordingly; the per-instance admission bound does not provide a global spending cap.
 - API availability, rate limits, model support, credits and host request timeouts can prevent analysis. Reports can be wrong; verify findings and use human review.
 - The application does not log PR contents or provider responses. Hosting providers, GitHub and Anthropic have their own processing/retention policies. Privacy and Terms are brief MVP notices and have not received custom legal review.
 

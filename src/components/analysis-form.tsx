@@ -14,6 +14,7 @@ export function AnalysisForm({ examplePrUrl }: { examplePrUrl?: string }) {
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [elapsed, setElapsed] = useState(0);
+  const [invalidUrl, setInvalidUrl] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<AnalysisResponse | null>(null);
   const controllerRef = useRef<AbortController | null>(null);
@@ -34,12 +35,15 @@ export function AnalysisForm({ examplePrUrl }: { examplePrUrl?: string }) {
     event.preventDefault();
     if (loading) return;
     setError(null);
+    setInvalidUrl(false);
     setResult(null);
     let parsed;
     try {
       parsed = parseGitHubPullRequestUrl(url);
     } catch {
       setError(PR_URL_ERROR);
+      setInvalidUrl(true);
+      inputRef.current?.focus();
       return;
     }
     const controller = new AbortController();
@@ -54,7 +58,18 @@ export function AnalysisForm({ examplePrUrl }: { examplePrUrl?: string }) {
         body: JSON.stringify({ url: parsed.url }),
         signal: controller.signal,
       });
-      const data: unknown = await response.json();
+      let data: unknown;
+      try {
+        data = await response.json();
+      } catch {
+        throw new Error(
+          response.status === 429
+            ? "The service is limiting requests. Wait a moment, then try again."
+            : response.status === 504
+              ? "The review took too long. Try again, or use a smaller PR."
+              : "The service returned an unreadable response. Please try again later.",
+        );
+      }
       if (!response.ok) {
         const message =
           typeof data === "object" &&
@@ -101,7 +116,7 @@ export function AnalysisForm({ examplePrUrl }: { examplePrUrl?: string }) {
       >
         <div className="console-titlebar flex items-center justify-between gap-3 px-5 py-4 sm:px-7">
           <p className="font-mono text-[10px] tracking-widest text-slate-300">
-            REVIEW WORKSPACE
+            PUBLIC PR ANALYZER
           </p>
           <span className="console-mode">
             <span aria-hidden="true" />
@@ -111,9 +126,7 @@ export function AnalysisForm({ examplePrUrl }: { examplePrUrl?: string }) {
         <div className="console-body p-5 sm:p-7">
           <div className="mb-6 flex items-start justify-between gap-4">
             <h2 className="console-heading text-slate-100">
-              Put the change
-              <br />
-              in perspective.
+              Analyze a pull request
             </h2>
             <span
               aria-hidden="true"
@@ -123,25 +136,24 @@ export function AnalysisForm({ examplePrUrl }: { examplePrUrl?: string }) {
             </span>
           </div>
           <p className="console-description">
-            A bounded Claude review. Your release call.
-            <span className="mt-1 block">
-              No account required · Public PRs only · Early beta
-            </span>
+            Public PRs only · No account required
           </p>
-          <form onSubmit={analyze} aria-busy={loading}>
+          <form onSubmit={analyze} aria-busy={loading} noValidate>
             <div className="mb-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
               <label htmlFor="pr-url" className="text-xs text-slate-300">
-                Public GitHub pull request URL
+                GitHub pull request URL
               </label>
               {examplePrUrl && (
                 <button
                   type="button"
                   disabled={loading}
-                  className="text-link min-h-6 text-xs disabled:cursor-wait disabled:opacity-60"
+                  className="text-link min-h-11 text-sm disabled:cursor-wait disabled:opacity-60"
                   title="Prefill a public example: Rails PR #58968. Analysis starts only when you choose Analyze PR."
                   onClick={() => {
                     setUrl(examplePrUrl);
                     setError(null);
+                    setInvalidUrl(false);
+                    setResult(null);
                     inputRef.current?.focus();
                   }}
                 >
@@ -154,6 +166,7 @@ export function AnalysisForm({ examplePrUrl }: { examplePrUrl?: string }) {
                 ref={inputRef}
                 id="pr-url"
                 type="url"
+                inputMode="url"
                 name="url"
                 autoComplete="off"
                 spellCheck={false}
@@ -163,10 +176,13 @@ export function AnalysisForm({ examplePrUrl }: { examplePrUrl?: string }) {
                 onChange={(event) => {
                   setUrl(event.target.value);
                   if (error) setError(null);
+                  setInvalidUrl(false);
                 }}
                 disabled={loading}
-                aria-invalid={!!error}
-                aria-describedby={error ? "analysis-error" : "privacy-note"}
+                aria-invalid={invalidUrl}
+                aria-describedby={
+                  error ? "analysis-error privacy-note" : "privacy-note"
+                }
                 placeholder="https://github.com/owner/repo/pull/123"
                 className="console-input min-w-0 flex-1 rounded-xl px-4 py-4 font-mono text-xs text-slate-100 placeholder:text-slate-400 disabled:opacity-60 sm:text-sm"
               />
@@ -213,8 +229,8 @@ export function AnalysisForm({ examplePrUrl }: { examplePrUrl?: string }) {
               id="privacy-note"
               className="mt-4 text-xs leading-5 text-slate-400"
             >
-              Public PR contents are sent to Claude to produce your review. We
-              do not store submitted PR contents.{" "}
+              Public PR contents are sent to Claude to produce your review. The
+              application does not persist PR contents or reports.{" "}
               <Link
                 href="/privacy"
                 className="text-slate-300 underline decoration-slate-600 underline-offset-2 hover:text-white"
@@ -225,7 +241,7 @@ export function AnalysisForm({ examplePrUrl }: { examplePrUrl?: string }) {
           </form>
           <noscript>
             <p className="mt-4 text-sm text-amber-200">
-              Enable JavaScript to submit a pull request for analysis. Company
+              Enable JavaScript to submit a pull request for analysis. Project
               information, feedback and evidence links are available without
               JavaScript.
             </p>
@@ -234,6 +250,7 @@ export function AnalysisForm({ examplePrUrl }: { examplePrUrl?: string }) {
             <div
               id="analysis-error"
               role="alert"
+              aria-label="Analysis error"
               className="mt-5 rounded-xl border border-rose-300/25 bg-rose-300/5 p-4"
             >
               <p className="text-sm font-medium text-rose-200">
@@ -283,6 +300,7 @@ export function AnalysisForm({ examplePrUrl }: { examplePrUrl?: string }) {
         <div
           ref={resultRef}
           tabIndex={-1}
+          role="region"
           aria-label="Completed release review"
           className="completed-report min-w-0 rounded-2xl"
         >

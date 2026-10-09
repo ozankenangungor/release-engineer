@@ -2,15 +2,22 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { POST } from "@/app/api/analyze/route";
 import { getPullRequest } from "@/lib/github";
 import { reviewPullRequest } from "@/lib/claude";
+import { acquireAnalysisSlot } from "@/lib/analysis-admission";
 import { AnalysisError } from "@/lib/errors";
 import { pullRequest, review } from "./fixtures";
 
+vi.mock("@/lib/analysis-admission", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/analysis-admission")>()),
+  acquireAnalysisSlot: vi.fn(),
+}));
 vi.mock("@/lib/github", () => ({ getPullRequest: vi.fn() }));
 vi.mock("@/lib/claude", () => ({ reviewPullRequest: vi.fn() }));
 const githubMock = vi.mocked(getPullRequest);
 const claudeMock = vi.mocked(reviewPullRequest);
 beforeEach(() => {
   vi.stubEnv("ANTHROPIC_API_KEY", "test-only-api-key");
+  vi.mocked(acquireAnalysisSlot).mockReset();
+  vi.mocked(acquireAnalysisSlot).mockReturnValue(vi.fn());
   githubMock.mockReset();
   claudeMock.mockReset();
   githubMock.mockResolvedValue(pullRequest());
@@ -27,6 +34,53 @@ function request(body: string, contentType = "application/json") {
 }
 
 describe("analysis endpoint", () => {
+  it("rejects cross-site browser requests before upstream access", async () => {
+    for (const headers of [
+      { Origin: "https://other.example" },
+      { Origin: "null" },
+      { "Sec-Fetch-Site": "cross-site" },
+    ] as Record<string, string>[]) {
+      const response = await POST(
+        new Request("http://localhost/api/analyze", {
+          method: "POST",
+          body: JSON.stringify({ url: pullRequest().url }),
+          headers: { "Content-Type": "application/json", ...headers },
+        }),
+      );
+      expect(response.status).toBe(403);
+    }
+    expect(githubMock).not.toHaveBeenCalled();
+    expect(claudeMock).not.toHaveBeenCalled();
+    expect(acquireAnalysisSlot).not.toHaveBeenCalled();
+  });
+  it("returns an uncached retryable limit without fetching or invoking Claude", async () => {
+    vi.mocked(acquireAnalysisSlot).mockImplementationOnce(() => {
+      throw new AnalysisError("SERVICE_BUSY", "Wait a minute.", 429);
+    });
+    const response = await POST(
+      request(JSON.stringify({ url: pullRequest().url })),
+    );
+    expect(response.status).toBe(429);
+    expect(response.headers.get("retry-after")).toBe("60");
+    expect(response.headers.get("cache-control")).toBe("no-store");
+    expect(githubMock).not.toHaveBeenCalled();
+    expect(claudeMock).not.toHaveBeenCalled();
+  });
+  it("releases admission on both successful and failed pipelines", async () => {
+    const release = vi.fn();
+    vi.mocked(acquireAnalysisSlot).mockReturnValue(release);
+    expect(
+      (await POST(request(JSON.stringify({ url: pullRequest().url })))).status,
+    ).toBe(200);
+    expect(release).toHaveBeenCalledTimes(1);
+    githubMock.mockRejectedValueOnce(
+      new AnalysisError("GITHUB_UNAVAILABLE", "Unavailable"),
+    );
+    expect(
+      (await POST(request(JSON.stringify({ url: pullRequest().url })))).status,
+    ).toBe(502);
+    expect(release).toHaveBeenCalledTimes(2);
+  });
   it("records only a successful validated pipeline, without PR/provider content or browser identity", async () => {
     vi.stubEnv("NODE_ENV", "production");
     vi.stubEnv("VERCEL_ENV", "production");

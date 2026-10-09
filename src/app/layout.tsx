@@ -10,38 +10,24 @@ const inter = localFont({
   display: "swap",
   weight: "400 700",
 });
-const title = "Release Engineer — Claude-native release readiness";
+const title = "Release Engineer — Review public GitHub PRs with Claude";
 const description =
-  "Claude-powered release-readiness reviews of bounded public GitHub pull-request metadata and patches, with explicit coverage limitations.";
+  "Review public GitHub pull requests with Claude for potential release risks, missing tests and breaking changes. Evidence, coverage limits and human verification.";
 
 const structuredData = {
   "@context": "https://schema.org",
   "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://releaseengineer.tech/#organization",
-      name: "Release Engineer",
-      url: "https://releaseengineer.tech",
-      logo: "https://releaseengineer.tech/release-engineer-logo.svg",
-      email: "founder@releaseengineer.tech",
-      foundingDate: "2026-10",
-      description:
-        "Release Engineer is an early-stage, bootstrapped developer-tool startup founded in October 2026 in Ankara, Türkiye.",
-      founder: { "@id": "https://releaseengineer.tech/#founder" },
-      sameAs: ["https://github.com/ozankenangungor/release-engineer"],
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Ankara",
-        addressCountry: "TR",
-      },
-    },
     {
       "@type": "Person",
       "@id": "https://releaseengineer.tech/#founder",
       name: "Ozan Kenan Güngör",
       url: "https://releaseengineer.tech/about",
       jobTitle: "Founder",
-      worksFor: { "@id": "https://releaseengineer.tech/#organization" },
+      email: "founder@releaseengineer.tech",
+      homeLocation: {
+        "@type": "Place",
+        name: "Ankara, Türkiye",
+      },
       sameAs: [
         "https://github.com/ozankenangungor",
         "https://linkedin.com/in/ozan-kenan-gungor",
@@ -56,7 +42,7 @@ const structuredData = {
       applicationCategory: "DeveloperApplication",
       operatingSystem: "Web",
       creator: { "@id": "https://releaseengineer.tech/#founder" },
-      provider: { "@id": "https://releaseengineer.tech/#organization" },
+      provider: { "@id": "https://releaseengineer.tech/#founder" },
       isPartOf: { "@id": "https://releaseengineer.tech/#website" },
       sameAs: "https://github.com/ozankenangungor/release-engineer",
     },
@@ -66,7 +52,7 @@ const structuredData = {
       name: "Release Engineer",
       alternateName: "releaseengineer.tech",
       url: "https://releaseengineer.tech/",
-      publisher: { "@id": "https://releaseengineer.tech/#organization" },
+      publisher: { "@id": "https://releaseengineer.tech/#founder" },
       description,
     },
   ],
@@ -91,7 +77,7 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Release Engineer — Claude-native release readiness for GitHub pull requests",
+        alt: "Release Engineer — Public GitHub PR reviews with Claude",
       },
     ],
   },

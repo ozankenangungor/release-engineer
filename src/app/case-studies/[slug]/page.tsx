@@ -17,6 +17,12 @@ export async function generateMetadata({
   return {
     title: `${study.title} — Release Engineer`,
     description: study.summary,
+    twitter: {
+      card: "summary_large_image",
+      title: `${study.title} — Release Engineer`,
+      description: study.summary,
+      images: ["/opengraph-image"],
+    },
     alternates: { canonical: `/case-studies/${slug}` },
     openGraph: {
       title: `${study.title} — Release Engineer`,

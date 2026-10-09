@@ -1,59 +1,29 @@
 import Link from "next/link";
 import { AnalysisForm } from "@/components/analysis-form";
+import { ReportPreview } from "@/components/report-preview";
 import { ReleaseIntelligenceScene } from "@/components/three/release-intelligence-scene";
-import { ReleaseMark } from "@/components/brand";
-import { Testimonials } from "@/components/testimonials";
-import { FeaturedPublicObservation } from "@/components/case-studies";
 import { getPublishedCaseStudies } from "@/content/case-studies";
-
-const intendedUsers = [
-  {
-    audience: "Open-source maintainers",
-    useCase: "A second pass on release risk before merging.",
-  },
-  {
-    audience: "Engineering leads",
-    useCase: "Review testing gaps and potential breaking changes.",
-  },
-  {
-    audience: "Developers reviewing unfamiliar changes",
-    useCase: "Identify what needs closer human verification.",
-  },
-  {
-    audience: "Small product teams",
-    useCase:
-      "Review configuration, migration and operational risks without dedicated release engineering staff.",
-  },
-];
 
 const workflow = [
   {
-    number: "01",
-    title: "Bring the change.",
-    detail: "PUBLIC GITHUB PR",
+    title: "Retrieve the public PR",
     description:
-      "A pull request, its metadata and changed-file patches. A pinned head SHA keeps the review tied to the change you submitted.",
+      "GitHub metadata and changed-file patches, tied to the retrieved head SHA.",
   },
   {
-    number: "02",
-    title: "Focus the context.",
-    detail: "DETERMINISTIC SELECTION",
+    title: "Select bounded context",
     description:
-      "Explicit size limits and deterministic selection bound what Claude sees. Missing or shortened context stays visible.",
+      "Explicit size limits. Omitted files and shortened patches stay visible in the report.",
   },
   {
-    number: "03",
-    title: "Reason with Claude.",
-    detail: "CORE REASONING ENGINE",
+    title: "Review with Claude",
     description:
-      "Claude examines the supplied changes for regressions, breaking changes, security concerns and gaps in testing.",
+      "Potential regressions, security concerns, breaking changes and missing test coverage.",
   },
   {
-    number: "04",
-    title: "Make the release call.",
-    detail: "STRUCTURED REVIEW",
+    title: "Verify before merging",
     description:
-      "Schema-validated findings, recommendations and coverage limits give you a second perspective. The decision remains yours.",
+      "Schema-validated findings and suggested checks. Human review and testing remain essential.",
   },
 ];
 
@@ -63,277 +33,152 @@ export default function Home() {
   );
   return (
     <main id="main" className="home-shell">
-      <section aria-labelledby="hero-title" className="hero-stage">
-        <div className="hero-copy">
-          <p className="claude-badge">
-            <span aria-hidden="true" className="badge-dot" /> CLAUDE-NATIVE
-            RELEASE READINESS
+      <section aria-labelledby="hero-title" className="product-hero">
+        <div className="product-copy">
+          <p className="product-eyebrow">
+            <span aria-hidden="true" className="badge-dot" /> Public GitHub PRs
+            · Reviewed with Claude
           </p>
-          <h1 id="hero-title" className="hero-title">
-            <span>See the change.</span>
-            <span>Know the risk.</span>
-            <span className="hero-wordmark">Own the release.</span>
+          <h1 id="hero-title" className="product-title">
+            Know what could break <span>before you merge.</span>
           </h1>
-          <p className="hero-description">
-            Paste a public GitHub PR. Get a structured second review of release
-            risks, missing tests, breaking changes and what still needs human
+          <p className="product-description">
+            Analyze a public GitHub pull request with Claude for potential
+            release risks, missing tests and breaking changes that need human
             verification.
           </p>
-          <div className="hero-credentials">
-            <span>Public PRs only</span>
-            <span>Decision support</span>
-            <span>Early beta</span>
-          </div>
-          <div className="hero-links">
-            <a href="#analyze" className="mobile-analyze-cta">
-              Analyze a public PR <span aria-hidden="true">↓</span>
+          <div className="product-links">
+            <a href="#report-preview" className="text-link">
+              See a sample report <span aria-hidden="true">↓</span>
             </a>
             <Link href="/evidence" className="text-link">
-              Inspect the evidence <span aria-hidden="true">↗︎</span>
-            </Link>
-            <Link
-              href="/case-studies/rails-doc-typo-58968"
-              className="subtle-link"
-            >
-              A real public PR <span aria-hidden="true">↗︎</span>
+              Technical evidence <span aria-hidden="true">→</span>
             </Link>
           </div>
         </div>
-        <ReleaseIntelligenceScene />
         <AnalysisForm examplePrUrl={example?.prUrl} />
       </section>
-      <div className="hero-pipeline" aria-label="Review workflow">
-        <p className="section-kicker">FROM CHANGE TO PERSPECTIVE</p>
-        <ol>
-          <li>
-            <span>01</span> Public PR changes
-          </li>
-          <li>
-            <span>02</span> Bounded context
-          </li>
-          <li>
-            <span>03</span> Claude reasoning
-          </li>
-          <li>
-            <span>04</span> Structured review
-          </li>
-        </ol>
-      </div>
-      <div className="founder-strip" data-reveal="0">
-        <div className="flex items-start gap-4">
-          <span className="founder-monogram" aria-hidden="true">
-            OKG
-          </span>
-          <div>
-            <p className="section-kicker">AN INDEPENDENT PRODUCT COMPANY</p>
-            <h2 className="founder-strip-title">
-              Founder-led. Built in public.
-            </h2>
-            <p className="mt-2 text-sm leading-6 text-slate-300">
-              Founded in October 2026 in Ankara, Türkiye by Ozan Kenan Güngör.
-              <br className="hidden sm:block" /> Shipping a Claude-native
-              product in early beta.
-            </p>
-          </div>
-        </div>
-        <Link href="/about" className="text-link">
-          Meet Release Engineer <span aria-hidden="true">→</span>
-        </Link>
-        <a
-          className="founder-contact text-link"
-          href="mailto:founder@releaseengineer.tech"
-        >
-          founder@releaseengineer.tech
-        </a>
-      </div>
-      <div className="reviewer-overview">
-        <section aria-labelledby="audience-title" data-reveal="0">
-          <div className="section-heading">
-            <div>
-              <p className="section-kicker">WHO IS THIS FOR?</p>
-              <h2 id="audience-title">
-                Built for teams that ship through pull requests.
-              </h2>
-            </div>
-          </div>
-          <p className="reviewer-intro">
-            Intended users and use cases for the early beta.
-          </p>
-          <dl className="audience-list">
-            {intendedUsers.map((item) => (
-              <div key={item.audience}>
-                <dt>{item.audience}</dt>
-                <dd>{item.useCase}</dd>
-              </div>
-            ))}
-          </dl>
-        </section>
-        <section
-          aria-labelledby="claude-title"
-          className="reviewer-engine"
-          data-reveal="70"
-        >
-          <p className="section-kicker">WHY CLAUDE</p>
-          <h2 id="claude-title">The reasoning layer.</h2>
-          <p>
-            Release review requires reasoning across changed files,
-            distinguishing evidence from inference, and producing structured
-            findings with explicit uncertainty and coverage boundaries. Claude
-            handles that reasoning.
-          </p>
-          <h3>Application code defines the boundaries.</h3>
-          <ul>
-            <li>GitHub retrieval</li>
-            <li>Bounded context selection</li>
-            <li>Schema validation</li>
-            <li>Coverage enforcement</li>
-          </ul>
-          <a
-            className="text-link"
-            href="https://github.com/ozankenangungor/release-engineer/blob/main/src/lib/claude.ts"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Inspect the Claude integration <span aria-hidden="true">↗︎</span>
-          </a>
-        </section>
-      </div>
-      <FeaturedPublicObservation />
-      <Testimonials />
+      <ReportPreview />
       <section
         id="how-it-works"
         aria-labelledby="workflow-title"
-        className="content-section"
-        data-reveal="0"
+        className="product-workflow section-stage"
       >
         <div className="section-heading">
           <div>
-            <p className="section-kicker">BUILT FOR THE RELEASE DECISION</p>
-            <h2 id="workflow-title">Engineering the second perspective.</h2>
+            <p className="section-kicker">FROM PULL REQUEST TO REVIEW</p>
+            <h2 id="workflow-title">A second pass, with visible limits.</h2>
           </div>
           <p>
-            A review for the human deciding what to verify before shipping:
-            release risks, testing gaps and coverage limits in one report.
+            For maintainers, engineering leads and developers deciding what to
+            verify before shipping.
           </p>
         </div>
-        <div className="workflow-grid">
-          {workflow.map((item) => (
-            <article
-              className="workflow-step"
-              key={item.number}
-              data-reveal={String(Number(item.number) * 70)}
-            >
-              <div className="workflow-step-top">
-                <span className="step-number">{item.number}</span>
-                <span aria-hidden="true">↗︎</span>
-              </div>
-              <div
-                className={`workflow-diagram workflow-diagram-${item.number}`}
-                aria-hidden="true"
-              >
-                <i />
-                <i />
-                <i />
-                <i />
-              </div>
+        <ol className="workflow-grid">
+          {workflow.map((item, index) => (
+            <li className="workflow-step" key={item.title}>
+              <span className="step-number">0{index + 1}</span>
               <h3>{item.title}</h3>
               <p>{item.description}</p>
-              <p className="workflow-detail">{item.detail}</p>
-            </article>
+            </li>
           ))}
-        </div>
+        </ol>
+        <details className="pipeline-explainer">
+          <summary>Explore the review pipeline</summary>
+          <p>
+            A conceptual illustration of context flowing through the review
+            engine. Animation is optional.
+          </p>
+          <ReleaseIntelligenceScene />
+        </details>
       </section>
       <section
         aria-labelledby="evidence-title"
-        className="trust-section section-stage"
-        data-reveal="0"
+        className="product-evidence section-stage"
       >
-        <div className="trust-intro">
-          <p className="section-kicker">SOURCE, SCOPE & EVIDENCE</p>
-          <h2 id="evidence-title">
-            A product you
-            <br className="hidden sm:block" /> can inspect.
-          </h2>
-          <p>
-            Live software. Public engineering. Visible limitations. Follow the
-            evidence behind the beta.
-          </p>
-          <Link className="text-link" href="/evidence">
-            Explore the evidence index →
-          </Link>
-          <div className="trust-seal" aria-hidden="true">
-            <ReleaseMark className="size-12" />
+        <div className="section-heading">
+          <div>
+            <p className="section-kicker">PUBLIC ENGINEERING RECORD</p>
+            <h2 id="evidence-title">Inspect the evidence behind the beta.</h2>
           </div>
+          <Link className="text-link" href="/evidence">
+            Open the evidence index →
+          </Link>
         </div>
-        <div className="trust-rows">
-          <a
-            className="trust-row"
-            href="https://github.com/ozankenangungor/release-engineer/blob/main/src/lib/claude.ts"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span className="trust-number">01</span>
-            <div>
-              <h3>Claude is the reasoning engine.</h3>
-              <p>
-                The official Anthropic SDK, structured output, schema validation
-                and deterministic coverage safeguards.
-              </p>
-              <span className="trust-source">INSPECT THE REVIEW ENGINE</span>
-            </div>
-            <span aria-hidden="true">↗︎</span>
-          </a>
-          <a
-            className="trust-row"
-            href="https://github.com/ozankenangungor/release-engineer/blob/main/docs/live-evaluation-evidence.md"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span className="trust-number">02</span>
-            <div>
-              <h3>Evaluation, including the failures.</h3>
-              <p>
-                Two complete synthetic Claude runs with metrics and regressions.
-                Synthetic observations are not real-world accuracy or external
-                validation.
-              </p>
-              <span className="trust-source">
-                READ THE DATED EVALUATION EVIDENCE
-              </span>
-            </div>
-            <span aria-hidden="true">↗︎</span>
-          </a>
-          <a
-            className="trust-row"
-            href="https://github.com/ozankenangungor/release-engineer/blob/main/SECURITY.md"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span className="trust-number">03</span>
-            <div>
-              <h3>The boundaries stay visible.</h3>
-              <p>
-                Public PRs, bounded context and no guarantee of release safety.
-                Privacy and responsible disclosure are documented.
-              </p>
-              <span className="trust-source">SECURITY & PRODUCT SCOPE</span>
-            </div>
-            <span aria-hidden="true">↗︎</span>
+        <div className="evidence-cards">
+          <article>
+            <h3>Claude integration</h3>
+            <p>
+              The official Anthropic SDK, strict report validation and
+              deterministic coverage safeguards. An incomplete context cannot
+              receive a merge recommendation.
+            </p>
+            <a
+              className="text-link"
+              href="https://github.com/ozankenangungor/release-engineer/blob/main/src/lib/claude.ts"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Inspect the review engine ↗︎
+            </a>
+          </article>
+          <article>
+            <h3>Evaluation, including failures</h3>
+            <p>
+              The October 7 synthetic run recorded 22 PASS / 10 FAIL and one
+              critical violation across 32 cases. Historical synthetic results
+              are not real-world accuracy.
+            </p>
+            <a
+              className="text-link"
+              href="https://github.com/ozankenangungor/release-engineer/blob/main/docs/live-evaluation-evidence.md"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Methodology and failures ↗︎
+            </a>
+          </article>
+          <article>
+            <h3>A real workflow observation</h3>
+            <p>
+              A founder-run Rails documentation PR check returned no findings.
+              The original report was not retained. This demonstrates a reported
+              workflow, not bug detection or external validation.
+            </p>
+            <Link
+              className="text-link"
+              href="/case-studies/rails-doc-typo-58968"
+            >
+              Read the observation →
+            </Link>
+          </article>
+        </div>
+      </section>
+      <section
+        aria-labelledby="founder-title"
+        className="product-founder section-stage"
+      >
+        <div>
+          <p className="section-kicker">INDEPENDENTLY BUILT & OPERATED</p>
+          <h2 id="founder-title">Built by Ozan Kenan Güngör.</h2>
+          <p>
+            Launched in October 2026 in Ankara, Türkiye. Self-funded early beta,
+            with no external investment. No legal company has been incorporated
+            or registered.
+          </p>
+        </div>
+        <div className="founder-links">
+          <Link href="/about" className="text-link">
+            About the project →
+          </Link>
+          <Link href="/about#beta" className="text-link">
+            Share beta feedback →
+          </Link>
+          <a className="text-link" href="mailto:founder@releaseengineer.tech">
+            founder@releaseengineer.tech
           </a>
         </div>
       </section>
-      <div className="decision-banner" data-reveal="0">
-        <div>
-          <p className="section-kicker">HUMAN JUDGMENT, ALWAYS</p>
-          <h2>Your release decision stays yours.</h2>
-          <p>
-            Verify findings, run your tests and use human review before merging.
-          </p>
-        </div>
-        <Link href="/about#beta" className="secondary-action">
-          Share beta feedback <span aria-hidden="true">↗︎</span>
-        </Link>
-      </div>
     </main>
   );
 }

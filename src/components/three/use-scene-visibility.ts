@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export function useSceneVisibility(paused: boolean) {
+export function useSceneVisibility(paused: boolean, enabled: boolean) {
   const container = useRef<HTMLDivElement>(null);
   const [eligible, setEligible] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -18,9 +18,9 @@ export function useSceneVisibility(paused: boolean) {
       clearTimeout(timer);
       const allowed = !reduced.matches && !colors.matches;
       const shown = inView && document.visibilityState === "visible";
-      setMotionAllowed(allowed);
+      setMotionAllowed(allowed && desktop.matches);
       setVisible(shown);
-      if (!allowed || !desktop.matches) {
+      if (!enabled || !allowed || !desktop.matches) {
         setEligible(false);
         return;
       }
@@ -63,11 +63,11 @@ export function useSceneVisibility(paused: boolean) {
       );
       document.removeEventListener("visibilitychange", update);
     };
-  }, []);
+  }, [enabled]);
   return {
     container,
     eligible,
     motionAllowed,
-    active: visible && motionAllowed && !paused,
+    active: enabled && visible && motionAllowed && !paused,
   };
 }
