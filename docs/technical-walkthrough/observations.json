@@ -1,0 +1,341 @@
+{
+  "schemaVersion": 1,
+  "kind": "assistant_executed_upstream_technical_checks",
+  "startedAtUtc": "2026-10-09T21:05:25.329371+00:00",
+  "finishedAtUtc": "2026-10-09T21:05:45.773079+00:00",
+  "environment": {
+    "platform": "Linux",
+    "architecture": "x86_64",
+    "node": "v26.10.0"
+  },
+  "sourceSnapshots": [
+    {
+      "repository": "colinhacks/zod",
+      "prNumber": 6645,
+      "headSha": "e2e410e447183db267cb94d7ab1892de9e513289",
+      "baseSha": "004d800c9e3cd4c79930f55aa4ad080225b22efd",
+      "snapshots": [
+        {
+          "variant": "before",
+          "sha": "004d800c9e3cd4c79930f55aa4ad080225b22efd",
+          "archiveSha256": "61fa06254773897bb7121122c497bffcfa2ad7e0d9cebdb5577eb1f3e277f405",
+          "retainedSourceFiles": 335
+        },
+        {
+          "variant": "after",
+          "sha": "e2e410e447183db267cb94d7ab1892de9e513289",
+          "archiveSha256": "581123efdf4598c3e92a608e58c5a5e6a20a13c68bf388d1c43b03be979b03e6",
+          "retainedSourceFiles": 335
+        }
+      ]
+    },
+    {
+      "repository": "honojs/hono",
+      "prNumber": 5536,
+      "headSha": "f7d4c67c5b887396b04dd7c09d41855eb0e772fa",
+      "baseSha": "cc92a59f60caf7fe4f61cd01d0d6afb66426c6ae",
+      "snapshots": [
+        {
+          "variant": "before",
+          "sha": "cc92a59f60caf7fe4f61cd01d0d6afb66426c6ae",
+          "archiveSha256": "2fd387c08be9f423f1be4eca7d285f8f2945043b76e3330d6c6eaca113b81810",
+          "retainedSourceFiles": 262
+        },
+        {
+          "variant": "after",
+          "sha": "f7d4c67c5b887396b04dd7c09d41855eb0e772fa",
+          "archiveSha256": "863367ff68ef7ccc570ea637ba42d3c1f3e5db15e43c76e0d4d371e1c2a14662",
+          "retainedSourceFiles": 262
+        }
+      ]
+    }
+  ],
+  "bunAsset": {
+    "version": "1.4.2",
+    "assetUrl": "https://github.com/oven-sh/bun/releases/download/bun-v1.4.2/bun-linux-x64-baseline.zip",
+    "assetSha256": "c678040f14fe0440eb839d37cbd0ce4c051a32da72806ac97de6a6aab6bf728f"
+  },
+  "dependencyLockSha256": "7d68d7bd7462d630d41b60a895fb795745539cef0824cede23135f19e64c76c4",
+  "zodCompilerProbes": [
+    {
+      "compilerPackageVersion": "5.9.3",
+      "compilerVersionOutput": "Version 5.9.3",
+      "variant": "before",
+      "probe": "record-consumer",
+      "exitCode": 0,
+      "diagnostics": "",
+      "command": [
+        "node",
+        "node_modules/ts-legacy/bin/tsc",
+        "--project",
+        "probes/zod/before/record-consumer.json",
+        "--pretty",
+        "false"
+      ]
+    },
+    {
+      "compilerPackageVersion": "5.9.3",
+      "compilerVersionOutput": "Version 5.9.3",
+      "variant": "before",
+      "probe": "internal-extension",
+      "exitCode": 0,
+      "diagnostics": "",
+      "command": [
+        "node",
+        "node_modules/ts-legacy/bin/tsc",
+        "--project",
+        "probes/zod/before/internal-extension.json",
+        "--pretty",
+        "false"
+      ]
+    },
+    {
+      "compilerPackageVersion": "5.9.3",
+      "compilerVersionOutput": "Version 5.9.3",
+      "variant": "before",
+      "probe": "recursive-json",
+      "exitCode": 0,
+      "diagnostics": "",
+      "command": [
+        "node",
+        "node_modules/ts-legacy/bin/tsc",
+        "--project",
+        "probes/zod/before/recursive-json.json",
+        "--pretty",
+        "false"
+      ]
+    },
+    {
+      "compilerPackageVersion": "5.9.3",
+      "compilerVersionOutput": "Version 5.9.3",
+      "variant": "after",
+      "probe": "record-consumer",
+      "exitCode": 0,
+      "diagnostics": "",
+      "command": [
+        "node",
+        "node_modules/ts-legacy/bin/tsc",
+        "--project",
+        "probes/zod/after/record-consumer.json",
+        "--pretty",
+        "false"
+      ]
+    },
+    {
+      "compilerPackageVersion": "5.9.3",
+      "compilerVersionOutput": "Version 5.9.3",
+      "variant": "after",
+      "probe": "internal-extension",
+      "exitCode": 0,
+      "diagnostics": "",
+      "command": [
+        "node",
+        "node_modules/ts-legacy/bin/tsc",
+        "--project",
+        "probes/zod/after/internal-extension.json",
+        "--pretty",
+        "false"
+      ]
+    },
+    {
+      "compilerPackageVersion": "5.9.3",
+      "compilerVersionOutput": "Version 5.9.3",
+      "variant": "after",
+      "probe": "recursive-json",
+      "exitCode": 0,
+      "diagnostics": "",
+      "command": [
+        "node",
+        "node_modules/ts-legacy/bin/tsc",
+        "--project",
+        "probes/zod/after/recursive-json.json",
+        "--pretty",
+        "false"
+      ]
+    },
+    {
+      "compilerPackageVersion": "7.1.0-dev.20261009.1",
+      "compilerVersionOutput": "Version 7.1.0-dev.20261009.1",
+      "variant": "before",
+      "probe": "record-consumer",
+      "exitCode": 2,
+      "diagnostics": "sources/zod/before/packages/zod/src/v4/classic/schemas.ts(2906,47): error TS5115: Instantiations of the following types appear infinitely circular: 'IsOptionalIn', '$ZodTypeInternals', '$InferZodRecordInput'.",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--project",
+        "probes/zod/before/record-consumer.json",
+        "--pretty",
+        "false"
+      ]
+    },
+    {
+      "compilerPackageVersion": "7.1.0-dev.20261009.1",
+      "compilerVersionOutput": "Version 7.1.0-dev.20261009.1",
+      "variant": "before",
+      "probe": "internal-extension",
+      "exitCode": 0,
+      "diagnostics": "",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--project",
+        "probes/zod/before/internal-extension.json",
+        "--pretty",
+        "false"
+      ]
+    },
+    {
+      "compilerPackageVersion": "7.1.0-dev.20261009.1",
+      "compilerVersionOutput": "Version 7.1.0-dev.20261009.1",
+      "variant": "before",
+      "probe": "recursive-json",
+      "exitCode": 2,
+      "diagnostics": "sources/zod/before/packages/zod/src/v4/classic/schemas.ts(2906,47): error TS5115: Instantiations of the following types appear infinitely circular: 'IsOptionalIn', '$ZodTypeInternals', '$InferZodRecordInput'.",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--project",
+        "probes/zod/before/recursive-json.json",
+        "--pretty",
+        "false"
+      ]
+    },
+    {
+      "compilerPackageVersion": "7.1.0-dev.20261009.1",
+      "compilerVersionOutput": "Version 7.1.0-dev.20261009.1",
+      "variant": "after",
+      "probe": "record-consumer",
+      "exitCode": 0,
+      "diagnostics": "",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--project",
+        "probes/zod/after/record-consumer.json",
+        "--pretty",
+        "false"
+      ]
+    },
+    {
+      "compilerPackageVersion": "7.1.0-dev.20261009.1",
+      "compilerVersionOutput": "Version 7.1.0-dev.20261009.1",
+      "variant": "after",
+      "probe": "internal-extension",
+      "exitCode": 0,
+      "diagnostics": "",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--project",
+        "probes/zod/after/internal-extension.json",
+        "--pretty",
+        "false"
+      ]
+    },
+    {
+      "compilerPackageVersion": "7.1.0-dev.20261009.1",
+      "compilerVersionOutput": "Version 7.1.0-dev.20261009.1",
+      "variant": "after",
+      "probe": "recursive-json",
+      "exitCode": 0,
+      "diagnostics": "",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--project",
+        "probes/zod/after/recursive-json.json",
+        "--pretty",
+        "false"
+      ]
+    }
+  ],
+  "honoBunProbe": {
+    "exitCode": 0,
+    "command": [
+      "bun@1.4.2",
+      "run",
+      "probes/hono-behavior.ts"
+    ],
+    "output": {
+      "runtime": "Bun 1.4.2",
+      "kind": "assistant_executed_upstream_behavior_probe",
+      "claudeCalls": 0,
+      "networkRequestsByProbe": 0,
+      "results": [
+        {
+          "variant": "before",
+          "json": {
+            "sameObject": true,
+            "secondName": "mutated"
+          },
+          "formData": {
+            "status": 500,
+            "text": "controlled probe error",
+            "error": "Can't decode form data from body because of incorrect MIME type/boundary"
+          },
+          "failedInputReadsRejected": [
+            true,
+            true
+          ]
+        },
+        {
+          "variant": "after",
+          "json": {
+            "sameObject": false,
+            "secondName": "original"
+          },
+          "formData": {
+            "status": 200,
+            "text": "walkthrough",
+            "error": null
+          },
+          "failedInputReadsRejected": [
+            true,
+            true
+          ]
+        }
+      ],
+      "limitation": "Three constructed in-process request objects per revision; no end-to-end product use, participant validation or lazy-boundary network-abort coverage."
+    },
+    "recheckedAtUtc": "2026-10-09T21:07:05.346303+00:00"
+  },
+  "honoUpstreamNodeTests": {
+    "exitCode": 0,
+    "command": [
+      "node",
+      "node_modules/vitest/vitest.mjs",
+      "run",
+      "--config",
+      "vitest.config.mts"
+    ],
+    "diagnostics": "JSON report written to <walkthrough>/hono-upstream-node-tests.json",
+    "totalTests": 106,
+    "passedTests": 106,
+    "failedTests": 0,
+    "success": true,
+    "suites": [
+      {
+        "name": "sources/hono/after/src/request.test.ts",
+        "status": "passed",
+        "assertions": 55
+      },
+      {
+        "name": "sources/hono/before/src/request.test.ts",
+        "status": "passed",
+        "assertions": 51
+      }
+    ]
+  },
+  "claudeCalls": 0,
+  "productionAnalysisRequests": 0,
+  "externalParticipantsEstablished": 0,
+  "qualification": "Assistant-executed source/behavior checks on two public PR snapshots, not a Release Engineer review, a complete compatibility proof, a live Claude evaluation or external user validation. Compiler failures and limited reproductions are retained.",
+  "methodNotes": [
+    "Sources are the GitHub-reported PR base and head snapshots. No upstream package install/build script is run.",
+    "Initial internal-extension probe used the core input defaults (unknown) but asserted a narrower input base. It failed in both revisions. The initial result is preserved privately. The final probe explicitly sets string and number inputs; its wrong-output assertion remains.",
+    "Compiler executables are addressed by package path and version-checked, because npm aliases can share the tsc shim.",
+    "The two TypeScript 7.1 failures are retained expected before-revision diagnostics, not omitted from the comparison."
+  ],
+  "honoBunProbeSourceSha256": "cf3946f4872791afd51667f61485f77b4beb8bf6801c435573b387fe24ad9f31"
+}
