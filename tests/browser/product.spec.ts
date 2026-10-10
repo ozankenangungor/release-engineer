@@ -425,7 +425,44 @@ test("robots, sitemap, social image and internal links are accessible", async ({
 });
 
 test.describe("server-rendered public content", () => {
-  test.use({ javaScriptEnabled: false });
+  test.use({ javaScriptEnabled: false, colorScheme: "light" });
+  test("the black theme is readable on public routes before hydration with light OS preferences", async ({
+    page,
+  }) => {
+    for (const path of [
+      "/",
+      "/about",
+      "/evidence",
+      "/pilot",
+      "/case-studies",
+      "/case-studies/rails-doc-typo-58968",
+      "/privacy",
+      "/terms",
+    ]) {
+      await page.goto(path);
+      await expect(page.locator('meta[name="color-scheme"]')).toHaveAttribute(
+        "content",
+        "dark",
+      );
+      const colors = await page.evaluate(() => {
+        const style = getComputedStyle(document.body);
+        const rgb = (value: string) =>
+          value.match(/\d+/g)!.slice(0, 3).map(Number);
+        return {
+          lightPreference: matchMedia("(prefers-color-scheme: light)").matches,
+          scheme: getComputedStyle(document.documentElement).colorScheme,
+          background: rgb(style.backgroundColor),
+          foreground: rgb(style.color),
+        };
+      });
+      expect(colors.lightPreference).toBe(true);
+      expect(colors.scheme).toBe("dark");
+      expect(Math.max(...colors.background)).toBeLessThan(32);
+      expect(Math.min(...colors.foreground)).toBeGreaterThan(200);
+      await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    }
+  });
+
   test("the product, preview and evidence are readable without JavaScript", async ({
     page,
   }) => {
