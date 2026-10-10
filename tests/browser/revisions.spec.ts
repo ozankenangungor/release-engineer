@@ -35,5 +35,5 @@ test("invalid input can be corrected and a different PR cannot be compared",asyn
 test("Daniel outcome states concrete developer actions and links to the local workflow",async({page})=>{
   await page.goto("/case-studies/webhook-review");await expect(page.getByRole("heading",{level:1})).toContainText("stronger validation");
   await expect(page.locator("main")).toContainText("validate=True");await expect(page.locator("main")).toContainText("developer ran those tests");
-  await expect(page.locator("main")).toContainText("developer-reported outcome");await page.getByRole("link",{name:"Compare reviews",exact:false}).click();await expect(page).toHaveURL(/\/compare$/);
+  await expect(page.locator("main")).toContainText("developer-reported outcome");await page.getByRole("main").getByRole("link",{name:"Compare reviews",exact:false}).click();await expect(page).toHaveURL(/\/compare$/);
 });
