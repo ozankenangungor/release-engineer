@@ -10,6 +10,9 @@ describe("delivered review evidence boundaries", () => {
     "CI is green.",
     "The test suite was executed.",
     "The tests confirm compatibility.",
+    "The tests confirmed compatibility.",
+    "Tests have verified that the migration is safe.",
+    "The tests proved the new handler works.",
     "We inspected the full repository.",
     "The full codebase has been reviewed.",
   ])("rejects an explicit unsupported execution assertion: %s", (summary) => {
@@ -23,6 +26,7 @@ describe("delivered review evidence boundaries", () => {
     "If CI is green, continue your human review.",
     "Ensure all tests passed before you merge.",
     "The PR description claims that tests passed, but this is unverified.",
+    "The PR description claims tests confirmed compatibility, but this is unverified.",
     "Tests do not prove that this release is safe.",
     "The visible test adds an assertion for the empty input case.",
     "There is no evidence that tests passed.",

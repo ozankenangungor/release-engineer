@@ -31,7 +31,7 @@ for (const width of [1440, 1120, 1024, 390, 360]) {
     await expect(free).toContainText("10 reviews / day");
     await expect(free).toContainText("Available now");
     await expect(pro).toContainText("Sandbox preview");
-    await expect(pro).toContainText("100 reviews / day");
+    await expect(pro).toContainText("100 reviews / month");
     await expect(free.locator(".pricing-price")).toHaveText("$0");
     await expect(pro.locator(".pricing-price")).toHaveText("$9");
     await expect(pro.getByRole("link", { name: "Request Pro access" })).toHaveAttribute("href", /^mailto:founder@releaseengineer\.tech\?subject=/);
@@ -39,7 +39,8 @@ for (const width of [1440, 1120, 1024, 390, 360]) {
     await expect(pro).toContainText("Use test cards in this checkout preview.");
     await expect(pro).toContainText("Sandbox checkout · $9/month");
     await expect(page.locator(".pricing-table-scroll thead th")).toHaveCount(3);
-    await expect(page.locator(".pricing-page")).not.toContainText(/Team|\$19|\$79|Planned|30 reviews/);
+    await expect(page.locator(".pricing-page")).not.toContainText(/Team|\$19|\$79|Planned/);
+    await expect(free).toContainText("Up to 30 / UTC month");
     await expect(page.getByRole("button", { name: /buy|subscribe/i })).toHaveCount(0);
     const question = page.getByText("How do the 10 free reviews work?", { exact: false });
     await question.focus();
@@ -67,7 +68,7 @@ test("the tenth successful review counts, persists after reload and blocks an el
   await page.getByRole("button", { name: "Load example PR" }).click();
   await page.getByRole("button", { name: "Analyze PR", exact: true }).click();
   await expect(page.getByRole("region", { name: "Completed release review" })).toBeVisible();
-  await expect(page.locator("#free-allowance")).toContainText("Daily limit reached");
+  await expect(page.locator("#free-allowance")).toContainText("Review limit reached");
   await expect(page.getByRole("button", { name: "Analyze PR", exact: true })).toBeDisabled();
   await page.reload();
   await expect(page.getByRole("button", { name: "Analyze PR", exact: true })).toBeDisabled();
@@ -135,8 +136,8 @@ test("tabs share the allowance and cannot spend the last review concurrently", a
   await other.getByRole("button", { name: "Analyze PR", exact: true }).click();
   await expect(other.getByRole("alert", { name: "Analysis error" })).toContainText("Another review is running");
   finish();
-  await expect(page.locator("#free-allowance")).toContainText("Daily limit reached");
-  await expect(other.locator("#free-allowance")).toContainText("Daily limit reached");
+  await expect(page.locator("#free-allowance")).toContainText("Review limit reached");
+  await expect(other.locator("#free-allowance")).toContainText("Review limit reached");
   expect(calls).toBe(1);
 });
 
@@ -165,4 +166,20 @@ test("storage becoming unwritable preserves the completed report and prevents an
   await page.getByRole("button", { name: "Analyze PR", exact: true }).click();
   await expect(page.getByRole("alert", { name: "Analysis error" })).toContainText("Enable browser storage");
   expect(calls).toBe(1);
+});
+
+
+test("a guest monthly limit survives midnight and resets at the next UTC month", async ({page}) => {
+  await page.clock.install({ time: new Date("2026-10-31T23:59:30Z") });
+  await page.emulateMedia({reducedMotion:"reduce"});
+  await page.goto("/");
+  await page.evaluate(key=>localStorage.setItem(key,JSON.stringify({day:"2026-10-31",used:0,month:"2026-10",monthlyUsed:30})),FREE_USAGE_KEY);
+  await page.reload();
+  await expect(page.getByRole("button",{name:"Analyze PR",exact:true})).toBeDisabled();
+  await page.getByLabel("GitHub pull request URL").fill("https://github.com/octocat/hello-world/pull/1");
+  await page.locator("#analyze form").evaluate(form=>(form as HTMLFormElement).requestSubmit());
+  await expect(page.getByRole("alert",{name:"Analysis error"})).toContainText("month's 30 free reviews");
+  await page.clock.fastForward(60_000);
+  await expect(page.getByRole("button",{name:"Analyze PR",exact:true})).toBeEnabled();
+  await expect(page.locator("#free-allowance")).toContainText("10 of 10");
 });

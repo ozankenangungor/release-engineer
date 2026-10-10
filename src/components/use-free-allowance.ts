@@ -1,12 +1,12 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { FREE_DAILY_REVIEWS, FREE_USAGE_KEY, readFreeUsage } from "@/lib/free-plan";
+import { FREE_DAILY_REVIEWS, FREE_MONTHLY_REVIEWS, FREE_USAGE_KEY, readFreeUsage, readMonthlyFreeUsage } from "@/lib/free-plan";
 
 const changed = "release-engineer:free-usage-changed";
 
 function remaining() {
-  try { return FREE_DAILY_REVIEWS - readFreeUsage(window.localStorage).used; }
+  try { return Math.min(FREE_DAILY_REVIEWS - readFreeUsage(window.localStorage).used, FREE_MONTHLY_REVIEWS - readMonthlyFreeUsage(window.localStorage).monthlyUsed); }
   catch { return null; }
 }
 

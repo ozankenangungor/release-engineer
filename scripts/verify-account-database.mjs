@@ -9,12 +9,7 @@ if (!process.argv[2]) throw new Error("Pass a private environment file.");
 const env = parseEnv(fs.readFileSync(process.argv[2], "utf8"));
 const sql = neon(env.DATABASE_URL_UNPOOLED);
 const schema = `account_verification_${Date.now()}`;
-const source = fs
-  .readFileSync(
-    new URL("../db/migrations/001_accounts.sql", import.meta.url),
-    "utf8",
-  )
-  .replaceAll("release_engineer", schema);
+const source = ["001_accounts.sql", "002_product_measurement.sql"].map(name => fs.readFileSync(new URL(`../db/migrations/${name}`, import.meta.url), "utf8")).join("\n-- statement-breakpoint\n").replaceAll("release_engineer", schema);
 let assertions = 0;
 const check = (actual, expected) => {
   assert.deepEqual(actual, expected);
@@ -115,11 +110,13 @@ try {
     await finish("pro", proRace.find((r) => r.reservation).reservation, true),
     true,
   );
-  check((await reserve("pro", "pri_test")).error, "DAILY_LIMIT");
+  check((await reserve("pro", "pri_test")).error, "MONTHLY_LIMIT");
   await query(
     "UPDATE $SCHEMA.reviews SET utc_day=utc_day-1 WHERE user_id='pro'",
   );
   check((await usage("pro", "pri_test")).used, 0);
+  check((await usage("pro", "pri_test")).remaining, 0);
+  await query("UPDATE $SCHEMA.reviews SET utc_day=date_trunc('month',now() AT TIME ZONE 'UTC')::date-1 WHERE user_id='pro'");
   check((await usage("pro", "pri_test")).remaining, 100);
   const claimCheckout = (id) =>
     query(
@@ -140,6 +137,18 @@ try {
     "UPDATE $SCHEMA.accounts SET checkout_lock_until=now()-interval '1 second' WHERE user_id='pro'",
   );
   check((await claimCheckout(randomUUID())).length, 1);
+  const budgetReserve = async (scope = "production", amount = 1000000) => (await query("SELECT $SCHEMA.reserve_inference($1::uuid,$2,NULL,'claude-sonnet-5-5',NULL,$3,2000000) AS admitted", [randomUUID(),scope,amount]))[0].admitted;
+  const budgetRace = await Promise.all(Array.from({ length: 6 }, () => budgetReserve()));
+  check(budgetRace.filter(Boolean).length, 2);
+  check(await budgetReserve(), false);
+  check(await budgetReserve("preview"), true);
+  await query("UPDATE $SCHEMA.inference_usage SET cost_micros=10000,cost_known=true,status='succeeded' WHERE id=(SELECT id FROM $SCHEMA.inference_usage WHERE scope='production' LIMIT 1)");
+  check(await budgetReserve("production",990000), true);
+  check(await budgetReserve(), false);
+  await query("INSERT INTO $SCHEMA.accounts(user_id) VALUES ('monthly-free')");
+  await query("INSERT INTO $SCHEMA.reviews(id,user_id,status,utc_day) SELECT gen_random_uuid(),'monthly-free','completed',date_trunc('month',now() AT TIME ZONE 'UTC')::date FROM generate_series(1,30)");
+  check((await reserve("monthly-free")).error, "MONTHLY_LIMIT");
+  check((await usage("monthly-free")).monthly.limit, 30);
   console.log(
     JSON.stringify({
       assertions,

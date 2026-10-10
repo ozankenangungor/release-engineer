@@ -7,6 +7,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/",
     "/about",
     "/pricing",
+    "/compare",
+    "/case-studies/webhook-review",
     "/evidence",
     "/feedback",
     "/pilot",

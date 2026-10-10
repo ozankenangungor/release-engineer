@@ -34,6 +34,7 @@ export default function Privacy() {
         Last updated: <time dateTime="2026-10-11">October 11, 2026</time>
       </p>
       <div className="mt-8 space-y-7 text-sm leading-7 text-muted">
+        <section><h2 className="mb-2 text-base font-medium text-ink">Usage measurement and local comparison</h2><p>The application records an inference ID, UTC time, environment, model, product revision, account ID when signed in, server outcome, duration, partial-context status and provider token counts. Estimated API cost is calculated using a documented tariff. No PR identifiers, code, report text or free-text notes are stored in these records. Records older than 90 days are deleted on subsequent inference admission; account deletion also removes linked usage records.</p><p className="mt-3">Signed-in reviewers can explicitly submit a usefulness choice and action choice for their own completed production review. These are user reports, not independent verification. Reports and verification files opened on Compare reviews are read locally in tab memory, never uploaded or saved. Reloading clears the comparison. The guest counter stores the UTC day/month and review counts in local storage.</p></section>
         <section>
           <h2 className="mb-2 text-base font-medium text-ink">
             Who operates this product
@@ -89,7 +90,7 @@ export default function Privacy() {
             reports. They are held in memory while processing and displayed in
             your browser. Optional accounts use Clerk for identity, verification,
             passwords, recovery and session cookies, and Neon for account IDs,
-            daily review usage and subscription state. There are no application
+            daily and monthly review usage and subscription state. There are no application
             advertising trackers. Our hosting provider, GitHub and
             Anthropic may process request metadata or contents under their own
             policies; this application does not control their retention.

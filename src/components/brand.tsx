@@ -87,6 +87,7 @@ export function Footer() {
             <p className="footer-label">PRODUCT</p>
             <Link href="/#report-preview">Product</Link>
             <Link href="/pricing">Pricing</Link>
+            <Link href="/compare">Compare reviews</Link>
             <Link href="/account" prefetch={false}>Account</Link>
             <Link href="/evidence">Evidence</Link>
             <Link href="/feedback">Feedback</Link>

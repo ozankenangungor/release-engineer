@@ -12,10 +12,7 @@ const env = parseEnv(fs.readFileSync(file, "utf8"));
 if (!env.DATABASE_URL_UNPOOLED)
   throw new Error("Direct database connection required.");
 const sql = neon(env.DATABASE_URL_UNPOOLED);
-const source = fs.readFileSync(
-  new URL("../db/migrations/001_accounts.sql", import.meta.url),
-  "utf8",
-);
+const source = ["001_accounts.sql", "002_product_measurement.sql"].map((name) => fs.readFileSync(new URL(`../db/migrations/${name}`, import.meta.url), "utf8")).join("\n-- statement-breakpoint\n");
 await sql.transaction(
   source.split("-- statement-breakpoint").map((s) => sql.query(s)),
   {

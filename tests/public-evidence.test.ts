@@ -128,6 +128,7 @@ describe("publication boundaries", () => {
       (match) => match[1],
     );
     expect(headings).toEqual([
+      "A review followed by code and test improvements.",
       "Working software, inspectable engineering.",
       "Public changes, checked against pinned sources.",
       "Approved developer feedback.",

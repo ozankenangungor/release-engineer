@@ -34,8 +34,9 @@ export type ReviewExecution = {
 export async function reviewPullRequest(
   context: ReviewContext,
   signal?: AbortSignal,
+  onResponse?: (metadata: ReviewMetadata) => void,
 ): Promise<Review> {
-  return (await reviewPullRequestWithMetadata(context, signal)).review;
+  return (await reviewPullRequestWithMetadata(context, signal, { onResponse })).review;
 }
 
 export async function reviewPullRequestWithMetadata(

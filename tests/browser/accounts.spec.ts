@@ -76,7 +76,7 @@ test("signed-in Free daily exhaustion blocks submission in a fresh browser", asy
   );
   await page.goto("/");
   await expect(page.locator("#free-allowance")).toContainText(
-    "Daily limit reached",
+    "Review limit reached",
   );
   await expect(page.locator("#free-allowance")).toContainText("Your account");
   await expect(
@@ -144,3 +144,29 @@ for (const width of [360, 1024]) {
     ).toBe(true);
   });
 }
+
+
+test("signed-in monthly exhaustion blocks analysis with daily capacity still available",async({page})=>{
+  const account=state("pro",0);
+  await page.route("**/api/account",route=>route.fulfill({json:{...account,usage:{...account.usage,monthly:{limit:100,used:100,remaining:0,resetsAt:"2026-11-01T00:00:00Z"}}}}));
+  await page.goto("/");
+  await expect(page.getByRole("button",{name:"Analyze PR",exact:true})).toBeDisabled();
+  await expect(page.locator("#free-allowance")).toContainText("Review limit reached");
+  await expect(page.locator(".analysis-label-row")).toContainText("Pro · 100/month");
+});
+
+test("usage feedback sends only explicit choices and the review record ID",async({page})=>{
+  await page.route("**/api/account",route=>route.fulfill({json:state("free",0)}));
+  const recordId="00000000-0000-4000-a000-000000000002";
+  await page.route("**/api/analyze",route=>route.fulfill({headers:{"X-Review-Record":recordId},json:handoffResponse()}));
+  let submitted:unknown=null;
+  await page.route("**/api/account/review-feedback",async route=>{submitted=route.request().postDataJSON();await route.fulfill({json:{saved:true}});});
+  await page.goto("/");await page.getByRole("button",{name:"Load example PR"}).click();await page.getByRole("button",{name:"Analyze PR",exact:true}).click();
+  const feedback=page.locator(".review-usage-feedback");
+  await expect(feedback.getByRole("combobox",{name:"Usefulness",exact:true})).toHaveValue("");
+  await feedback.getByRole("combobox",{name:"Usefulness",exact:true}).selectOption("mixed");
+  await feedback.getByLabel("What did you do?").selectOption("added_or_changed_tests");
+  await feedback.getByRole("button",{name:"Share usage-only feedback"}).click();
+  await expect(feedback.getByRole("status")).toContainText("Feedback saved");
+  expect(submitted).toEqual({recordId,usefulness:"mixed",action:"added_or_changed_tests"});
+});

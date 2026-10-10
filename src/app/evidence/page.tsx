@@ -52,6 +52,10 @@ export default function Evidence() {
         </div>
       </div>
       <div className="evidence-ledger">
+        <section id="developer-feedback" className="evidence-entry" data-reveal="0">
+          <span className="evidence-status">DEVELOPER-REPORTED OUTCOME</span>
+          <div><h2>A review followed by code and test improvements.</h2><p>Daniel Reyes reported tightening Base64 secret validation, adding two edge-case tests and noticing a 400/422 contract change after a webhook review. His written feedback explains the changes he made.</p><Link href="/case-studies/webhook-review" className="text-link">Daniel’s outcome, actions & scope →</Link></div>
+        </section>
         <section className="evidence-entry" data-reveal="0">
           <span className="evidence-status">PUBLIC PRODUCT & SOURCE</span>
           <div>
@@ -252,13 +256,13 @@ export default function Evidence() {
           <div>
             <h2>How live usage is measured.</h2>
             <p>
-              The server emits privacy-safe operational events when an analysis
+              The server records content-free inference usage and emits operational events when an analysis
               starts, succeeds or fails. A success means the server prepared a
               schema-valid report. It does not prove correctness, browser
               delivery, a unique developer or a customer.
             </p>
             <p className="mt-3">
-              No verified production count is published. A future count requires
+              No verified production count is published. Publishing a count requires
               a preserved, complete production log window, deduplication and
               explicit exclusion or disclosure of operator testing.
             </p>

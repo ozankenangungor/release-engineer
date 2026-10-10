@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import type { AnalysisResponse } from "@/lib/review-schema";
+import { reviewSnapshot } from "@/lib/review-comparison";
 import {
   createVerificationRecord, EMPTY_FEEDBACK, handoffFilename, reportText,
   type Feedback, type FindingAssessment, type ReviewReceipt,
@@ -62,6 +63,15 @@ export function ReviewHandoff({ result, receivedAt, interfaceRevision }: {
             setError("");
           } catch { setError("The report could not be exported. Please try again."); }
         }}>Download report <span aria-hidden="true">↓</span></button>
+      </div>
+      <div className="mt-5 flex flex-wrap items-center gap-5">
+        <button className="secondary-action" type="button" onClick={() => {
+          try {
+            download(JSON.stringify(reviewSnapshot(result), null, 2), "application/json;charset=utf-8", handoffFilename(result, "verification").replace("-verification.json", "-review.json"));
+            setStatus("Review JSON prepared for download. Open two review files on Compare reviews to follow a revision."); setError("");
+          } catch { setError("The review JSON could not be exported. Please try again."); }
+        }}>Download Review JSON ↓</button>
+        <Link href="/compare" className="text-link">Compare PR revisions ↗︎</Link>
       </div>
       <details className="verification-details">
         <summary>Record your human verification <span aria-hidden="true">+</span></summary>

@@ -50,6 +50,8 @@ export async function reserveAccountReview(userId: string) {
   const rows =
     await sql`SELECT release_engineer.reserve_review(${userId}, ${id}::uuid, ${liveEntitlementPrice()}) AS usage`;
   const data = rows[0]?.usage;
+  if (data?.error === "MONTHLY_LIMIT")
+    throw new AnalysisError("MONTHLY_LIMIT", "Your account has reached its monthly review limit. Your monthly allowance resets on the first day of the next UTC month.", 429);
   if (data?.error === "DAILY_LIMIT")
     throw new AnalysisError(
       "DAILY_LIMIT",

@@ -20,10 +20,10 @@ describe("product clarity and evidence integrity", () => {
       /^Understand the change\.\s*Own the release\.$/,
     );
     expect(html).toContain(
-      "Claude-powered analysis for public GitHub pull requests",
+      "Claude-powered release-risk review for public GitHub pull requests",
     );
     expect(html).toContain(
-      "Surface breaking changes, regressions and testing gaps",
+      "Identify API contract changes, security concerns and testing gaps",
     );
     expect(html).toContain('href="#report-preview"');
     expect(html).toContain('href="/evidence"');
@@ -31,7 +31,10 @@ describe("product clarity and evidence integrity", () => {
     expect(html.indexOf('id="analyze"')).toBeLessThan(
       html.indexOf('id="report-preview"'),
     );
-    expect(html).not.toContain("<blockquote>");
+    expect(html.match(/<blockquote>/g)).toHaveLength(1);
+    expect(html).toContain("Daniel Reyes");
+    expect(html).toContain("Published with permission");
+    expect(html).toContain('href="/case-studies/webhook-review"');
   });
   it("keeps the authored preview separate from live and founder evidence", () => {
     const html = render(ReportPreview);

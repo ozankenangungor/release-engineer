@@ -89,6 +89,7 @@ export default function Feedback() {
                     )}
                   </div>
                 </figcaption>
+                {item.id === "daniel-reyes" && <Link href="/case-studies/webhook-review" className="text-link mt-5 inline-block">Read the review outcome ↗︎</Link>}
               </figure>
             ))}
           </div>

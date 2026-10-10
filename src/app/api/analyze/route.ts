@@ -14,6 +14,8 @@ import {
 import { startUsageRecord } from "@/lib/live-usage";
 import { accountIdentity } from "@/lib/account-auth";
 import { reserveAccountReview, finishAccountReview } from "@/lib/accounts";
+import { reserveInference, finishInference } from "@/lib/inference-measurement";
+import type { ReviewMetadata } from "@/lib/claude";
 
 export const runtime = "nodejs";
 export const maxDuration = 120;
@@ -88,6 +90,10 @@ export async function POST(request: Request) {
   let usage: ReturnType<typeof startUsageRecord> | undefined;
   let reservation: Awaited<ReturnType<typeof reserveAccountReview>> | undefined;
   let recorded = false;
+  let inference: Awaited<ReturnType<typeof reserveInference>> | null = null;
+  let modelMetadata: ReviewMetadata | null = null;
+  let inferenceRecorded = false;
+  let partialContext = false;
   try {
     assertBrowserOrigin(request);
     const input = requestSchema.safeParse(await readInput(request));
@@ -105,15 +111,19 @@ export async function POST(request: Request) {
     usage = startUsageRecord();
     const signal = AbortSignal.any([
       request.signal,
-      // Leave time inside the 120s route deadline to finalize account usage.
+      // Leave 25 seconds inside the 120s deadline for durable completion or rollback.
       reservation
-        ? AbortSignal.timeout(Math.max(1, 105_000 - (Date.now() - startedAt)))
+        ? AbortSignal.timeout(Math.max(1, 95_000 - (Date.now() - startedAt)))
         : AbortSignal.timeout(115_000),
     ]);
     signal.throwIfAborted();
     const pr = await getPullRequest(reference, signal);
     const context = buildReviewContext(pr);
-    const review = await reviewPullRequest(context, signal);
+    partialContext = context.coverage.partial;
+    signal.throwIfAborted();
+    inference = await reserveInference(userId, new TextEncoder().encode(context.json).byteLength);
+    signal.throwIfAborted();
+    const review = await reviewPullRequest(context, signal, (metadata) => { modelMetadata = metadata; });
     const pullRequest = {
       url: pr.url,
       owner: pr.owner,
@@ -137,9 +147,12 @@ export async function POST(request: Request) {
     if (reservation) {
       await finishAccountReview(reservation, true);
       signal.throwIfAborted();
-      recorded = true;
     }
-    const response = NextResponse.json(result, { headers: responseHeaders });
+    await finishInference(inference, true, modelMetadata, Date.now() - startedAt, partialContext);
+    inferenceRecorded = true;
+    signal.throwIfAborted();
+    recorded = true;
+    const response = NextResponse.json(result, { headers: { ...responseHeaders, "X-Review-Record": inference.id } });
     usage.succeeded({
       changedFileCount: pr.changedFileCount,
       includedFileCount: context.coverage.includedFiles,
@@ -170,6 +183,10 @@ export async function POST(request: Request) {
       } catch {
         /* fail closed until expiry */
       }
+    }
+    if (inference && !inferenceRecorded) {
+      try { await finishInference(inference, false, modelMetadata, Date.now() - startedAt, partialContext); }
+      catch { /* Keep the conservative reservation charged after an uncertain outcome. */ }
     }
     releaseSlot?.();
   }

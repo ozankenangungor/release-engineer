@@ -6,6 +6,7 @@ export const accountUsageSchema = z.object({
   pending: z.number().int().nonnegative(),
   remaining: z.number().int().nonnegative(),
   resetsAt: z.string(),
+  monthly: z.object({ limit: z.number().int().positive(), used: z.number().int().nonnegative(), remaining: z.number().int().nonnegative(), resetsAt: z.string() }).nullable().optional(),
 });
 export const accountStateSchema = z.object({
   usage: accountUsageSchema,

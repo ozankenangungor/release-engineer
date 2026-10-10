@@ -95,7 +95,7 @@ for (const width of [1440, 360]) {
       day: new Date().toISOString().slice(0, 10),
       key,
     }), FREE_USAGE_KEY)).toEqual({
-      local: [[FREE_USAGE_KEY, { day: new Date().toISOString().slice(0, 10), used: 1 }]],
+      local: [[FREE_USAGE_KEY, { day: new Date().toISOString().slice(0, 10), used: 1, month: new Date().toISOString().slice(0, 7), monthlyUsed: 1 }]],
       session: 0,
       day: new Date().toISOString().slice(0, 10),
       key: FREE_USAGE_KEY,

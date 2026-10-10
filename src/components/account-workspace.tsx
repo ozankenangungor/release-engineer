@@ -5,6 +5,7 @@ import { SignOutButton, useUser } from "@clerk/nextjs";
 import { z } from "zod";
 import type { Paddle } from "@paddle/paddle-js";
 import { useAccount } from "./account-context";
+import { PRO_MONTHLY_REVIEWS } from "@/lib/free-plan";
 
 export function AccountWorkspace() {
   const { account, error, refresh } = useAccount();
@@ -170,6 +171,7 @@ export function AccountWorkspace() {
               ? `${usage.used} completed${usage.pending ? " · 1 review in progress" : ""} · Resets at 00:00 UTC`
               : "Loading account usage…"}
           </p>
+          {usage?.monthly && <p>{usage.monthly.remaining} of {usage.monthly.limit} monthly reviews remaining · Resets {new Date(usage.monthly.resetsAt).toLocaleDateString("en-GB", { timeZone: "UTC" })}</p>}
           <Link className="account-primary" href="/#analyze">
             Analyze a public PR ↗︎
           </Link>
@@ -184,17 +186,16 @@ export function AccountWorkspace() {
           </h2>
           <p>
             {usage?.plan === "pro"
-              ? "100 public PR reviews a day, linked to your account."
-              : "10 public PR reviews a day, linked to your account."}
+              ? "100 public PR reviews per UTC calendar month, linked to your account."
+              : "10 public PR reviews a day, up to 30 per UTC month, linked to your account."}
           </p>
         </div>
         <div>
           <p className="account-plan-option">
-            Pro · $9/month · 100 reviews/day
+            Pro · $9/month · {PRO_MONTHLY_REVIEWS} reviews/month
           </p>
           <p>
-            Keep the same evidence and verification standard, with more daily
-            review capacity.
+            A defined monthly review budget with the same evidence and verification standard.
           </p>
           {account?.billing.environment === "sandbox" && (
             <p className="account-sandbox">
@@ -261,6 +262,9 @@ export function AccountWorkspace() {
             {message}
           </p>
         </div>
+      </section>
+      <section className="account-data">
+        <p className="section-kicker">REVIEW / REVISION</p><h2>Keep track of the next change.</h2><p>Export Review JSON after each analysis. Compare two records of the same PR in your browser, without uploading or storing the reports.</p><Link className="account-secondary" href="/compare">Compare PR revisions ↗︎</Link>
       </section>
       <section className="account-data">
         <p className="section-kicker">ACCOUNT DATA</p>

@@ -45,6 +45,11 @@ describe("device-local free review allowance", () => {
     const device = { getItem: () => null, setItem: () => { throw new Error("Blocked"); } };
     expect(() => prepareFreeReview(device, today)).toThrow("Blocked");
   });
+  it("preserves monthly usage across midnight and resets only at the next UTC month", () => {
+    const device = storage(JSON.stringify({ day: "2026-10-11", used: 2, month:"2026-10", monthlyUsed:30 }));
+    expect(() => prepareFreeReview(device, new Date("2026-10-12T00:00:00Z"))).toThrow("month's 30");
+    expect(() => prepareFreeReview(device, new Date("2026-11-01T00:00:00Z"))).not.toThrow();
+  });
   it("never represents more than ten completed reviews", () => {
     const device = storage(JSON.stringify({ day: "2026-10-11", used: 10 }));
     expect(completeFreeReview(device, today).used).toBe(10);

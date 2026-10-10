@@ -53,7 +53,7 @@ configuration disables account billing; it does not manufacture a subscription.
 ## Allowance and payment state
 
 Free signed-in accounts have 10 completed reviews per UTC day. An active verified
-**live** subscription with the configured price and a future paid period has 100.
+**live** subscription with the configured price and a future paid period has 100 per UTC calendar month, with a daily ceiling of 100. Free accounts have a monthly ceiling of 30.
 Sandbox subscription records never buy real inference allowance. A row lock
 serializes per-account review reservations across instances. One account has at
 most one pending review. Failures release their reservation; a crash reservation
@@ -135,3 +135,7 @@ or paid Claude call was made. This is integration verification, not customer
 traction or verification of live payment processing. Production signup/signin
 forms and the production Clerk SDK were checked; production signup email delivery
 was not exercised by this development-account test.
+
+## Measurement migration
+
+The migration runner applies both 001 and 002 in one transaction. Migration 002 adds content-free inference records, operator classification and shared daily cost admission, and replaces quota functions with calendar-month enforcement. Re-running the runner finishes with the newer functions. See [measurement](live-usage-evidence.md) and [release scope](product-growth-release.md). Comparison files remain in tab memory.

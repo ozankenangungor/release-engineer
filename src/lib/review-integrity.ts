@@ -10,6 +10,7 @@ const contextEvidence = z.object({
 // this product never performs. They are not a semantic verifier or a complete
 // prompt-injection detector. The independent evaluator remains unchanged.
 const executionClaims = [
+  /\btests?\s+(?:(?:have|has|were|was)\s+)?(?:confirmed|verified|proved|demonstrated)\b/gi,
   /\b(?:I|we)\s+(?:have\s+)?(?:ran|executed|run)\s+(?:the\s+)?(?:tests?|test suite|application|code)\b/gi,
   /\b(?:tests?|test suite|CI|checks?|pipeline)\s+(?:(?:all|has|have|is|are)\s+)?(?:passed|succeeded|green|failed)\b/gi,
   /\b(?:tests?|test suite)\s+(?:were|was|have been|has been)\s+(?:run|executed)\b/gi,

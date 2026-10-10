@@ -3,6 +3,8 @@ import { POST } from "@/app/api/analyze/route";
 import { getPullRequest } from "@/lib/github";
 import { reviewPullRequest } from "@/lib/claude";
 import { acquireAnalysisSlot } from "@/lib/analysis-admission";
+import { reserveInference, finishInference } from "@/lib/inference-measurement";
+vi.mock("@/lib/inference-measurement", () => ({ reserveInference: vi.fn(), finishInference: vi.fn() }));
 import { AnalysisError } from "@/lib/errors";
 import { pullRequest, review } from "./fixtures";
 import { accountIdentity } from "@/lib/account-auth";
@@ -22,6 +24,8 @@ vi.mock("@/lib/claude", () => ({ reviewPullRequest: vi.fn() }));
 const githubMock = vi.mocked(getPullRequest);
 const claudeMock = vi.mocked(reviewPullRequest);
 beforeEach(() => {
+  vi.mocked(reserveInference).mockReset().mockResolvedValue({ id: "00000000-0000-4000-a000-000000000002", reserved: 200000 });
+  vi.mocked(finishInference).mockReset().mockResolvedValue(undefined);
   vi.mocked(accountIdentity).mockReset().mockResolvedValue(null);
   vi.mocked(reserveAccountReview)
     .mockReset()
@@ -64,7 +68,7 @@ describe("analysis endpoint", () => {
       true,
     );
   });
-  it.each(["DAILY_LIMIT", "ACCOUNT_BUSY"])(
+  it.each(["DAILY_LIMIT", "MONTHLY_LIMIT", "ACCOUNT_BUSY"])(
     "rejects %s before retrieval and inference",
     async (code) => {
       vi.mocked(accountIdentity).mockResolvedValue("user_test");
@@ -79,6 +83,25 @@ describe("analysis endpoint", () => {
       expect(claudeMock).not.toHaveBeenCalled();
     },
   );
+  it("stops before Claude when the shared budget refuses admission and releases the account reservation", async () => {
+    vi.mocked(accountIdentity).mockResolvedValue("user_test");
+    vi.mocked(reserveInference).mockRejectedValueOnce(new AnalysisError("REVIEW_CAPACITY", "Capacity reached", 429));
+    const response = await POST(request(JSON.stringify({ url: pullRequest().url })));
+    expect(response.status).toBe(429);
+    expect(claudeMock).not.toHaveBeenCalled();
+    expect(finishAccountReview).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({userId:"user_test"}), false);
+    expect(finishInference).not.toHaveBeenCalled();
+  });
+  it("rolls back completed account usage when inference measurement cannot be persisted", async () => {
+    vi.mocked(accountIdentity).mockResolvedValue("user_test");
+    vi.mocked(finishInference).mockRejectedValueOnce(new Error("database unavailable"));
+    const response = await POST(request(JSON.stringify({ url: pullRequest().url })));
+    expect(response.status).toBe(502);
+    expect(await response.text()).not.toContain(review().summary);
+    expect(finishAccountReview).toHaveBeenNthCalledWith(1, expect.anything(), true);
+    expect(finishAccountReview).toHaveBeenNthCalledWith(2, expect.anything(), false);
+    expect(finishInference).toHaveBeenLastCalledWith(expect.anything(), false, null, expect.any(Number), expect.any(Boolean));
+  });
   it("releases failed and invalid reports without completing account usage", async () => {
     vi.mocked(accountIdentity).mockResolvedValue("user_test");
     claudeMock.mockResolvedValueOnce({ ...review(), summary: "" });

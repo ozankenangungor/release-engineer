@@ -1,0 +1,18 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import "../../product-growth.css";
+export const metadata: Metadata = { title: "Daniel’s webhook review — Release Engineer", description: "A developer-reported outcome: strict Base64 secret validation, two added tests and an identified HTTP status contract change.", alternates: { canonical: "/case-studies/webhook-review" } };
+export default function WebhookReview() {
+  return <main id="main" className="page-shell outcome-page">
+    <div className="growth-heading"><p className="section-kicker">DEVELOPER-REPORTED OUTCOME / WEBHOOK SECURITY</p><h1 className="page-title">From a second review<br /><span>to stronger validation.</span></h1><p className="page-intro">Daniel Reyes, Backend Developer, described what he checked and changed after reviewing Release Engineer’s report on his webhook implementation.</p></div>
+    <section className="outcome-ledger" aria-labelledby="outcome-actions"><h2 id="outcome-actions">What changed after the review.</h2>
+      <article><span>01 / SECRET VALIDATION</span><h3>Strict Base64 decoding.</h3><p>Daniel reported changing <code>_secret_bytes</code> to use <code>base64.b64decode(raw, validate=True)</code>. He said the report drew his attention to non-alphabet characters being silently discarded by permissive decoding.</p></article>
+      <article><span>02 / TEST COVERAGE</span><h3>Two added edge-case tests.</h3><p>He reported adding tests for a non-object JSON payload and a non-numeric <code>svix-timestamp</code>, then re-running the existing seven signature tests successfully. The developer ran those tests; Release Engineer did not.</p></article>
+      <article><span>03 / API CONTRACT</span><h3>A status-code change made visible.</h3><p>Daniel said the report helped him notice that malformed JSON now returned 400 where the earlier FastAPI behavior returned 422. He had not noticed the contract change when writing the code.</p></article>
+      <article><span>04 / ROLLOUT DESIGN</span><h3>A clearer opt-out proposal.</h3><p>The fail-open rollout risk was already known to Daniel. He found the proposed <code>ALLOW_UNSIGNED_WEBHOOKS</code> flag useful and recorded it for a later security change. His message did not say that this flag had already shipped.</p></article>
+    </section>
+    <figure className="outcome-quote"><blockquote>“Caught a missing validate=True in my base64 secret decoding right after I wrote the code. The tool doesn’t run tests, and it says so — that honesty is why I trust the rest of the report.”</blockquote><figcaption>Daniel Reyes · Backend Developer · Quote published with permission</figcaption></figure>
+    <section className="outcome-source"><h2>Record and scope.</h2><p>This summary is based on the developer’s written feedback supplied by the founder. Daniel reported matching the reviewed head prefix <code>d0b3ed2</code> to his local branch. The complete SHA, original report, code changes and PR URL are not published here; this page is a developer-reported outcome, not an independently reproduced audit or an accuracy benchmark.</p><p>Release Engineer reviewed bounded public PR context. The developer checked the code and ran tests. No prevented incident, financial saving or time saving is inferred from this record.</p><Link className="text-link" href="/feedback">More approved developer feedback ↗︎</Link></section>
+    <section className="growth-next"><div><h2>Follow your next revision.</h2><p>Export a review, update your PR, then compare the next report locally.</p></div><Link className="secondary-action" href="/compare">Compare reviews ↗︎</Link><Link className="primary-action" href="/#analyze">Analyze a public PR ↗︎</Link></section>
+  </main>;
+}

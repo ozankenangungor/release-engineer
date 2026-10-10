@@ -19,7 +19,9 @@
     "eval:live": "node evals/run.mjs live",
     "eval:compare": "node evals/run.mjs compare",
     "pilot:summarize": "node scripts/run-pilot.mjs",
-    "test:browser": "playwright test"
+    "test:browser": "playwright test",
+    "evidence:check": "node scripts/check-evidence-links.mjs",
+    "usage:summarize": "node scripts/summarize-product-usage.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.131.0",

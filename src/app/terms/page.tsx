@@ -95,11 +95,13 @@ export default function Terms() {
             warnings. The service may change or be unavailable during the beta.
           </p>
           <p className="mt-3">
-            Free homepage use allows 10 completed, validated reviews per UTC day
+            Free homepage use allows 10 completed, validated reviews per UTC day, up to 30 per UTC calendar month,
             in each browser, tracked in local storage. Failed or interrupted
-            reviews do not count. Rate and concurrency limits also apply. The
+            reviews do not count. Rate, concurrency and service-wide daily capacity limits also apply. The
             Pro plan at $9/month on the <a href="/pricing" className="text-signal underline underline-offset-4">Pricing page</a>{" "}
-            lists a 100-review daily subscription allowance, resetting at 00:00 UTC.
+            lists 100 reviews per UTC calendar month, with a 100-review daily safety ceiling.
+            The monthly allowance resets on the first day of each UTC month,
+            independently of the subscription billing date.
             Account registration is optional for Free reviews. Signed-in usage is
             enforced on the server across devices. Pro requires a verified active
             live subscription; sandbox subscriptions do not grant the production

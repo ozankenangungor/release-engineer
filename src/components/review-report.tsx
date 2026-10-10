@@ -1,5 +1,6 @@
 import type { AnalysisResponse, Review } from "@/lib/review-schema";
 import dynamic from "next/dynamic";
+import { ReviewUsageFeedback } from "./review-usage-feedback";
 
 const ReviewHandoff = dynamic(() => import("./review-handoff").then((module) => module.ReviewHandoff));
 
@@ -108,8 +109,8 @@ export function Finding({
   );
 }
 
-export function ReviewReport({ result, receivedAt = null, interfaceRevision = null }: {
-  result: AnalysisResponse; receivedAt?: string | null; interfaceRevision?: string | null;
+export function ReviewReport({ result, receivedAt = null, interfaceRevision = null, recordId = null }: {
+  result: AnalysisResponse; receivedAt?: string | null; interfaceRevision?: string | null; recordId?: string | null;
 }) {
   const { review, pullRequest: pr, coverage, warnings } = result;
   return (
@@ -307,6 +308,7 @@ export function ReviewReport({ result, receivedAt = null, interfaceRevision = nu
         </ul>
       </details>
       <ReviewHandoff result={result} receivedAt={receivedAt} interfaceRevision={interfaceRevision} />
+      <ReviewUsageFeedback recordId={recordId} />
       <p className="mt-5 text-xs leading-5 text-muted">
         Powered by Claude. Findings are decision support; verify them against
         the code and your release process.

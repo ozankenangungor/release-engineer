@@ -5,6 +5,8 @@ import { ReleaseIntelligenceScene } from "@/components/three/release-intelligenc
 import { ReleaseMark } from "@/components/brand";
 import { getPublishedCaseStudies } from "@/content/case-studies";
 import { getDeploymentProvenance } from "@/lib/deployment-provenance";
+import { DeveloperOutcome } from "@/components/developer-outcome";
+import "./product-growth.css";
 const repository = "https://github.com/ozankenangungor/release-engineer";
 const workflow = [
   {
@@ -86,9 +88,9 @@ export default function Home() {
           <div className="hero-entry">
             <div>
               <p className="hero-description">
-                Claude-powered analysis for public GitHub pull requests. Surface
-                breaking changes, regressions and testing gaps — with evidence
-                and honest limits.
+                Claude-powered release-risk review for public GitHub pull requests.
+                Identify API contract changes, security concerns and testing gaps,
+                with evidence tied to the reviewed commit.
               </p>
               <a className="hero-preview-link" href="#report-preview">
                 See a sample report <span aria-hidden="true">↓</span>
@@ -104,6 +106,7 @@ export default function Home() {
       </section>
       <div id="analysis-results" className="analysis-results" />
       <ReportPreview />
+      <DeveloperOutcome />
       <section
         id="how-it-works"
         className="process-section section-shell"

@@ -1,7 +1,9 @@
 // Anonymous, device-local allowance for the homepage. This is not an account
 // entitlement or a server-side abuse boundary; API admission remains separate.
 export const FREE_DAILY_REVIEWS = 10;
+export const FREE_MONTHLY_REVIEWS = 30;
 export const PRO_DAILY_REVIEWS = 100;
+export const PRO_MONTHLY_REVIEWS = 100;
 export const FREE_USAGE_KEY = "release-engineer:free-usage:v1";
 export const FREE_REVIEW_LOCK = "release-engineer:free-review";
 
@@ -9,8 +11,8 @@ type UsageStorage = Pick<Storage, "getItem" | "setItem">;
 export type FreeUsage = { day: string; used: number };
 
 export class FreeLimitError extends Error {
-  constructor() {
-    super(`You have used today's ${FREE_DAILY_REVIEWS} free reviews in this browser. Your allowance resets at 00:00 UTC.`);
+  constructor(message = `You have used today's ${FREE_DAILY_REVIEWS} free reviews in this browser. Your allowance resets at 00:00 UTC.`) {
+    super(message);
     this.name = "FreeLimitError";
   }
 }
@@ -35,17 +37,33 @@ export function readFreeUsage(storage: UsageStorage, now = new Date()): FreeUsag
 
 export function prepareFreeReview(storage: UsageStorage, now = new Date()) {
   const usage = readFreeUsage(storage, now);
+  const monthly = readMonthlyFreeUsage(storage, now);
+  if (monthly.monthlyUsed >= FREE_MONTHLY_REVIEWS) throw new FreeLimitError("You have used this month's 30 free reviews in this browser. The monthly allowance resets on the first day of the next UTC month.");
   if (usage.used >= FREE_DAILY_REVIEWS) {
     throw new FreeLimitError();
   }
   // Verify storage is writable before starting work. A reservation does not
   // consume a review: only a validated, completed response increments usage.
-  storage.setItem(FREE_USAGE_KEY, JSON.stringify(usage));
+  storage.setItem(FREE_USAGE_KEY, JSON.stringify({ ...usage, ...monthly }));
 }
 
 export function completeFreeReview(storage: UsageStorage, now = new Date()): FreeUsage {
   const usage = readFreeUsage(storage, now);
+  const monthly = readMonthlyFreeUsage(storage, now);
   const completed = { ...usage, used: Math.min(FREE_DAILY_REVIEWS, usage.used + 1) };
-  storage.setItem(FREE_USAGE_KEY, JSON.stringify(completed));
+  storage.setItem(FREE_USAGE_KEY, JSON.stringify({ ...completed, ...monthly, monthlyUsed: Math.min(FREE_MONTHLY_REVIEWS, monthly.monthlyUsed + 1) }));
   return completed;
+}
+
+export function readMonthlyFreeUsage(storage: UsageStorage, now = new Date()) {
+  const month = now.toISOString().slice(0, 7);
+  try {
+    const raw = JSON.parse(storage.getItem(FREE_USAGE_KEY) ?? "null");
+    if (raw?.month === month && Number.isInteger(raw.monthlyUsed) && raw.monthlyUsed >= 0 && raw.monthlyUsed <= FREE_MONTHLY_REVIEWS)
+      return { month, monthlyUsed: raw.monthlyUsed as number };
+    // Upgrade an older valid device counter without inventing historical usage.
+    if (!raw?.month && typeof raw?.day === "string" && raw.day.startsWith(month) && Number.isInteger(raw.used) && raw.used >= 0 && raw.used <= FREE_DAILY_REVIEWS)
+      return { month, monthlyUsed: raw.used as number };
+  } catch { /* Same local recovery boundary as the daily counter. */ }
+  return { month, monthlyUsed: 0 };
 }

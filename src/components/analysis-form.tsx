@@ -23,12 +23,13 @@ export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<AnalysisResponse | null>(null);
   const [receivedAt, setReceivedAt] = useState<string | null>(null);
+  const [recordId, setRecordId] = useState<string | null>(null);
   const controllerRef = useRef<AbortController | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const resultRef = useRef<HTMLDivElement | null>(null);
   const browserRemaining = useFreeAllowance();
   const { account, refresh: refreshAccount } = useAccount();
-  const remaining = account ? account.usage.remaining : browserRemaining;
+  const remaining = account ? Math.min(account.usage.remaining, account.usage.monthly?.remaining ?? account.usage.remaining) : browserRemaining;
 
   useEffect(() => {
     if (!loading) return;
@@ -120,6 +121,8 @@ export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
       notifyFreeUsageChanged();
       void refreshAccount();
       setReceivedAt(new Date().toISOString());
+      const record = response.headers.get("X-Review-Record");
+      setRecordId(record && /^[a-f0-9-]{36}$/.test(record) ? record : null);
       setResult(validated.data);
     }
     try {
@@ -167,7 +170,7 @@ export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
         <form onSubmit={analyze} aria-busy={loading} noValidate>
           <div className="analysis-label-row">
             <label htmlFor="pr-url">GitHub pull request URL</label>
-            <span>{account?.usage.plan === 'pro' ? 'Pro' : 'Free'} · {account?.usage.limit ?? FREE_DAILY_REVIEWS} reviews/day</span>
+            <span>{account?.usage.plan === 'pro' ? 'Pro · 100/month' : 'Free · 10/day · 30/month'}</span>
           </div>
           <div className="analysis-controls">
             <input
@@ -212,7 +215,7 @@ export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
               {remaining === null
                 ? "Enable browser storage to track free reviews."
                 : remaining === 0
-                  ? "Daily limit reached. Resets at 00:00 UTC."
+                  ? "Review limit reached. Daily reset: 00:00 UTC; monthly reset: the 1st."
                   : `${remaining} of ${account?.usage.limit ?? FREE_DAILY_REVIEWS} ${account?.usage.plan === 'pro' ? 'Pro' : 'free'} reviews left today`}
               <span className="allowance-scope"> · {account ? 'Your account' : 'This browser'}</span>
             </p>
@@ -282,7 +285,7 @@ export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
             aria-label="Completed release review"
             className="completed-report"
           >
-            <ReviewReport key={receivedAt} result={result} receivedAt={receivedAt} interfaceRevision={interfaceRevision} />
+            <ReviewReport key={receivedAt} result={result} receivedAt={receivedAt} interfaceRevision={interfaceRevision} recordId={recordId} />
           </div>,
           output,
         )}
