@@ -15,7 +15,10 @@ const render = (Page: () => React.ReactNode) =>
 describe("product clarity and evidence integrity", () => {
   it("explains input, Claude and output before the working form, with a free preview", () => {
     const html = render(Home);
-    expect(html).toMatch(/<h1[^>]*>Catch release/);
+    const heading = html.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/)?.[1];
+    expect(heading?.replace(/<[^>]+>/g, "")).toMatch(
+      /^Catch release risks\.\s*Before they ship\.$/,
+    );
     expect(html).toContain(
       "Claude-powered analysis for public GitHub pull requests",
     );

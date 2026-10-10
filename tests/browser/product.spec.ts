@@ -691,6 +691,15 @@ test("the desktop graph renders, moves, pauses and suspends offscreen", async ({
   const paused = await canvas.screenshot();
   await page.waitForTimeout(350);
   expect((await canvas.screenshot()).equals(paused)).toBe(true);
+  // A chapter can be explored while paused without starting autonomous motion.
+  await graph.getByRole("button", { name: /Source/ }).click();
+  await expect(graph).toHaveAttribute("data-phase", "source");
+  await expect(graph).toHaveAttribute("data-motion-active", "false");
+  await page.waitForTimeout(150);
+  const sourceFocus = await canvas.screenshot();
+  expect(sourceFocus.equals(paused)).toBe(false);
+  await page.waitForTimeout(250);
+  expect((await canvas.screenshot()).equals(sourceFocus)).toBe(true);
   await page
     .getByRole("button", { name: "Play animation", exact: true })
     .click();
@@ -703,6 +712,35 @@ test("the desktop graph renders, moves, pauses and suspends offscreen", async ({
   await expect(graph).toHaveAttribute("data-scene", "static");
   await expect(graph.locator(".scene-fallback")).toBeVisible();
   expect(errors).toEqual([]);
+});
+
+test("release graph chapters work by keyboard with a static reduced-motion drawing", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  const graph = page.locator(".hero-stage");
+  await expect(graph).toHaveAttribute("data-scene", "static");
+  await expect(graph.locator("canvas")).toHaveCount(0);
+  const source = graph.getByRole("button", { name: /Source/ });
+  await source.focus();
+  await page.keyboard.press("Space");
+  await expect(source).toHaveAttribute("aria-pressed", "true");
+  await expect(graph).toHaveAttribute("data-phase", "source");
+  await expect(graph.locator(".scene-phase-description")).toContainText("specific set of changes");
+  await page.keyboard.press("Tab");
+  await expect(graph.getByRole("button", { name: /Context/ })).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(graph.getByRole("button", { name: /Findings/ })).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(graph).toHaveAttribute("data-phase", "signal");
+  await expect(graph.locator(".scene-fallback")).toBeVisible();
+  await expect(graph.locator(".scene-phase-description")).toContainText("evidence to inspect");
+  const sample = graph.getByRole("link", { name: /Explore an illustrative finding/ });
+  await expect(sample).toHaveAttribute("href", "#report-preview");
+  await sample.click();
+  await expect(page.getByRole("heading", { name: /A small change/ })).toBeInViewport();
+  await page.getByRole("button", { name: "Load example PR" }).click();
+  await expect(page.getByLabel("GitHub pull request URL")).toBeFocused();
+  await expect(page.getByRole("button", { name: "Analyze PR", exact: true })).toBeEnabled();
 });
 
 test("GPU context loss retains the analyzer and the graph can recover", async ({

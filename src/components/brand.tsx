@@ -29,7 +29,7 @@ export function Brand() {
         <ReleaseMark />
       </span>
       <span>
-        Release<span className="brand-engineer">Engineer</span>
+        Release<span className="brand-engineer"> Engineer</span>
       </span>
     </Link>
   );
