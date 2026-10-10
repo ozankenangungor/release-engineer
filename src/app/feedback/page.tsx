@@ -75,7 +75,7 @@ export default function Feedback() {
                 </blockquote>
                 <figcaption className="feedback-card-author">
                   <span className="feedback-author-monogram" aria-hidden="true">
-                    {(item.role ?? item.displayName)
+                    {item.displayName
                       .split(" ")
                       .filter(Boolean)
                       .slice(0, 2)
@@ -94,7 +94,7 @@ export default function Feedback() {
           </div>
           <div className="feedback-publication-note">
             <p>
-              Quotes published with permission, using approved display aliases.
+              Quotes published with permission, using approved names and roles.
             </p>
             <Link className="text-link" href="/evidence#developer-feedback">
               Feedback provenance <span aria-hidden="true">↗︎</span>

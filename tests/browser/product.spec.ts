@@ -513,7 +513,19 @@ for (const width of [1440, 390]) {
     );
     if (width < 1024)
       await expect(page.locator(".mobile-menu")).not.toHaveAttribute("open", "");
-    await expect(page.locator("main blockquote")).toHaveCount(3);
+    await expect(page.locator("main blockquote")).toHaveCount(23);
+    await expect(page.locator(".feedback-review-card")).toHaveCount(23);
+    await expect(page.locator(".feedback-author-name")).toHaveText([
+      "Daniel Reyes", "Megan Carter", "Tyler Brooks", "Sarah Lindqvist",
+      "Brandon Mitchell", "Emily Foster", "James Carter", "Lauren Hayes",
+      "Kevin Murphy", "Marc Dubois", "Rachel Sullivan", "Jason Myers",
+      "Alex Chen", "Ashley Coleman", "Derek Watson", "Hannah Weber",
+      "Chris Donovan", "Marcus Johnson", "Madison Reed", "Nathan Brooks",
+      "Early Beta Tester", "Beta Developer", "Early Tester",
+    ]);
+    await expect(page.locator("main")).toContainText(
+      "Caught a missing validate=True in my base64 secret decoding right after I wrote the code.",
+    );
     await expect(page.locator("main")).toContainText(
       "The structured analysis gives a quick sanity check before merging.",
     );

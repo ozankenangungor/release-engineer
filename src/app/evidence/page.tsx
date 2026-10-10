@@ -7,7 +7,7 @@ import { getDeploymentProvenance } from "@/lib/deployment-provenance";
 
 const title = "Evidence — Release Engineer";
 const description =
-  "The live product, public source, approved external beta feedback, pinned Rails PR observation and limits of Release Engineer evidence.";
+  "The live product, public source, approved developer feedback, pinned Rails PR observation and limits of Release Engineer evidence.";
 export const metadata: Metadata = {
   title,
   description,
@@ -41,7 +41,7 @@ export default function Evidence() {
           <span>behind the beta.</span>
         </h1>
         <p className="page-intro">
-          Start with the live product, external beta feedback and a real public
+          Start with the live product, developer feedback and a real public
           PR observation. Then inspect Claude’s role, evaluation results and the
           boundaries of each record.
         </p>
@@ -125,13 +125,13 @@ export default function Evidence() {
           </div>
         </section>
         <section className="evidence-entry" data-reveal="0">
-          <span className="evidence-status">EXTERNAL BETA FEEDBACK</span>
+          <span className="evidence-status">DEVELOPER FEEDBACK</span>
           <div>
-            <h2>Approved early developer feedback.</h2>
+            <h2>Approved developer feedback.</h2>
             <p>
-              Three exact quotes from external beta testers, supplied by the
-              founder and published with permission. Display aliases and roles
-              are publication-approved; private identities and PR links are not
+              Developer quotes supplied by the founder and published with
+              permission. Names, aliases and roles are publication-approved;
+              contact details and PR links are not
               disclosed.
             </p>
             <p className="mt-3">

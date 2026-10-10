@@ -176,13 +176,12 @@ export default function About() {
           <section data-reveal="0">
             <h2>Real-world evidence</h2>
             <p>
-              Three founder-supplied, publication-approved quotes from external
-              beta testers appear in the{" "}
+              Founder-supplied, publication-approved developer quotes appear on the{" "}
               <Link href="/feedback" className="text-link">
                 developer feedback page
               </Link>
-              . Exact quotes are published with permission. Display aliases and
-              roles are publication-approved; private identities and PR links
+              . Exact quotes are published with permission. Names, aliases and
+              roles are publication-approved; contact details and PR links
               are not disclosed. They are informal qualitative feedback. They do
               not establish product accuracy, verified findings, unique
               developer counts or customer traction.
