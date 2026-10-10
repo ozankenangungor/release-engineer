@@ -1,0 +1,16 @@
+# Vercel source uploads must exclude local credentials and private verification artifacts.
+.env*
+.private-evidence
+.vercel
+.git
+node_modules
+.next
+out
+coverage
+test-results
+playwright-report
+.eval-build
+.pilot-build
+evals/results
+*.log
+*.tsbuildinfo
