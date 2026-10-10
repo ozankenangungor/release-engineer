@@ -267,6 +267,7 @@ for (const width of [1440, 360]) {
       "/about",
       "/pilot",
       "/evidence",
+      "/feedback",
       "/case-studies",
       "/case-studies/rails-doc-typo-58968",
       "/privacy",
@@ -394,6 +395,9 @@ test("robots, sitemap, social image and internal links are accessible", async ({
   expect(await sitemap.text()).toContain(
     "https://releaseengineer.tech/evidence",
   );
+  expect(await sitemap.text()).toContain(
+    "https://releaseengineer.tech/feedback",
+  );
   const image = await request.get("/opengraph-image");
   expect(image.status()).toBe(200);
   expect(image.headers()["content-type"]).toContain("image/png");
@@ -403,6 +407,7 @@ test("robots, sitemap, social image and internal links are accessible", async ({
     "/about",
     "/pilot",
     "/evidence",
+    "/feedback",
     "/case-studies",
     "/case-studies/rails-doc-typo-58968",
     "/privacy",
@@ -433,6 +438,7 @@ test.describe("server-rendered public content", () => {
       "/",
       "/about",
       "/evidence",
+      "/feedback",
       "/pilot",
       "/case-studies",
       "/case-studies/rails-doc-typo-58968",
@@ -483,6 +489,57 @@ test.describe("server-rendered public content", () => {
     ).toBeVisible();
   });
 });
+
+for (const width of [1440, 390]) {
+  test(`feedback is reachable by keyboard and returns to the working analyzer at ${width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/");
+    if (width < 1024) {
+      await page.getByLabel("Toggle navigation").focus();
+      await page.keyboard.press("Enter");
+    }
+    const navigation = page.getByRole("navigation", {
+      name: width < 1024 ? "Mobile" : "Main",
+      exact: true,
+    });
+    await navigation.getByRole("link", { name: "Feedback", exact: true }).focus();
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(/\/feedback$/);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(
+      "In developers’ words.",
+    );
+    if (width < 1024)
+      await expect(page.locator(".mobile-menu")).not.toHaveAttribute("open", "");
+    await expect(page.locator("main blockquote")).toHaveCount(3);
+    await expect(page.locator("main")).toContainText(
+      "The structured analysis gives a quick sanity check before merging.",
+    );
+    await page.getByRole("link", { name: "Read their feedback" }).focus();
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(/\/feedback#perspectives$/);
+    await expect(
+      page.getByRole("heading", { name: "Developer perspectives", exact: true }),
+    ).toBeInViewport();
+    await expect(
+      page.getByRole("link", { name: "Share your feedback", exact: true }),
+    ).toHaveAttribute(
+      "href",
+      "mailto:founder@releaseengineer.tech?subject=Release%20Engineer%20feedback",
+    );
+    await page
+      .getByRole("main")
+      .getByRole("link", { name: "Analyze a public PR", exact: true })
+      .click();
+    await expect(page).toHaveURL(/\/#analyze$/);
+    await expect(page.getByLabel("GitHub pull request URL")).toBeInViewport();
+    await page.getByRole("button", { name: "Load example PR" }).click();
+    await expect(page.getByLabel("GitHub pull request URL")).toBeFocused();
+    await expect(page.getByLabel("GitHub pull request URL")).not.toBeEmpty();
+  });
+}
 
 test("the diff connects to its finding and report tabs support keyboard navigation", async ({
   page,

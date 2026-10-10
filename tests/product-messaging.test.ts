@@ -85,6 +85,6 @@ describe("product clarity and evidence integrity", () => {
     expect(html.match(/<blockquote>/g)).toHaveLength(3);
     expect(html).toContain("22 PASS / 10 FAIL");
     expect(html).toContain("one critical violation remaining");
-    expect(render(About)).toContain('href="/evidence#developer-feedback"');
+    expect(render(About)).toContain('href="/feedback"');
   });
 });

@@ -9,6 +9,7 @@ import {
 import { Testimonials } from "@/components/testimonials";
 import { FeaturedPublicObservation } from "@/components/case-studies";
 import Evidence from "@/app/evidence/page";
+import Feedback from "@/app/feedback/page";
 import sitemap from "@/app/sitemap";
 
 describe("publication boundaries", () => {
@@ -68,6 +69,22 @@ describe("publication boundaries", () => {
       "https://releaseengineer.tech/case-studies/rails-doc-typo-58968",
     );
     expect(urls).toContain("https://releaseengineer.tech/evidence");
+  });
+  it("keeps the dedicated feedback page within the approved publication scope", () => {
+    const html = renderToStaticMarkup(createElement(Feedback));
+    expect(html.match(/<blockquote>/g)).toHaveLength(3);
+    for (const item of testimonials) {
+      expect(html).toContain(item.quote);
+      expect(html).toContain(item.displayName);
+      expect(html).toContain(item.role);
+    }
+    expect(html).toContain(
+      "Quotes published with permission, using approved display aliases.",
+    );
+    expect(html).not.toMatch(/AggregateRating|ratingValue|stars|Trusted by/);
+    expect(sitemap().map((item) => item.url)).toContain(
+      "https://releaseengineer.tech/feedback",
+    );
   });
   it("introduces public evidence before synthetic evaluation without hiding failures", () => {
     const html = renderToStaticMarkup(createElement(Evidence));
