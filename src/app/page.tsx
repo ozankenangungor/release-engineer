@@ -74,7 +74,7 @@ export default function Home() {
           <div className="hero-copy">
             <p className="hero-eyebrow">
               <span className="signal-dot" aria-hidden="true" /> RELEASE
-              INTELLIGENCE<span className="hero-beta">EARLY BETA</span>
+              INTELLIGENCE
             </p>
             <h1 id="hero-title">
               Catch release

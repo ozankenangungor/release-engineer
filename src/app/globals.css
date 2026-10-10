@@ -180,13 +180,6 @@ button:disabled {
   height: 7px;
   background: var(--blue);
 }
-.hero-beta {
-  font-size: 10px;
-  letter-spacing: 0.04em;
-  border-left: 1px solid var(--rule);
-  margin-left: 6px;
-  padding-left: 14px;
-}
 .hero-copy h1 {
   font-size: clamp(72px, 6.15vw, 104px);
   line-height: 0.98;
@@ -2112,9 +2105,6 @@ button:disabled {
   .hero-copy {
     width: 48%;
   }
-  .hero-beta {
-    display: none;
-  }
   .analysis-controls {
     flex-wrap: wrap;
     padding: 4px;
@@ -2513,12 +2503,6 @@ button:disabled {
   .hero-eyebrow {
     font-size: 10px;
     margin-bottom: 23px;
-  }
-  .hero-beta {
-    display: inline;
-    margin-left: 3px;
-    padding-left: 10px;
-    font-size: 8px;
   }
   .hero-copy h1 {
     font-size: clamp(45px, 12.8vw, 76px);
