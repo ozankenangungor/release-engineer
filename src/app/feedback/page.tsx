@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ReleaseMark } from "@/components/brand";
 import { testimonials } from "@/content/testimonials";
 import "./feedback.css";
 
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
 };
 
 export default function Feedback() {
-  const [featured, ...perspectives] = testimonials.filter(
+  const approvedFeedback = testimonials.filter(
     (item) => item.permission === "approved",
   );
 
@@ -51,7 +50,7 @@ export default function Feedback() {
         </div>
       </section>
 
-      {featured && (
+      {approvedFeedback.length > 0 && (
         <section
           id="perspectives"
           className="developer-perspectives"
@@ -61,40 +60,35 @@ export default function Feedback() {
             <h2 id="perspectives-title">Developer perspectives</h2>
             <span>IN THEIR OWN WORDS</span>
           </div>
-          <figure className="feedback-feature">
-            <figcaption className="feedback-feature-author">
-              <span className="feedback-wordmark" aria-hidden="true">
-                <ReleaseMark />
-              </span>
-              <div>
-                <p className="feedback-author-role">{featured.role}</p>
-                <p className="feedback-author-name">{featured.displayName}</p>
-              </div>
-              <span className="feedback-source">PUBLIC PR REVIEW</span>
-            </figcaption>
-            <div className="feedback-feature-quote">
-              <span className="feedback-open-quote" aria-hidden="true">“</span>
-              <blockquote>
-                <p>{featured.quote}</p>
-              </blockquote>
-            </div>
-          </figure>
-
-          <div className="feedback-perspective-list">
-            {perspectives.map((item, index) => (
-              <figure className="feedback-perspective" key={item.id}>
-                <figcaption>
-                  <span className="feedback-perspective-index" aria-hidden="true">
-                    {String(index + 2).padStart(2, "0")}
+          <div className="feedback-review-grid">
+            {approvedFeedback.map((item, index) => (
+              <figure
+                className={`feedback-review-card${index === 0 ? " feedback-review-featured" : ""}`}
+                key={item.id}
+              >
+                <div className="feedback-card-heading" aria-hidden="true">
+                  <span className="feedback-open-quote">“</span>
+                  <span className="feedback-source">PUBLIC PR REVIEW</span>
+                </div>
+                <blockquote>
+                  <p>{item.quote}</p>
+                </blockquote>
+                <figcaption className="feedback-card-author">
+                  <span className="feedback-author-monogram" aria-hidden="true">
+                    {(item.role ?? item.displayName)
+                      .split(" ")
+                      .filter(Boolean)
+                      .slice(0, 2)
+                      .map((word) => word[0])
+                      .join("")}
                   </span>
                   <div>
-                    <p className="feedback-author-role">{item.role}</p>
                     <p className="feedback-author-name">{item.displayName}</p>
+                    {item.role && (
+                      <p className="feedback-author-role">{item.role}</p>
+                    )}
                   </div>
                 </figcaption>
-                <blockquote>
-                  <p>“{item.quote}”</p>
-                </blockquote>
               </figure>
             ))}
           </div>
