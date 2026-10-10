@@ -193,19 +193,21 @@ export default function Home() {
         aria-labelledby="founder-title"
       >
         <div>
-          <p className="section-kicker">04 / INDEPENDENT BY DESIGN</p>
+          <p className="section-kicker">04 / MEET THE FOUNDER</p>
           <h2 id="founder-title">
-            Built with a name
+            Built for better
             <br />
-            behind it.
+            release decisions.
           </h2>
         </div>
         <div>
           <h3>Ozan Kenan Güngör</h3>
+          <p className="founder-role">Founder &amp; developer</p>
           <p>
-            Independently built and operated in Ankara, Türkiye. Launched in
-            October 2026. Self-funded early beta; no external investment. No
-            legal company has been incorporated or registered.
+            Ozan builds and operates Release Engineer in Ankara, Türkiye.
+            Launched in October 2026, the project helps developers review public
+            pull requests with clear evidence, focused findings and practical
+            next steps.
           </p>
           <div className="founder-links">
             <Link href="/about" className="text-link">
@@ -215,7 +217,7 @@ export default function Home() {
               href="/case-studies/rails-doc-typo-58968"
               className="text-link"
             >
-              Founder-run PR observation ↗︎
+              Explore a documented PR review ↗︎
             </Link>
             <Link href="/about#beta" className="text-link">
               Share beta feedback ↗︎

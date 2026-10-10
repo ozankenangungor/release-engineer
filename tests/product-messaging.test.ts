@@ -43,19 +43,26 @@ describe("product clarity and evidence integrity", () => {
       false,
     );
   });
-  it("states the individual operator and unincorporated status consistently", () => {
+  it("identifies the founder and keeps legal status in project and legal information", () => {
     for (const Page of [Home, About, Evidence, Privacy, Terms]) {
       const html = render(Page)
         .replace(/<[^>]+>/g, "")
         .replace(/\s+/g, " ");
       expect(html).toContain("Ozan Kenan Güngör");
       expect(html).toContain("Ankara, Türkiye");
-      expect(html).toContain(
-        "No legal company has been incorporated or registered",
-      );
       expect(html).not.toMatch(
         /THE COMPANY|PRODUCT COMPANY|startup founded|These company facts/,
       );
+    }
+    const home = render(Home);
+    expect(home).toContain("Founder &amp; developer");
+    expect(home).toContain('href="/about"');
+    expect(home).not.toContain(
+      "No legal company has been incorporated or registered",
+    );
+    for (const Page of [About, Evidence, Privacy, Terms]) {
+      expect(render(Page).replace(/<[^>]+>/g, "").replace(/\s+/g, " "))
+        .toContain("No legal company has been incorporated or registered");
     }
     const readme = readFileSync(
       new URL("../README.md", import.meta.url),

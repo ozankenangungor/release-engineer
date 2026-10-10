@@ -42,11 +42,18 @@ describe("public identity", () => {
       expect(page).toContain("October 2026");
       expect(page).toContain(String(founder.name));
       expect(page).toContain("Ankara, Türkiye");
-      expect(page).toContain(
-        "No legal company has been incorporated or registered",
-      );
       expect(page).toContain(`href="mailto:${founder.email}"`);
     }
+    const home = renderToStaticMarkup(createElement(Home));
+    const about = renderToStaticMarkup(createElement(About));
+    const founderIntroduction = about.match(/<section[^>]*class="about-founder">([\s\S]*?)<\/section>/)?.[1];
+    const projectStatus = about.match(/<section id="project-status"[^>]*>([\s\S]*?)<\/section>/)?.[1];
+    expect(home).not.toContain("No legal company has been incorporated or registered");
+    expect(founderIntroduction).toBeDefined();
+    expect(founderIntroduction).not.toMatch(/external investment|incorporated|registered/);
+    expect(projectStatus).toBeDefined();
+    expect(projectStatus).toContain("No legal company has been incorporated or registered");
+    expect(projectStatus).toContain("self-funded and has not raised external investment");
   });
 
   it("renders one parseable graph with unique, resolving identity relationships", () => {

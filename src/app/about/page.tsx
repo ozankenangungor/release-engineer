@@ -61,11 +61,11 @@ export default function About() {
             Ozan Kenan Güngör
           </h2>
           <p className="mt-5">
-            Release Engineer is an independent, founder-built developer tool
-            launched in <time dateTime="2026-10">October 2026</time> in Ankara,
-            Türkiye. Built and operated by Ozan Kenan Güngör. Self-funded; no
-            external investment has been raised. No legal company has been
-            incorporated or registered.
+            Ozan is the founder and developer of Release Engineer, an independent
+            tool for reviewing public GitHub pull requests. Built and operated
+            from Ankara, Türkiye, the project launched in{" "}
+            <time dateTime="2026-10">October 2026</time> with a focus on evidence
+            reviewers can inspect and decisions they can verify.
           </p>
           <dl className="project-facts">
             <div>
@@ -83,10 +83,6 @@ export default function About() {
             <div>
               <dt>Location</dt>
               <dd>Ankara, Türkiye</dd>
-            </div>
-            <div>
-              <dt>Funding</dt>
-              <dd>Self-funded</dd>
             </div>
           </dl>
           <div className="mt-6 flex flex-wrap gap-x-6 gap-y-3">
@@ -293,6 +289,14 @@ export default function About() {
             >
               Evaluation methodology and limitations ↗︎
             </a>
+          </section>
+          <section id="project-status" data-reveal="0">
+            <h2>Project status</h2>
+            <p>
+              Release Engineer is operated by Ozan Kenan Güngör as an independent
+              project. It is self-funded and has not raised external investment.
+              No legal company has been incorporated or registered.
+            </p>
           </section>
           <section data-reveal="0">
             <h2>Source, security & contact</h2>
