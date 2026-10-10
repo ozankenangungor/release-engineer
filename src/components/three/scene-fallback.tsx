@@ -5,20 +5,19 @@ import {
   riskNodes,
   type GraphPhase,
 } from "./graph-topology";
-
 const project = ([x = 0, y = 0, z = 0]: number[]): [number, number] => [
-  550 + (x * 0.89 - z * 0.5) * 85,
-  380 + (-y + x * 0.18 + z * 0.44) * 85,
+  640 + x * 101 - z * 13,
+  220 - y * 50 + z * 31 + x * 1.5,
 ];
-const points = (vertices: number[][]) =>
-  vertices.map((p) => project(p).join(",")).join(" ");
-function surface(y: number, w = 4, h = 3.25) {
-  return points([
-    [-w / 2, y, -h / 2],
-    [w / 2, y, -h / 2],
-    [w / 2, y, h / 2],
-    [-w / 2, y, h / 2],
-  ]);
+function path(indices: number[]) {
+  const vertices = indices.map((i) => project(graphNodes[i]!));
+  let d = `M${vertices[0]!.join(" ")}`;
+  for (let i = 1; i < vertices.length; i++) {
+    const [a, b] = [vertices[i - 1]!, vertices[i]!],
+      mid = (a[0] + b[0]) / 2;
+    d += `C${mid} ${a[1]},${mid} ${b[1]},${b[0]} ${b[1]}`;
+  }
+  return d;
 }
 export function SceneFallback({
   phase = "trace",
@@ -31,206 +30,91 @@ export function SceneFallback({
 }) {
   return (
     <svg
-      viewBox="0 0 1100 740"
+      viewBox="0 0 1280 400"
       width={width}
       height={height}
-      fill="none"
       className="scene-fallback"
+      fill="none"
       aria-hidden="true"
     >
       <defs>
-        <linearGradient
-          id="signal-metal"
-          x1="360"
-          y1="260"
-          x2="700"
-          y2="560"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stopColor="#fbfdff" />
-          <stop offset=".2" stopColor="#9babc0" />
-          <stop offset=".43" stopColor="#f4f8ff" />
-          <stop offset=".7" stopColor="#7f96b6" />
-          <stop offset="1" stopColor="#dce8fa" />
+        <linearGradient id="graph-steel" x1="0" y1="0" x2="0" y2="1">
+          <stop stopColor="#d6e0f1" />
+          <stop offset=".3" stopColor="#728bab" />
+          <stop offset=".55" stopColor="#cad6ea" />
+          <stop offset="1" stopColor="#405775" />
         </linearGradient>
-        <linearGradient
-          id="signal-glass"
-          x1="420"
-          y1="200"
-          x2="620"
-          y2="570"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stopColor="#d7e7ff" stopOpacity=".5" />
-          <stop offset="1" stopColor="#87adff" stopOpacity=".12" />
+        <linearGradient id="graph-rail">
+          <stop stopColor="#506580" />
+          <stop offset=".5" stopColor="#c5d1e3" />
+          <stop offset="1" stopColor="#647b97" />
         </linearGradient>
-        <linearGradient
-          id="signal-top"
-          x1="380"
-          y1="200"
-          x2="700"
-          y2="370"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stopColor="#698fff" />
-          <stop offset="1" stopColor="#315dff" />
-        </linearGradient>
-        <linearGradient id="signal-base">
-          <stop stopColor="#2c4672" />
-          <stop offset="1" stopColor="#122848" />
-        </linearGradient>
-        <linearGradient id="signal-line">
-          <stop stopColor="#315dff" />
-          <stop offset="1" stopColor="#169eaa" />
-        </linearGradient>
-        <radialGradient id="signal-shadow">
-          <stop stopColor="#435a7e" stopOpacity=".22" />
-          <stop offset="1" stopColor="#435a7e" stopOpacity="0" />
+        <radialGradient id="graph-floor">
+          <stop stopColor="#27415d" stopOpacity=".3" />
+          <stop offset="1" stopColor="#142136" stopOpacity="0" />
         </radialGradient>
       </defs>
-      <ellipse cx="550" cy="540" rx="390" ry="135" fill="url(#signal-shadow)" />
-      <g stroke="#c9d8eb" strokeOpacity=".35" strokeWidth=".7">
-        {Array.from({ length: 12 }, (_, i) => (
-          <path
-            key={i}
-            d={`M${140 + i * 52} 660l430 -260M${140 + i * 52} 660l-350 -195`}
-          />
-        ))}
-      </g>
+      <ellipse cx="640" cy="220" rx="520" ry="180" fill="url(#graph-floor)" />
+      <path
+        d={`M${project([-2.6, -0.3, -2.8]).join(" ")}L${project([2.1, -0.3, -2.8]).join(" ")}L${project([2.1, -0.3, 2.8]).join(" ")}L${project([-2.6, -0.3, 2.8]).join(" ")}Z`}
+        stroke={phase === "trace" ? "#53729e" : "#27364c"}
+        strokeDasharray="4 5"
+      />
       {graphLinks.map(([a, b]) => (
         <path
           key={`${a}-${b}`}
-          d={`M${project(graphNodes[a!]!).join(" ")}L${project(graphNodes[b!]!).join(" ")}`}
-          stroke="#9eb6d3"
-          strokeOpacity=".5"
+          d={path([a!, b!])}
+          stroke="#506580"
+          strokeWidth="1.5"
         />
-      ))}
-      <polygon
-        points={points([
-          [-2.1, -1.0, 1.74],
-          [2.1, -1.0, 1.74],
-          [2.1, -1.35, 1.74],
-          [-2.1, -1.35, 1.74],
-        ])}
-        fill="url(#signal-base)"
-      />
-      <polygon
-        points={points([
-          [2.1, -1, -1.74],
-          [2.1, -1, 1.74],
-          [2.1, -1.35, 1.74],
-          [2.1, -1.35, -1.74],
-        ])}
-        fill="#10284d"
-      />
-      <polygon
-        points={surface(-1, 4.2, 3.48)}
-        fill="#304d7b"
-        stroke="url(#signal-metal)"
-        strokeWidth="5"
-        strokeLinejoin="round"
-      />
-      <g stroke="url(#signal-metal)" strokeWidth="3">
-        {[-1.8, 1.8].flatMap((x) =>
-          [-1.42, 1.42].map((z) => (
-            <path
-              key={`${x}-${z}`}
-              d={`M${project([x, -1, z]).join(" ")}L${project([x, 1.3, z]).join(" ")}`}
-            />
-          )),
-        )}
-      </g>
-      {[-0.65, 0, 0.65, 1.25].map((y, i) => (
-        <g key={y} opacity={phase === "trace" ? 1 : 0.88}>
-          <polygon
-            points={surface(y - 0.05)}
-            fill="url(#signal-glass)"
-            stroke="#738eaf"
-            strokeWidth="3"
-            strokeLinejoin="round"
-          />
-          <polygon
-            points={surface(y)}
-            fill={i === 3 ? "url(#signal-top)" : "url(#signal-glass)"}
-            stroke="url(#signal-metal)"
-            strokeWidth="5"
-            strokeLinejoin="round"
-          />
-          <polygon
-            points={surface(y + 0.015, 3.8, 3.05)}
-            stroke="#ecf5ff"
-            strokeOpacity=".7"
-            strokeWidth=".8"
-          />
-        </g>
-      ))}
-      <g stroke="#edf4ff" strokeWidth="5" strokeLinejoin="round">
-        <polyline
-          points={points([
-            [-1.35, 1.34, -0.85],
-            [-0.85, 1.34, -0.85],
-            [-0.1, 1.34, 0],
-            [-0.85, 1.34, 0.85],
-            [-1.35, 1.34, 0.85],
-          ])}
-        />
-        <polyline
-          points={points([
-            [-0.1, 1.34, 0],
-            [1.4, 1.34, 0],
-          ])}
-        />
-        <polyline
-          points={points([
-            [0.65, 1.34, -0.9],
-            [0.65, 1.34, 0.9],
-          ])}
-        />
-      </g>
-      {graphNodes.slice(0, 3).map(([x, y, z], i) => (
-        <g key={i} opacity={phase === "source" ? 1 : 0.88}>
-          <polygon
-            points={points([
-              [x - 0.75, y - 0.1, z - 0.5],
-              [x + 0.45, y - 0.1, z - 0.5],
-              [x + 0.45, y - 0.1, z + 0.45],
-              [x - 0.75, y - 0.1, z + 0.45],
-            ])}
-            fill="#eef4fc"
-            stroke="url(#signal-metal)"
-            strokeWidth="3"
-          />
-          {[0, 1, 2, 3].map((line) => (
-            <path
-              key={line}
-              d={`M${project([x - 0.58, y, z - 0.28 + line * 0.18]).join(" ")}L${project([x + (line === 2 ? 0.18 : 0.02), y, z - 0.28 + line * 0.18]).join(" ")}`}
-              stroke={line === 2 ? "#315dff" : "#a2b6d1"}
-              strokeWidth="2"
-            />
-          ))}
-        </g>
       ))}
       {graphRoutes.map((route, i) => (
-        <polyline
-          key={i}
-          points={route
-            .map((index) => project(graphNodes[index]!).join(","))
-            .join(" ")}
-          stroke={i === 1 ? "#e77760" : "url(#signal-line)"}
-          strokeWidth={phase === "signal" ? 2.8 : 1.8}
-          strokeLinejoin="round"
-          opacity=".85"
-        />
+        <g key={i}>
+          <path
+            d={path(route)}
+            stroke="#070a11"
+            strokeWidth="9"
+            transform="translate(0 5)"
+          />
+          <path d={path(route)} stroke="url(#graph-rail)" strokeWidth="4" />
+          <path
+            d={path(route)}
+            stroke="#adc4e7"
+            strokeOpacity=".25"
+            strokeWidth=".8"
+            transform="translate(0 -1)"
+          />
+        </g>
       ))}
-      {graphNodes.map((node, i) => {
-        const [x, y] = project(node),
-          color = riskNodes.has(i) ? "#eb755b" : i > 8 ? "#159a9f" : "#315dff";
+      <path
+        d={path([10, 13, 16])}
+        stroke={phase === "signal" ? "#ffb196" : "#b87056"}
+        strokeWidth="3"
+      />
+      {graphNodes.map((p, i) => {
+        const [x, y] = project(p),
+          color = riskNodes.has(i)
+            ? phase === "signal"
+              ? "#ffc4aa"
+              : "#e49273"
+            : i > 8
+              ? "#76d6c4"
+              : phase === "source"
+                ? "#afc5ff"
+                : "#678de7";
         return (
-          <g key={i}>
-            <circle cx={x} cy={y} r="11" fill={color} fillOpacity=".06" />
-            <circle cx={x} cy={y} r="6" stroke={color} strokeOpacity=".4" />
-            <circle cx={x} cy={y} r="3.4" fill={color} />
-            <circle cx={x - 1} cy={y - 1} r="1" fill="white" />
+          <g key={i} transform={`translate(${x} ${y})`}>
+            <ellipse cy="10" rx="22" ry="7" fill="#050911" opacity=".6" />
+            <path d="M-17 0v7c0 11 34 11 34 0V0" fill="url(#graph-steel)" />
+            <ellipse
+              rx="17"
+              ry="8"
+              fill="#8093b1"
+              stroke="#b6c5dd"
+              strokeWidth="1.3"
+            />
+            <ellipse cy="-1" rx="10" ry="4.5" fill={color} />
+            <ellipse cy="-2" rx="4" ry="1.5" fill="#eef4ff" opacity=".75" />
           </g>
         );
       })}

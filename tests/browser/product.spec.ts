@@ -41,7 +41,7 @@ for (const [width, height] of [
     });
     await page.goto("/", { waitUntil: "networkidle" });
     await expect(page.getByRole("heading", { level: 1 })).toContainText(
-      "Catch release",
+      "Understand the change",
     );
     const submit = page.getByRole("button", {
       name: "Analyze PR",
@@ -490,13 +490,17 @@ test("the diff connects to its finding and report tabs support keyboard navigati
   await expect(risk).toHaveAttribute("aria-selected", "true");
 });
 
-test("the response playground checks every example contract and clears stale results", async ({ page }) => {
+test("the response playground checks every example contract and clears stale results", async ({
+  page,
+}) => {
   let requests = 0;
   page.on("request", (request) => {
     if (request.url().includes("/api/")) requests++;
   });
   await page.goto("/");
-  await page.getByRole("button", { name: "Open response playground", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Open response playground", exact: true })
+    .click();
   const result = page.getByRole("status", { name: "Example caller result" });
   const payload = page.getByLabel("Example response payload");
   const caller = page.getByLabel("Example caller", { exact: true });
@@ -511,80 +515,158 @@ test("the response playground checks every example contract and clears stale res
     await expect(result).toContainText("Run the example");
     const data = JSON.parse(await payload.innerText());
     expect(Array.isArray(data)).toBe(version === "Before change");
-    await page.getByRole("button", { name: "Run example caller", exact: true }).click();
-    await expect(result).toHaveAttribute("data-outcome", compatible ? "compatible" : "incompatible");
-    await expect(result).toContainText(compatible ? "Compatible in this example" : "Incompatible in this example");
+    await page
+      .getByRole("button", { name: "Run example caller", exact: true })
+      .click();
+    await expect(result).toHaveAttribute(
+      "data-outcome",
+      compatible ? "compatible" : "incompatible",
+    );
+    await expect(result).toContainText(
+      compatible
+        ? "Compatible in this example"
+        : "Incompatible in this example",
+    );
     if (compatible) await expect(result).toContainText('["v1.8.0","v1.9.0"]');
     else await expect(result).not.toContainText('["v1.8.0","v1.9.0"]');
   }
-  await expect(page.getByText("Browser-only example data. No PR code or repository tests are run.")).toBeVisible();
-  await page.getByRole("button", { name: "Show source diff", exact: true }).click();
+  await expect(
+    page.getByText(
+      "Browser-only example data. No PR code or repository tests are run.",
+    ),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Show source diff", exact: true })
+    .click();
   await expect(page.getByLabel("Illustrative API response diff")).toBeVisible();
-  await expect(page.getByRole("button", { name: "Run example caller", exact: true })).toBeHidden();
-  await page.getByRole("button", { name: "Open response playground", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Run example caller", exact: true }),
+  ).toBeHidden();
+  await page
+    .getByRole("button", { name: "Open response playground", exact: true })
+    .click();
   await expect(caller).toHaveValue("envelope");
-  await expect(page.getByRole("button", { name: /^Before change/ })).toHaveAttribute("aria-pressed", "true");
+  await expect(
+    page.getByRole("button", { name: /^Before change/ }),
+  ).toHaveAttribute("aria-pressed", "true");
   await expect(result).toHaveAttribute("data-outcome", "incompatible");
   expect(requests).toBe(0);
 });
 
-test("the example checklist retains local selections and reset clears the whole workspace", async ({ page }) => {
+test("the example checklist retains local selections and reset clears the whole workspace", async ({
+  page,
+}) => {
   await page.goto("/");
   const preview = page.locator("#report-preview");
-  await preview.getByRole("button", { name: "Open review checklist", exact: true }).click();
-  const progress = preview.getByRole("status", { name: "Example checklist progress" });
+  await preview
+    .getByRole("button", { name: "Open review checklist", exact: true })
+    .click();
+  const progress = preview.getByRole("status", {
+    name: "Example checklist progress",
+  });
   await expect(progress).toContainText("0 of 3");
   const checks = preview.getByRole("checkbox");
   for (const check of await checks.all()) await check.check();
-  await expect(progress).toContainText("3 of 3 example steps selected · Human verification still required.");
+  await expect(progress).toContainText(
+    "3 of 3 example steps selected · Human verification still required.",
+  );
   await preview.getByRole("tab", { name: "Evidence", exact: true }).click();
   await preview.getByRole("tab", { name: "Next steps", exact: true }).click();
   for (const check of await checks.all()) await expect(check).toBeChecked();
   await checks.nth(1).uncheck();
   await expect(progress).toContainText("2 of 3");
-  await preview.getByRole("button", { name: "Open response playground", exact: true }).click();
-  await preview.getByLabel("Example caller", { exact: true }).selectOption("envelope");
-  await preview.getByRole("button", { name: "Run example caller", exact: true }).click();
-  await expect(preview.getByRole("status", { name: "Example caller result" })).toHaveAttribute("data-outcome", "compatible");
+  await preview
+    .getByRole("button", { name: "Open response playground", exact: true })
+    .click();
+  await preview
+    .getByLabel("Example caller", { exact: true })
+    .selectOption("envelope");
+  await preview
+    .getByRole("button", { name: "Run example caller", exact: true })
+    .click();
+  await expect(
+    preview.getByRole("status", { name: "Example caller result" }),
+  ).toHaveAttribute("data-outcome", "compatible");
   await preview.getByRole("button", { name: "src/api/releases.ts:11" }).click();
-  await expect(preview.locator(".diff-added")).toHaveAttribute("aria-pressed", "true");
-  await preview.getByRole("button", { name: "Reset example", exact: true }).click();
-  await expect(preview.getByRole("tab", { name: "Risk", exact: true })).toHaveAttribute("aria-selected", "true");
-  await expect(preview.locator(".diff-added")).toHaveAttribute("aria-pressed", "false");
-  await preview.getByRole("button", { name: "Open review checklist", exact: true }).click();
+  await expect(preview.locator(".diff-added")).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await preview
+    .getByRole("button", { name: "Reset example", exact: true })
+    .click();
+  await expect(
+    preview.getByRole("tab", { name: "Risk", exact: true }),
+  ).toHaveAttribute("aria-selected", "true");
+  await expect(preview.locator(".diff-added")).toHaveAttribute(
+    "aria-pressed",
+    "false",
+  );
+  await preview
+    .getByRole("button", { name: "Open review checklist", exact: true })
+    .click();
   for (const check of await checks.all()) await expect(check).not.toBeChecked();
   await expect(progress).toContainText("0 of 3");
-  await preview.getByRole("button", { name: "Open response playground", exact: true }).click();
-  await expect(preview.getByLabel("Example caller", { exact: true })).toHaveValue("array");
-  await expect(preview.getByRole("button", { name: /^After change/ })).toHaveAttribute("aria-pressed", "true");
-  await expect(preview.getByRole("status", { name: "Example caller result" })).toHaveAttribute("data-outcome", "idle");
+  await preview
+    .getByRole("button", { name: "Open response playground", exact: true })
+    .click();
+  await expect(
+    preview.getByLabel("Example caller", { exact: true }),
+  ).toHaveValue("array");
+  await expect(
+    preview.getByRole("button", { name: /^After change/ }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await expect(
+    preview.getByRole("status", { name: "Example caller result" }),
+  ).toHaveAttribute("data-outcome", "idle");
 });
 
 for (const width of [1440, 390]) {
-  test(`workspace tools, evidence links and checkboxes work with a keyboard at ${width}px`, async ({ page }) => {
+  test(`workspace tools, evidence links and checkboxes work with a keyboard at ${width}px`, async ({
+    page,
+  }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/");
     const preview = page.locator("#report-preview");
-    const tools = preview.getByRole("navigation", { name: "Example workspace tools" });
+    const tools = preview.getByRole("navigation", {
+      name: "Example workspace tools",
+    });
     await expect(tools).toBeVisible();
-    await tools.getByRole("button", { name: "Open response playground", exact: true }).focus();
+    await tools
+      .getByRole("button", { name: "Open response playground", exact: true })
+      .focus();
     await page.keyboard.press("Enter");
-    await expect(preview.getByRole("region", { name: "Try both sides of the contract." })).toBeFocused();
+    await expect(
+      preview.getByRole("region", { name: "Try both sides of the contract." }),
+    ).toBeFocused();
     await page.keyboard.press("Tab");
-    await expect(preview.getByRole("button", { name: /^Before change/ })).toBeFocused();
+    await expect(
+      preview.getByRole("button", { name: /^Before change/ }),
+    ).toBeFocused();
     await page.keyboard.press("Space");
-    await expect(preview.getByRole("button", { name: /^Before change/ })).toHaveAttribute("aria-pressed", "true");
-    await preview.getByRole("button", { name: "src/api/releases.ts:11" }).focus();
+    await expect(
+      preview.getByRole("button", { name: /^Before change/ }),
+    ).toHaveAttribute("aria-pressed", "true");
+    await preview
+      .getByRole("button", { name: "src/api/releases.ts:11" })
+      .focus();
     await page.keyboard.press("Enter");
-    const line = preview.getByRole("button", { name: "Select changed response line to inspect its risk" });
+    const line = preview.getByRole("button", {
+      name: "Select changed response line to inspect its risk",
+    });
     await expect(line).toBeFocused();
     await expect(line).toBeInViewport();
     await expect(line).toHaveAttribute("aria-pressed", "true");
     await preview.getByRole("button", { name: "Inspect finding" }).click();
     await expect(preview.getByRole("tabpanel")).toBeFocused();
-    await expect(preview.locator(".risk-view")).toHaveAttribute("data-highlighted", "true");
-    await tools.getByRole("button", { name: "Open review checklist", exact: true }).focus();
+    await expect(preview.locator(".risk-view")).toHaveAttribute(
+      "data-highlighted",
+      "true",
+    );
+    await tools
+      .getByRole("button", { name: "Open review checklist", exact: true })
+      .focus();
     await page.keyboard.press("Enter");
     await expect(preview.getByRole("tabpanel")).toBeFocused();
     await page.keyboard.press("Tab");
@@ -592,12 +674,23 @@ for (const width of [1440, 390]) {
     await expect(firstCheck).toBeFocused();
     await page.keyboard.press("Space");
     await expect(firstCheck).toBeChecked();
-    await expect(preview.getByRole("status", { name: "Example checklist progress" })).toContainText("1 of 3");
-    const a11y = await new AxeBuilder({ page }).include("#report-preview").withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
+    await expect(
+      preview.getByRole("status", { name: "Example checklist progress" }),
+    ).toContainText("1 of 3");
+    const a11y = await new AxeBuilder({ page })
+      .include("#report-preview")
+      .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+      .analyze();
     expect(a11y.violations).toEqual([]);
-    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
     await page.reload();
-    await preview.getByRole("button", { name: "Open review checklist", exact: true }).click();
+    await preview
+      .getByRole("button", { name: "Open review checklist", exact: true })
+      .click();
     await expect(firstCheck).not.toBeChecked();
   });
 }
@@ -714,7 +807,9 @@ test("the desktop graph renders, moves, pauses and suspends offscreen", async ({
   expect(errors).toEqual([]);
 });
 
-test("release graph chapters work by keyboard with a static reduced-motion drawing", async ({ page }) => {
+test("release graph chapters work by keyboard with a static reduced-motion drawing", async ({
+  page,
+}) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   const graph = page.locator(".hero-stage");
@@ -725,22 +820,72 @@ test("release graph chapters work by keyboard with a static reduced-motion drawi
   await page.keyboard.press("Space");
   await expect(source).toHaveAttribute("aria-pressed", "true");
   await expect(graph).toHaveAttribute("data-phase", "source");
-  await expect(graph.locator(".scene-phase-description")).toContainText("specific set of changes");
+  await expect(graph.locator(".scene-review-note")).toContainText(
+    "Inspect the changed shape",
+  );
+  await expect(graph.locator(".scene-phase-description")).toContainText(
+    "specific set of changes",
+  );
   await page.keyboard.press("Tab");
   await expect(graph.getByRole("button", { name: /Context/ })).toBeFocused();
   await page.keyboard.press("Tab");
   await expect(graph.getByRole("button", { name: /Findings/ })).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(graph).toHaveAttribute("data-phase", "signal");
+  await expect(graph.locator(".scene-review-note")).toContainText(
+    "Human verification required",
+  );
   await expect(graph.locator(".scene-fallback")).toBeVisible();
-  await expect(graph.locator(".scene-phase-description")).toContainText("evidence to inspect");
-  const sample = graph.getByRole("link", { name: /Explore an illustrative finding/ });
+  await expect(graph.locator(".scene-phase-description")).toContainText(
+    "evidence to inspect",
+  );
+  const sample = graph.getByRole("link", {
+    name: /Explore an illustrative finding/,
+  });
   await expect(sample).toHaveAttribute("href", "#report-preview");
   await sample.click();
-  await expect(page.getByRole("heading", { name: /A small change/ })).toBeInViewport();
+  await expect(
+    page.getByRole("heading", { name: /The change\. The evidence/ }),
+  ).toBeInViewport();
   await page.getByRole("button", { name: "Load example PR" }).click();
   await expect(page.getByLabel("GitHub pull request URL")).toBeFocused();
-  await expect(page.getByRole("button", { name: "Analyze PR", exact: true })).toBeEnabled();
+  await expect(
+    page.getByRole("button", { name: "Analyze PR", exact: true }),
+  ).toBeEnabled();
+});
+
+test("the editorial hero keeps its working input above a panoramic illustrative graph", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  const title = await page.locator("#hero-title").boundingBox();
+  const analyzer = await page.locator("#analyze").boundingBox();
+  const graph = await page.locator(".hero-stage").boundingBox();
+  expect(title!.y + title!.height).toBeLessThan(analyzer!.y);
+  expect(analyzer!.y + analyzer!.height).toBeLessThan(graph!.y);
+  expect(graph!.width).toBeGreaterThan(1200);
+  expect(graph!.y + graph!.height).toBeLessThanOrEqual(900);
+  await expect(page.locator(".scene-source-note")).toContainText(
+    "{ items: Release[] }",
+  );
+  await expect(page.locator(".scene-review-note")).toContainText(
+    "has not been inspected",
+  );
+  await expect(page.locator(".hero-stage")).toContainText("No live telemetry");
+  await page.getByRole("button", { name: "Load example PR" }).click();
+  await expect(page.getByLabel("GitHub pull request URL")).toBeFocused();
+  await page.setViewportSize({ width: 1366, height: 768 });
+  for (const phase of ["Source", "Context", "Findings"]) {
+    await page
+      .locator(".scene-chapters")
+      .getByRole("button", { name: new RegExp(phase) })
+      .click();
+    const note = await page.locator(".scene-review-note").boundingBox();
+    const link = await page.locator(".scene-signal-link").boundingBox();
+    expect(note!.y + note!.height + 8).toBeLessThan(link!.y);
+  }
 });
 
 test("GPU context loss retains the analyzer and the graph can recover", async ({

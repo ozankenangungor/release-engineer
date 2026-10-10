@@ -63,12 +63,14 @@ const safeguards = [
   },
 ];
 export default function Home() {
-  const interfaceRevision = getDeploymentProvenance({ sha: process.env.VERCEL_GIT_COMMIT_SHA })?.sha ?? null;
+  const interfaceRevision =
+    getDeploymentProvenance({ sha: process.env.VERCEL_GIT_COMMIT_SHA })?.sha ??
+    null;
   const example = getPublishedCaseStudies().find(
     (study) => study.slug === "rails-doc-typo-58968",
   );
   return (
-    <main id="main" className="home-shell signal-experience">
+    <main id="main" className="home-shell studio-experience">
       <section className="signal-hero" aria-labelledby="hero-title">
         <div className="hero-composition">
           <div className="hero-copy">
@@ -77,31 +79,27 @@ export default function Home() {
               INTELLIGENCE
             </p>
             <h1 id="hero-title">
-              <span>Catch release risks.</span>
-              <span className="hero-resolution">
-                Before they <span className="ship-word">ship.</span>
-              </span>
+              <span>Understand the change.</span>
+              <span>Own the release.</span>
             </h1>
-            <p className="hero-description">
-              Claude-powered analysis for public GitHub pull requests. Surface
-              breaking changes, regressions and testing gaps — with evidence and
-              honest limits.
-            </p>
-            <AnalysisForm examplePrUrl={example?.prUrl} interfaceRevision={interfaceRevision} />
-            <a className="hero-preview-link" href="#report-preview">
-              See a sample report <span aria-hidden="true">↓</span>
-            </a>
+          </div>
+          <div className="hero-entry">
+            <div>
+              <p className="hero-description">
+                Claude-powered analysis for public GitHub pull requests. Surface
+                breaking changes, regressions and testing gaps — with evidence
+                and honest limits.
+              </p>
+              <a className="hero-preview-link" href="#report-preview">
+                See a sample report <span aria-hidden="true">↓</span>
+              </a>
+            </div>
+            <AnalysisForm
+              examplePrUrl={example?.prUrl}
+              interfaceRevision={interfaceRevision}
+            />
           </div>
           <ReleaseIntelligenceScene />
-        </div>
-        <div className="hero-baseline">
-          <span>
-            <ReleaseMark /> FROM CHANGE TO SIGNAL
-          </span>
-          <p>Public PRs. Bounded context. Human decisions.</p>
-          <a href="#report-preview" aria-label="Explore the product">
-            <span aria-hidden="true">↓</span>
-          </a>
         </div>
       </section>
       <div id="analysis-results" className="analysis-results" />
@@ -114,9 +112,9 @@ export default function Home() {
         <div className="process-editorial" data-reveal="0">
           <p className="section-kicker">02 / THE REVIEW PIPELINE</p>
           <h2 id="workflow-title">
-            A second pass.
+            An extra perspective.
             <br />
-            <span>A clearer decision.</span>
+            <span>A human decision.</span>
           </h2>
           <p>
             For the moments when a small diff can carry a much larger
@@ -154,8 +152,9 @@ export default function Home() {
             <div>
               <p className="section-kicker">03 / ENGINEERING, IN THE OPEN</p>
               <h2 id="evidence-title">
-                Confidence needs
-                <br />a public record.
+                Built on boundaries
+                <br />
+                you can inspect.
               </h2>
             </div>
             <div>
@@ -194,9 +193,9 @@ export default function Home() {
         <div>
           <p className="section-kicker">04 / MEET THE FOUNDER</p>
           <h2 id="founder-title">
-            Built for better
+            Engineering judgment,
             <br />
-            release decisions.
+            built into the product.
           </h2>
         </div>
         <div>
@@ -233,9 +232,8 @@ export default function Home() {
             YOUR NEXT RELEASE / A SECOND PERSPECTIVE
           </p>
           <h2 id="final-title">
-            Small diff.
-            <br />
-            See the bigger picture.
+            Your next pull request.
+            <br />A clearer second opinion.
           </h2>
           <a href="#analyze" className="final-action">
             Analyze a public PR <span aria-hidden="true">↗︎</span>
