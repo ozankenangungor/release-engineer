@@ -2190,7 +2190,7 @@ button:disabled {
     gap: 45px;
   }
 }
-@media (max-width: 1023px) {
+@media (max-width: 1119px) {
   .header-inner {
     min-height: 82px;
   }
@@ -2267,6 +2267,8 @@ button:disabled {
     margin-top: 25px;
     border: 0;
   }
+}
+@media (max-width: 1023px) {
   .hero-composition {
     min-height: 0;
     padding-bottom: 35px;

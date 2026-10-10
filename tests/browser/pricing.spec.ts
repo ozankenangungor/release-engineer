@@ -8,16 +8,16 @@ test.beforeEach(async ({ context }) => {
   await context.route("**/api/analyze", route => route.fulfill({ status: 503, json: { error: { message: "Offline service error." } } }));
 });
 
-for (const width of [1440, 1024, 390, 360]) {
+for (const width of [1440, 1120, 1024, 390, 360]) {
   test(`pricing plans and navigation are usable at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
-    if (width < 1024) {
+    if (width < 1120) {
       await page.getByLabel("Toggle navigation").click();
       await page.getByRole("navigation", { name: "Mobile", exact: true }).getByRole("link", { name: "Pricing", exact: true }).focus();
     } else {
       const navigation = await page.getByRole("navigation", { name: "Main", exact: true }).boundingBox();
-      const action = await page.locator(".header-action").boundingBox();
+      const action = await page.locator(".header-account-actions").boundingBox();
       expect(navigation!.x + navigation!.width).toBeLessThan(action!.x);
       await page.getByRole("navigation", { name: "Main", exact: true }).getByRole("link", { name: "Pricing", exact: true }).focus();
     }

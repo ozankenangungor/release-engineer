@@ -114,31 +114,33 @@ test("pricing leads guests to registration and signed-in accounts to their works
   ).toHaveAttribute("href", "/account");
 });
 
-test("mobile sign-in navigation is keyboard operable and registration has no horizontal overflow", async ({
-  page,
-}) => {
-  await page.route("**/api/account", (route) =>
-    route.fulfill({ status: 401, json: {} }),
-  );
-  await page.setViewportSize({ width: 360, height: 800 });
-  await page.goto("/");
-  await page.getByLabel("Toggle navigation").click();
-  await page
-    .getByRole("navigation", { name: "Mobile", exact: true })
-    .getByRole("link", { name: "Sign in" })
-    .focus();
-  await page.keyboard.press("Enter");
-  await expect(page).toHaveURL(/\/sign-in$/);
-  await expect(page.getByRole("heading", { level: 1 })).toContainText(
-    "your next review.",
-  );
-  await page.goto("/sign-up");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText(
-    "Your review workspace.",
-  );
-  expect(
-    await page.evaluate(
-      () => document.documentElement.scrollWidth <= innerWidth,
-    ),
-  ).toBe(true);
-});
+for (const width of [360, 1024]) {
+  test(`sign-in navigation is keyboard operable at ${width}px and registration has no horizontal overflow`, async ({
+    page,
+  }) => {
+    await page.route("**/api/account", (route) =>
+      route.fulfill({ status: 401, json: {} }),
+    );
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto("/");
+    await page.getByLabel("Toggle navigation").click();
+    await page
+      .getByRole("navigation", { name: "Mobile", exact: true })
+      .getByRole("link", { name: "Sign in" })
+      .focus();
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(/\/sign-in$/);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(
+      "your next review.",
+    );
+    await page.goto("/sign-up");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(
+      "Your review workspace.",
+    );
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+  });
+}

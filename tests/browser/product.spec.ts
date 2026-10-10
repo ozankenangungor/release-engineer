@@ -71,7 +71,7 @@ for (const [width, height] of [
       ),
     ).toBe(true);
     await expect(page.locator(".hero-stage .scene-fallback")).toBeAttached();
-    if (width >= 1024) {
+    if (width >= 1120) {
       await expect(
         page
           .getByRole("navigation", { name: "Main", exact: true })
@@ -521,12 +521,12 @@ for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 900 });
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/");
-    if (width < 1024) {
+    if (width < 1120) {
       await page.getByLabel("Toggle navigation").focus();
       await page.keyboard.press("Enter");
     }
     const navigation = page.getByRole("navigation", {
-      name: width < 1024 ? "Mobile" : "Main",
+      name: width < 1120 ? "Mobile" : "Main",
       exact: true,
     });
     await navigation.getByRole("link", { name: "Feedback", exact: true }).focus();
@@ -535,7 +535,7 @@ for (const width of [1440, 390]) {
     await expect(page.getByRole("heading", { level: 1 })).toContainText(
       "In developers’ words.",
     );
-    if (width < 1024)
+    if (width < 1120)
       await expect(page.locator(".mobile-menu")).not.toHaveAttribute("open", "");
     await expect(page.locator("main blockquote")).toHaveCount(23);
     await expect(page.locator(".feedback-review-card")).toHaveCount(23);
