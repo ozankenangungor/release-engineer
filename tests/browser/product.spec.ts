@@ -1,6 +1,6 @@
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { pullRequest, review } from "../fixtures";
 
@@ -753,6 +753,19 @@ test("the desktop graph renders, moves, pauses and suspends offscreen", async ({
   page,
 }) => {
   await capableDesktop(page);
+  await page.addInitScript(() => {
+    const metrics = window as typeof window & { graphLayoutShift: number };
+    metrics.graphLayoutShift = 0;
+    new PerformanceObserver((list) => {
+      for (const entry of list.getEntries()) {
+        const shift = entry as PerformanceEntry & {
+          hadRecentInput: boolean;
+          value: number;
+        };
+        if (!shift.hadRecentInput) metrics.graphLayoutShift += shift.value;
+      }
+    }).observe({ type: "layout-shift", buffered: true });
+  });
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
@@ -762,6 +775,12 @@ test("the desktop graph renders, moves, pauses and suspends offscreen", async ({
   });
   const canvas = graph.locator("canvas");
   await expect(canvas).toHaveCount(1);
+  await page.waitForTimeout(150);
+  expect(
+    await page.evaluate(
+      () => (window as typeof window & { graphLayoutShift: number }).graphLayoutShift,
+    ),
+  ).toBe(0);
   await expect(
     page.getByRole("button", { name: "Analyze PR", exact: true }),
   ).toBeInViewport();
@@ -793,6 +812,17 @@ test("the desktop graph renders, moves, pauses and suspends offscreen", async ({
   expect(sourceFocus.equals(paused)).toBe(false);
   await page.waitForTimeout(250);
   expect((await canvas.screenshot()).equals(sourceFocus)).toBe(true);
+  await page.setViewportSize({ width: 2560, height: 1440 });
+  await expect
+    .poll(async () => (await canvas.boundingBox())!.width)
+    .toBeGreaterThan(1000);
+  await expect(graph).toHaveAttribute("data-scene", "webgl");
+  await expect(graph).toHaveAttribute("data-motion-active", "false");
+  await page.waitForTimeout(200);
+  const resized = await canvas.screenshot();
+  await page.waitForTimeout(250);
+  expect((await canvas.screenshot()).equals(resized)).toBe(true);
+  await page.setViewportSize({ width: 1440, height: 900 });
   await page
     .getByRole("button", { name: "Play animation", exact: true })
     .click();
@@ -886,6 +916,98 @@ test("the editorial hero keeps its working input above a panoramic illustrative 
     const link = await page.locator(".scene-signal-link").boundingBox();
     expect(note!.y + note!.height + 8).toBeLessThan(link!.y);
   }
+});
+
+async function expectWideGraphLayout(page: Page, viewportWidth: number) {
+  const stage = page.locator(".hero-stage");
+  const bounds = await stage.boundingBox();
+  const workspace = await page.locator(".product-workspace").boundingBox();
+  expect(bounds!.width / viewportWidth).toBeGreaterThanOrEqual(0.9);
+  expect(workspace!.width / viewportWidth).toBeGreaterThanOrEqual(0.9);
+  for (const phase of ["Source", "Context", "Findings"]) {
+    await stage.getByRole("button", { name: new RegExp(phase) }).click();
+    const source = await stage.locator(".scene-source-note").boundingBox();
+    const visual = await stage.locator(".scene-visual").boundingBox();
+    const note = await stage.locator(".scene-review-note").boundingBox();
+    const link = await stage.locator(".scene-signal-link").boundingBox();
+    const footer = await stage.locator(".scene-footer").boundingBox();
+    expect(source!.x + source!.width + 8).toBeLessThanOrEqual(visual!.x);
+    expect(visual!.x + visual!.width + 8).toBeLessThanOrEqual(note!.x);
+    expect(note!.y + note!.height + 8).toBeLessThanOrEqual(link!.y);
+    expect(link!.y + link!.height).toBeLessThanOrEqual(footer!.y + 1);
+    await expect(stage.locator(".scene-caption")).toBeVisible();
+  }
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+}
+
+for (const width of [2560, 3840]) {
+  test(`the product fills a ${width}px wide display without overlapping graph controls`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: Math.round((width * 9) / 16) });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/");
+    await expectWideGraphLayout(page, width);
+    await page.getByRole("button", { name: "Load example PR" }).click();
+    await expect(page.getByLabel("GitHub pull request URL")).toBeFocused();
+    await expect(
+      page.getByRole("button", { name: "Analyze PR", exact: true }),
+    ).toBeInViewport();
+  });
+}
+
+test.describe("75 percent desktop zoom layout", () => {
+  // Desktop zoom increases CSS viewport dimensions and reduces DPR. This
+  // emulates those metrics; it does not use mobile/pinch page-scale emulation.
+  test.use({ deviceScaleFactor: 0.75, reducedMotion: "reduce" });
+  for (const physicalWidth of [1920, 2560]) {
+    test(`fills a ${physicalWidth}px physical viewport at zoom-equivalent metrics`, async ({
+      page,
+    }) => {
+      const width = Math.round(physicalWidth / 0.75);
+      await page.setViewportSize({
+        width,
+        height: Math.round((physicalWidth * 9) / 16 / 0.75),
+      });
+      await page.goto("/");
+      expect(await page.evaluate(() => devicePixelRatio)).toBe(0.75);
+      await expectWideGraphLayout(page, width);
+      await page.getByRole("button", { name: "Load example PR" }).click();
+      await expect(page.getByLabel("GitHub pull request URL")).toBeFocused();
+    });
+  }
+});
+
+test("enlarged scene text wraps without hiding explanations, links or chapter controls", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  await page
+    .locator(
+      ".hero-stage p, .hero-stage h3, .hero-stage code, .hero-stage button, .hero-stage a, .scene-version",
+    )
+    .evaluateAll((elements) => {
+      const sizes = elements.map((element) =>
+        Math.max(18, parseFloat(getComputedStyle(element).fontSize) * 1.25),
+      );
+      elements.forEach((element, index) => {
+        (element as HTMLElement).style.fontSize = `${sizes[index]}px`;
+      });
+    });
+  await expectWideGraphLayout(page, 1440);
+  await page
+    .locator(".hero-stage")
+    .getByRole("link", { name: /Explore an illustrative finding/ })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: /The change\. The evidence/ }),
+  ).toBeInViewport();
 });
 
 test("GPU context loss retains the analyzer and the graph can recover", async ({

@@ -4,6 +4,21 @@ The homepage uses a centered editorial headline, a working input row and one pan
 dark release graph. The visual subject is the relationship between an authored code
 change and a potential release consequence. There is no standalone module sculpture.
 
+## Fluid composition
+
+Homepage, navigation and footer use viewport gutters rather than a 1480px width cap.
+The graph and software workspace occupy at least 90% of wide desktop viewports.
+Display, navigation and interface text scale with the available width, including the
+larger CSS viewport produced by desktop zoom. Long-form legal/project reading columns
+keep their existing readable measure.
+
+The scene has a flowing header, three-column body and control footer. Explanatory
+text and links are not absolute overlays; enlarged text can wrap and grow the stage.
+The toolbar reserves its width and height before the lazy renderer exposes controls.
+On mobile, the lightweight graph and link form one column with wrapping controls.
+The desktop camera fits actual graph nodes and the context outline on canvas resize,
+with room for hubs and pointer parallax, instead of retaining a fixed camera distance.
+
 ## Visual language
 
 - White, ink, cobalt and muted steel. Teal identifies stable paths; coral identifies
@@ -44,6 +59,10 @@ Capture before/after viewports at 1920×1080, 1440×900, 1366×768, 768×1024,
 the report workspace, error states, full homepage and public information pages. The
 desktop composition has a browser regression check requiring the working input to appear
 above a panoramic scene that fits the first viewport at 1440×900.
+Also capture 2560px and 3840px displays, 75% zoom-equivalent CSS viewport/DPR metrics,
+and scene text enlarged by 25% with an 18px minimum. Browser regressions require the
+wide graph/workspace to fill the page and explanations, links and controls to remain
+separate. Exercise wide canvas resize while paused.
 
 Compare cold browser JS transfer, LCP observations and layout shifts using production
 builds and the same capture procedure. These are lab observations, not real-user
