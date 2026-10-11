@@ -352,9 +352,11 @@ test("keyboard navigation, free preview and reduced motion work", async ({
   ).toBeFocused();
   await page.keyboard.press("Enter");
   const example = page.getByRole("button", { name: "Load example PR" });
+  // The interactive workspace now precedes the analyzer in the tab order.
+  const tabLimit = 12 + await page.locator("#report-preview").locator("a[href], button, input").count();
   for (
     let i = 0;
-    i < 12 &&
+    i < tabLimit &&
     !(await example.evaluate((node) => node === document.activeElement));
     i++
   ) {
