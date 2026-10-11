@@ -6,7 +6,7 @@ Use the existing locally hosted, SIL OFL licensed Inter variable font. Large dis
 
 ## Composition
 
-1. Spacious navigation; editorial hero; functioning inline analyzer beneath the copy. A cinematic graph replaces the right-hand form card. On mobile, the form precedes a compact static graph.
+1. Spacious navigation; editorial headline and product introduction; an immediately visible cinematic graph; then the functioning inline analyzer. On mobile, a compact static graph precedes the form. Header and mobile-menu analysis links jump directly to the form. The product LinkedIn page appears in navigation; the founder's personal profile stays on About.
 2. One unified dark software workspace connects an authored API-contract diff to Risk, Evidence and Next steps. It is explicitly illustrative. Selecting a changed line highlights the related finding.
 3. An open process timeline connects retrieval, context selection, Claude reasoning and human verification.
 4. A ruled engineering ledger links real implementation evidence. Historical failures stay explicit.

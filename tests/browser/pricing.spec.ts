@@ -24,7 +24,7 @@ for (const width of [1440, 1366, 1200, 1120, 1024, 390, 360]) {
     }
     const linkedin = page.getByRole("navigation", { name: mobile ? "Mobile" : "Main", exact: true }).getByRole("link", { name: "LinkedIn", exact: true });
     await expect(linkedin).toBeVisible();
-    await expect(linkedin).toHaveAttribute("href", "https://linkedin.com/in/ozan-kenan-gungor");
+    await expect(linkedin).toHaveAttribute("href", "https://www.linkedin.com/company/releaseengineer-tech/");
     await expect(linkedin).toHaveAttribute("target", "_blank");
     await expect(linkedin).toHaveAttribute("rel", "noopener noreferrer");
     await page.keyboard.press("Enter");

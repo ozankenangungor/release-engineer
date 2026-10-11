@@ -117,12 +117,54 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+.hero-product-story {
+  display: flex;
+  flex-direction: column;
+}
+@media (min-width: 1024px) {
+  .hero-product-story {
+    --hero-header-height: clamp(80px, 5.2vw, 104px);
+    min-height: calc(100svh - var(--hero-header-height));
+    padding-bottom: clamp(28px, 2vw, 48px);
+  }
+  .hero-product-story > .hero-stage {
+    flex: 1;
+  }
+}
+.hero-intro {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 6px 0 28px;
+}
+.studio-experience .hero-intro .hero-description {
+  max-width: 68ch;
+  margin: 0;
+}
+.studio-experience .hero-intro .hero-preview-link {
+  flex-shrink: 0;
+  margin: 0;
+}
 .hero-entry {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
   gap: clamp(32px, 5vw, 120px);
   align-items: center;
-  padding: 6px 0 30px;
+  padding: clamp(32px, 3vw, 64px) 0 0;
+}
+.hero-analysis-intro h2 {
+  margin: 12px 0;
+  font-size: clamp(28px, 2.4vw, 46px);
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+}
+.hero-analysis-description {
+  max-width: 42ch;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--muted);
 }
 .studio-experience .hero-description {
   max-width: 52ch;
@@ -892,6 +934,9 @@
 }
 
 @media (min-width: 1024px) and (max-height: 820px) {
+  .hero-product-story {
+    --hero-header-height: 80px;
+  }
   .header-inner {
     min-height: 80px;
   }
@@ -959,7 +1004,7 @@
   }
   .hero-entry {
     display: block;
-    padding: 0 0 24px;
+    padding: 32px 0 0;
   }
   .studio-experience .hero-description {
     max-width: 650px;
@@ -970,9 +1015,6 @@
   .studio-experience .hero-entry > div:first-child {
     text-align: center;
     margin-bottom: 25px;
-  }
-  .studio-experience .hero-entry .hero-preview-link {
-    margin-top: 0;
   }
   .studio-experience .hero-stage {
     margin-top: 8px;
@@ -1072,13 +1114,13 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 0;
-    padding: 0 0 20px;
+    gap: 24px;
+    padding: 32px 0 0;
   }
   .studio-experience .hero-entry > div:first-child {
     text-align: left;
     margin: 0;
-    display: contents;
+    display: block;
   }
   .studio-experience .hero-description {
     text-align: left;
@@ -1087,13 +1129,15 @@
     margin: 22px 0 23px;
     order: 0;
   }
+  .hero-intro {
+    display: block;
+    padding: 24px 0;
+  }
+  .studio-experience .hero-intro .hero-preview-link {
+    margin-top: 14px;
+  }
   .studio-experience .hero-entry .hero-analyzer {
     order: 1;
-  }
-  .studio-experience .hero-entry .hero-preview-link {
-    order: 2;
-    margin-top: 17px;
-    align-self: flex-start;
   }
   .studio-experience .hero-analyzer {
     max-width: none;

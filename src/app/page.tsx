@@ -75,18 +75,18 @@ export default function Home() {
     <main id="main" className="home-shell studio-experience">
       <section className="signal-hero" aria-labelledby="hero-title">
         <div className="hero-composition">
-          <div className="hero-copy">
-            <p className="hero-eyebrow">
-              <span className="signal-dot" aria-hidden="true" /> RELEASE
-              INTELLIGENCE
-            </p>
-            <h1 id="hero-title">
-              <span>Understand the change.</span>
-              <span>Own the release.</span>
-            </h1>
-          </div>
-          <div className="hero-entry">
-            <div>
+          <div className="hero-product-story">
+            <div className="hero-copy">
+              <p className="hero-eyebrow">
+                <span className="signal-dot" aria-hidden="true" /> RELEASE
+                INTELLIGENCE
+              </p>
+              <h1 id="hero-title">
+                <span>Understand the change.</span>
+                <span>Own the release.</span>
+              </h1>
+            </div>
+            <div className="hero-intro">
               <p className="hero-description">
                 Claude-powered release-risk review for public GitHub pull requests.
                 Identify API contract changes, security concerns and testing gaps,
@@ -96,12 +96,21 @@ export default function Home() {
                 See a sample report <span aria-hidden="true">↓</span>
               </a>
             </div>
+            <ReleaseIntelligenceScene />
+          </div>
+          <div className="hero-entry">
+            <div className="hero-analysis-intro">
+              <p className="section-kicker">YOUR PUBLIC PULL REQUEST</p>
+              <h2>Bring your next change.</h2>
+              <p className="hero-analysis-description">
+                Get a structured second opinion, tied to the reviewed commit.
+              </p>
+            </div>
             <AnalysisForm
               examplePrUrl={example?.prUrl}
               interfaceRevision={interfaceRevision}
             />
           </div>
-          <ReleaseIntelligenceScene />
         </div>
       </section>
       <div id="analysis-results" className="analysis-results" />

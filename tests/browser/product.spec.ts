@@ -63,8 +63,9 @@ for (const [width, height] of [
       name: "Analyze PR",
       exact: true,
     });
-    const box = await submit.boundingBox();
-    expect(box!.y + box!.height).toBeLessThanOrEqual(height);
+    const graph = await page.locator(".hero-stage").boundingBox();
+    const analyzer = await page.locator("#analyze").boundingBox();
+    expect(graph!.y + graph!.height).toBeLessThan(analyzer!.y);
     expect(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth,
@@ -87,6 +88,14 @@ for (const [width, height] of [
       ).toBeVisible();
       await page.keyboard.press("Escape");
     }
+    if (width >= 1200) {
+      await page.locator(".header-action").click();
+    } else {
+      await page.getByLabel("Toggle navigation").click();
+      await page.getByRole("navigation", { name: "Mobile", exact: true }).getByRole("link", { name: "Analyze a public PR" }).click();
+    }
+    await expect(page).toHaveURL(/#analyze$/);
+    await expect(submit).toBeInViewport();
     await page.getByRole("button", { name: "Load example PR" }).click();
     await expect(page.getByLabel("GitHub pull request URL")).toHaveValue(
       "https://github.com/rails/rails/pull/58968",
@@ -914,18 +923,22 @@ test("the desktop graph renders, moves, pauses and suspends offscreen", async ({
       () => (window as typeof window & { graphLayoutShift: number }).graphLayoutShift,
     ),
   ).toBe(0);
+  await page.locator(".header-action").click();
   await expect(
     page.getByRole("button", { name: "Analyze PR", exact: true }),
   ).toBeInViewport();
   await page.getByRole("button", { name: "Load example PR" }).click();
   await expect(page.getByLabel("GitHub pull request URL")).toBeFocused();
+  await graph.scrollIntoViewIfNeeded();
+  await expect(graph).toHaveAttribute("data-motion-active", "true");
   const first = await canvas.screenshot();
   await page.waitForTimeout(400);
   expect((await canvas.screenshot()).equals(first)).toBe(false);
-  await page.mouse.move(800, 300);
+  const canvasBounds = await canvas.boundingBox();
+  await page.mouse.move(canvasBounds!.x + canvasBounds!.width * 0.2, canvasBounds!.y + canvasBounds!.height * 0.35);
   await page.waitForTimeout(200);
   const left = await canvas.screenshot();
-  await page.mouse.move(1300, 650);
+  await page.mouse.move(canvasBounds!.x + canvasBounds!.width * 0.8, canvasBounds!.y + canvasBounds!.height * 0.65);
   await page.waitForTimeout(300);
   expect((await canvas.screenshot()).equals(left)).toBe(false);
   await page
@@ -1017,7 +1030,7 @@ test("release graph chapters work by keyboard with a static reduced-motion drawi
   ).toBeEnabled();
 });
 
-test("the editorial hero keeps its working input above a panoramic illustrative graph", async ({
+test("the editorial hero introduces the product and graph before the working analyzer", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -1026,8 +1039,11 @@ test("the editorial hero keeps its working input above a panoramic illustrative 
   const title = await page.locator("#hero-title").boundingBox();
   const analyzer = await page.locator("#analyze").boundingBox();
   const graph = await page.locator(".hero-stage").boundingBox();
-  expect(title!.y + title!.height).toBeLessThan(analyzer!.y);
-  expect(analyzer!.y + analyzer!.height).toBeLessThan(graph!.y);
+  const introduction = await page.locator(".hero-intro").boundingBox();
+  expect(title!.y + title!.height).toBeLessThan(introduction!.y);
+  expect(introduction!.y + introduction!.height).toBeLessThanOrEqual(graph!.y);
+  expect(graph!.y + graph!.height).toBeLessThan(analyzer!.y);
+  expect(analyzer!.y).toBeGreaterThanOrEqual(900);
   expect(graph!.width).toBeGreaterThan(1200);
   expect(graph!.y + graph!.height).toBeLessThanOrEqual(900);
   await expect(page.locator(".scene-source-note")).toContainText(

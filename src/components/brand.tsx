@@ -64,7 +64,7 @@ export function Header() {
           </a>
           <a
             className="nav-link"
-            href="https://linkedin.com/in/ozan-kenan-gungor"
+            href="https://www.linkedin.com/company/releaseengineer-tech/"
             target="_blank"
             rel="noopener noreferrer"
           >

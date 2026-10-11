@@ -62,7 +62,7 @@ export function MobileNavigation({
           GitHub<span aria-hidden="true">↗︎</span>
         </a>
         <a
-          href="https://linkedin.com/in/ozan-kenan-gungor"
+          href="https://www.linkedin.com/company/releaseengineer-tech/"
           target="_blank"
           rel="noopener noreferrer"
         >
