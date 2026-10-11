@@ -1410,9 +1410,9 @@
     color: Highlight;
   }
 }
-@media (max-width: 1199px) and (min-width: 1024px) {
+@media (max-width: 1439px) and (min-width: 1200px) {
   .header-inner { gap: 20px; }
-  .header-navigation { gap: 16px; }
+  .header-navigation { gap: 14px; }
   .nav-link { font-size: 14px; }
   .header-action { font-size: 13px; gap: 12px; padding-inline: 12px; }
   .brand-link { font-size: 20px; }

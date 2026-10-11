@@ -8,11 +8,12 @@ test.beforeEach(async ({ context }) => {
   await context.route("**/api/analyze", route => route.fulfill({ status: 503, json: { error: { message: "Offline service error." } } }));
 });
 
-for (const width of [1440, 1120, 1024, 390, 360]) {
+for (const width of [1440, 1366, 1200, 1120, 1024, 390, 360]) {
   test(`pricing plans and navigation are usable at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
-    if (width < 1120) {
+    const mobile = width < 1200;
+    if (mobile) {
       await page.getByLabel("Toggle navigation").click();
       await page.getByRole("navigation", { name: "Mobile", exact: true }).getByRole("link", { name: "Pricing", exact: true }).focus();
     } else {
@@ -21,6 +22,11 @@ for (const width of [1440, 1120, 1024, 390, 360]) {
       expect(navigation!.x + navigation!.width).toBeLessThan(action!.x);
       await page.getByRole("navigation", { name: "Main", exact: true }).getByRole("link", { name: "Pricing", exact: true }).focus();
     }
+    const linkedin = page.getByRole("navigation", { name: mobile ? "Mobile" : "Main", exact: true }).getByRole("link", { name: "LinkedIn", exact: true });
+    await expect(linkedin).toBeVisible();
+    await expect(linkedin).toHaveAttribute("href", "https://linkedin.com/in/ozan-kenan-gungor");
+    await expect(linkedin).toHaveAttribute("target", "_blank");
+    await expect(linkedin).toHaveAttribute("rel", "noopener noreferrer");
     await page.keyboard.press("Enter");
     await expect(page).toHaveURL(/\/pricing$/);
     await expect(page.locator("h1")).toContainText("Build release confidence.");
@@ -28,7 +34,7 @@ for (const width of [1440, 1120, 1024, 390, 360]) {
     const pro = page.getByRole("article", { name: "Pro", exact: true });
     await expect(page.getByRole("region", { name: "Review plans" }).getByRole("article")).toHaveCount(2);
     await expect(page.getByRole("article", { name: "Team", exact: true })).toHaveCount(0);
-    await expect(free).toContainText("10 reviews / day");
+    await expect(free).toContainText("10 reviews / month");
     await expect(free).toContainText("Available now");
     await expect(pro).toContainText("Sandbox preview");
     await expect(pro).toContainText("100 reviews / month");
@@ -40,7 +46,8 @@ for (const width of [1440, 1120, 1024, 390, 360]) {
     await expect(pro).toContainText("Sandbox checkout · $9/month");
     await expect(page.locator(".pricing-table-scroll thead th")).toHaveCount(3);
     await expect(page.locator(".pricing-page")).not.toContainText(/Team|\$19|\$79|Planned/);
-    await expect(free).toContainText("Up to 30 / UTC month");
+    await expect(free).toContainText("UTC calendar month");
+    await expect(free).not.toContainText(/reviews \/ day|Up to 30/);
     await expect(page.getByRole("button", { name: /buy|subscribe/i })).toHaveCount(0);
     const question = page.getByText("How do the 10 free reviews work?", { exact: false });
     await question.focus();
@@ -74,7 +81,7 @@ test("the tenth successful review counts, persists after reload and blocks an el
   await expect(page.getByRole("button", { name: "Analyze PR", exact: true })).toBeDisabled();
   await page.getByLabel("GitHub pull request URL").fill("https://github.com/octocat/hello-world/pull/1");
   await page.locator("#analyze form").evaluate(form => (form as HTMLFormElement).requestSubmit());
-  await expect(page.getByRole("alert", { name: "Analysis error" })).toContainText("today's 10");
+  await expect(page.getByRole("alert", { name: "Analysis error" })).toContainText("month's 10");
   expect(calls).toBe(1);
 });
 
@@ -97,7 +104,7 @@ test("errors and malformed reports do not count; a validated report with no find
   await expect(page.locator("#free-allowance")).toContainText("9 of 10");
 });
 
-test("an open page refreshes its allowance at UTC midnight", async ({ page }) => {
+test("an exhausted monthly allowance stays blocked across an ordinary UTC midnight", async ({ page }) => {
   await page.clock.install({ time: new Date("2026-10-11T23:59:30Z") });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
@@ -105,8 +112,8 @@ test("an open page refreshes its allowance at UTC midnight", async ({ page }) =>
   await page.reload();
   await expect(page.getByRole("button", { name: "Analyze PR", exact: true })).toBeDisabled();
   await page.clock.fastForward(60_000);
-  await expect(page.locator("#free-allowance")).toContainText("10 of 10");
-  await expect(page.getByRole("button", { name: "Analyze PR", exact: true })).toBeEnabled();
+  await expect(page.locator("#free-allowance")).toContainText("Review limit reached");
+  await expect(page.getByRole("button", { name: "Analyze PR", exact: true })).toBeDisabled();
 });
 
 test("unavailable browser storage gives actionable guidance without starting a review", async ({ page }) => {
@@ -173,12 +180,12 @@ test("a guest monthly limit survives midnight and resets at the next UTC month",
   await page.clock.install({ time: new Date("2026-10-31T23:59:30Z") });
   await page.emulateMedia({reducedMotion:"reduce"});
   await page.goto("/");
-  await page.evaluate(key=>localStorage.setItem(key,JSON.stringify({day:"2026-10-31",used:0,month:"2026-10",monthlyUsed:30})),FREE_USAGE_KEY);
+  await page.evaluate(key=>localStorage.setItem(key,JSON.stringify({day:"2026-10-31",used:0,month:"2026-10",monthlyUsed:10})),FREE_USAGE_KEY);
   await page.reload();
   await expect(page.getByRole("button",{name:"Analyze PR",exact:true})).toBeDisabled();
   await page.getByLabel("GitHub pull request URL").fill("https://github.com/octocat/hello-world/pull/1");
   await page.locator("#analyze form").evaluate(form=>(form as HTMLFormElement).requestSubmit());
-  await expect(page.getByRole("alert",{name:"Analysis error"})).toContainText("month's 30 free reviews");
+  await expect(page.getByRole("alert",{name:"Analysis error"})).toContainText("month's 10 free reviews");
   await page.clock.fastForward(60_000);
   await expect(page.getByRole("button",{name:"Analyze PR",exact:true})).toBeEnabled();
   await expect(page.locator("#free-allowance")).toContainText("10 of 10");

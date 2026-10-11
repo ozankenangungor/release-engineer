@@ -123,6 +123,7 @@ export function AccountWorkspace() {
     }
   }
   const usage = account?.usage;
+  const monthlyUsage = usage?.monthly ?? usage;
   const managedSubscription = Boolean(
     account?.subscription && account.subscription.status !== "canceled",
   );
@@ -148,8 +149,8 @@ export function AccountWorkspace() {
       )}
       <section className="account-usage" aria-labelledby="account-usage-title">
         <div>
-          <p className="section-kicker">TODAY / UTC</p>
-          <h2 id="account-usage-title">Your daily review allowance.</h2>
+          <p className="section-kicker">THIS MONTH / UTC</p>
+          <h2 id="account-usage-title">Your monthly review allowance.</h2>
           <p>
             Only completed, validated reviews count. Failed requests release
             their reservation.
@@ -157,18 +158,18 @@ export function AccountWorkspace() {
         </div>
         <div className="account-counter" aria-live="polite">
           <strong>
-            {usage?.remaining ?? "—"}
-            <span> / {usage?.limit ?? "—"}</span>
+            {monthlyUsage?.remaining ?? "—"}
+            <span> / {monthlyUsage?.limit ?? "—"}</span>
           </strong>
           <p>reviews remaining</p>
           <progress
-            aria-label="Daily reviews used"
-            value={usage?.used ?? 0}
-            max={usage?.limit ?? 10}
+            aria-label="Monthly reviews used"
+            value={monthlyUsage?.used ?? 0}
+            max={monthlyUsage?.limit ?? 10}
           />
           <p>
-            {usage
-              ? `${usage.used} completed${usage.pending ? " · 1 review in progress" : ""} · Resets at 00:00 UTC`
+            {monthlyUsage
+              ? `${monthlyUsage.used} completed${usage?.pending ? " · 1 review in progress" : ""} · Resets on the 1st at 00:00 UTC`
               : "Loading account usage…"}
           </p>
           {usage?.monthly && <p>{usage.monthly.remaining} of {usage.monthly.limit} monthly reviews remaining · Resets {new Date(usage.monthly.resetsAt).toLocaleDateString("en-GB", { timeZone: "UTC" })}</p>}
@@ -187,7 +188,7 @@ export function AccountWorkspace() {
           <p>
             {usage?.plan === "pro"
               ? "100 public PR reviews per UTC calendar month, linked to your account."
-              : "10 public PR reviews a day, up to 30 per UTC month, linked to your account."}
+              : "10 public PR reviews per UTC calendar month, linked to your account."}
           </p>
         </div>
         <div>

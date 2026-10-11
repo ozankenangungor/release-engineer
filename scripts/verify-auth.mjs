@@ -110,7 +110,7 @@ try {
     .filter({ hasText: "10" })
     .waitFor();
   await page
-    .getByText("10 public PR reviews a day, up to 30 per UTC month, linked to your account.", {
+    .getByText("10 public PR reviews per UTC calendar month, linked to your account.", {
       exact: true,
     })
     .waitFor();
@@ -126,8 +126,8 @@ try {
   check(state.body.usage.plan, "free");
   check(state.body.usage.limit, 10);
   check(state.body.usage.remaining, 10);
-  check(state.body.usage.monthly.limit, 30);
-  check(state.body.usage.monthly.remaining, 30);
+  check(state.body.usage.monthly.limit, 10);
+  check(state.body.usage.monthly.remaining, 10);
   check(state.cache.includes("no-store"), true);
   if (!state.body.billing.ready) {
     const billingStatus = await page.evaluate(

@@ -12,6 +12,12 @@ const state = (plan: "free" | "pro", used = 0) => ({
     pending: 0,
     remaining: (plan === "pro" ? 100 : 10) - used,
     resetsAt: "2026-10-12T00:00:00Z",
+    monthly: {
+      limit: plan === "pro" ? 100 : 10,
+      used,
+      remaining: (plan === "pro" ? 100 : 10) - used,
+      resetsAt: "2026-11-01T00:00:00Z",
+    },
   },
   subscription: null,
   billing: { environment: "sandbox", ready: false },
@@ -68,11 +74,11 @@ test("a Pro account uses its server allowance even when the browser counter is e
   await expect(page.locator("#free-allowance")).toContainText("99 of 100 Pro");
 });
 
-test("signed-in Free daily exhaustion blocks submission in a fresh browser", async ({
+test("signed-in Free monthly exhaustion blocks submission in a fresh browser", async ({
   page,
 }) => {
   await page.route("**/api/account", (route) =>
-    route.fulfill({ json: state("free", 10) }),
+    route.fulfill({ json: { ...state("free", 10), usage: { ...state("free", 10).usage, used: 0 } } }),
   );
   await page.goto("/");
   await expect(page.locator("#free-allowance")).toContainText(
@@ -82,6 +88,17 @@ test("signed-in Free daily exhaustion blocks submission in a fresh browser", asy
   await expect(
     page.getByRole("button", { name: "Analyze PR", exact: true }),
   ).toBeDisabled();
+});
+
+test("signed-in Free shows the monthly balance when today's usage is zero", async ({ page }) => {
+  const account = state("free", 7);
+  await page.route("**/api/account", route => route.fulfill({ json: { ...account, usage: { ...account.usage, used: 0 } } }));
+  await page.goto("/");
+  await expect(page.locator("#free-allowance")).toContainText("3 of 10 free reviews left this month");
+  await expect(page.locator(".analysis-label-row")).toContainText("Free · 10/month");
+  await expect(page.getByRole("button", { name: "Analyze PR", exact: true })).toBeEnabled();
+  await page.reload();
+  await expect(page.locator("#free-allowance")).toContainText("3 of 10 free reviews left this month");
 });
 
 test("malformed account responses do not present an unvalidated Pro allowance", async ({

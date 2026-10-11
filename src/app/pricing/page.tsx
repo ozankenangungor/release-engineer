@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { FREE_DAILY_REVIEWS, PRO_MONTHLY_REVIEWS } from "@/lib/free-plan";
+import { FREE_MONTHLY_REVIEWS, PRO_MONTHLY_REVIEWS } from "@/lib/free-plan";
 import { CheckoutPreview } from "@/components/checkout-preview";
 import { PricingAccountLink } from "@/components/account-link";
 import "./pricing.css";
 
 const title = "Pricing — Release Engineer";
-const description = "Start with 10 free public GitHub PR reviews a day, up to 30 per UTC month. Explore Pro at $9/month with a 100-review monthly subscription allowance and preview its checkout in sandbox.";
+const description = "Start with 10 free public GitHub PR reviews per month. Explore Pro at $9/month with a 100-review monthly subscription allowance and preview its checkout in sandbox.";
 export const metadata: Metadata = {
   title,
   description,
@@ -19,7 +19,7 @@ const plans = [
   {
     name: "Free", status: "Available now", price: "0", unit: "No subscription",
     description: "A second perspective on your next public pull request.",
-    allowance: `${FREE_DAILY_REVIEWS} reviews / day`, scope: "Up to 30 / UTC month · account or guest browser",
+    allowance: `${FREE_MONTHLY_REVIEWS} reviews / month`, scope: "UTC calendar month · account or guest browser",
     features: ["Public GitHub pull requests", "Structured risks and testing gaps", "Reviewed head SHA and coverage limits", "Downloadable report and verification record", "Local PR revision comparison", "No account or credit card required"],
     href: "/#analyze", action: "Analyze a PR", live: true,
   },
@@ -33,7 +33,7 @@ const plans = [
 ];
 
 const comparison = [
-  ["Review allowance", "10 / day, up to 30 / UTC month", "100 / UTC calendar month / subscriber"],
+  ["Review allowance", "10 / UTC calendar month", "100 / UTC calendar month / subscriber"],
   ["Repository access", "Public", "Public"],
   ["Developers", "No account required", "1"],
   ["Review input", "Paste a public PR URL", "Paste a public PR URL"],
@@ -51,7 +51,7 @@ export default function Pricing() {
         <p className="section-kicker"><span className="pricing-signal" aria-hidden="true" /> RELEASE ENGINEER / PRICING</p>
         <h1 id="pricing-title">Start with the diff.<br /><span>Build release confidence.</span></h1>
         <p className="pricing-intro">Try a structured Claude review on your public PR, free.<br className="pricing-desktop-break" /> Choose your next workflow as the product grows.</p>
-        <div className="pricing-hero-note"><span aria-hidden="true">↳</span> Free: 30 reviews/month, up to 10/day. Explore Pro at $9/month in the sandbox checkout.</div>
+        <div className="pricing-hero-note"><span aria-hidden="true">↳</span> Free: 10 reviews/month. Explore Pro at $9/month in the sandbox checkout.</div>
       </section>
 
       <section className="pricing-plans" aria-label="Review plans">
@@ -88,7 +88,7 @@ export default function Pricing() {
       <section className="pricing-faq" aria-labelledby="pricing-faq-title">
         <div><p className="section-kicker">THE DETAILS</p><h2 id="pricing-faq-title">Before your<br /><span>next review.</span></h2><p>Have a workflow in mind?<br /><a href="mailto:founder@releaseengineer.tech">Talk to the founder ↗︎</a></p></div>
         <div className="pricing-faq-questions">
-          <details><summary>How do the 10 free reviews work?<span aria-hidden="true">+</span></summary><p>You can complete up to {FREE_DAILY_REVIEWS} reviews each UTC day, within a 30-review UTC calendar-month allowance. Without signing in, this is tracked in this browser. With an account, the server tracks one daily allowance across your devices. Daily usage resets at 00:00 UTC; monthly usage resets on the first day of each UTC month. No credit card is required.</p><p>The guest counter is stored locally on your device. It is a browser allowance, not a verified account quota; another browser or clearing site storage starts a separate guest counter. Signed-in quotas are enforced on the server. Server rate and concurrency limits also apply.</p></details>
+          <details><summary>How do the 10 free reviews work?<span aria-hidden="true">+</span></summary><p>You can complete up to {FREE_MONTHLY_REVIEWS} reviews per UTC calendar month. Without signing in, this is tracked in this browser. With an account, the server tracks one monthly allowance across your devices. Usage resets at 00:00 UTC on the first day of each month, not each day. No credit card is required.</p><p>The guest counter is stored locally on your device. It is a browser allowance, not a verified account quota; another browser or clearing site storage starts a separate guest counter. Signed-in quotas are enforced on the server. Server rate and concurrency limits also apply.</p></details>
           <details><summary>What counts as one review?<span aria-hidden="true">+</span></summary><p>One successfully completed, validated report counts as one review, including a report with no findings. Invalid URLs, service errors, interrupted requests and responses that fail validation do not consume a review. Reading or downloading an existing report does not use another review.</p></details>
           <details><summary>How does Pro access work?<span aria-hidden="true">+</span></summary><p>Pro is $9/month with a {PRO_MONTHLY_REVIEWS}-review monthly subscription allowance, resetting at 00:00 UTC on the first day of each calendar month. Access is linked to your signed-in account and verified on the server.</p><p>Checkout is currently a Paddle sandbox preview using test cards. Sandbox completion does not activate the production allowance. The calendar-month quota is independent of your subscription renewal date. A daily safety ceiling of 100 and service-wide capacity limits also apply. Test subscriptions appear in your account separately; your production allowance stays Free until live billing is enabled. <Link href="/sign-up" prefetch={false}>Create an account</Link> to get started.</p></details>
           <details><summary>Can I analyze private repositories?<span aria-hidden="true">+</span></summary><p>Both plans support public GitHub pull requests only. Do not paste private code, credentials or confidential data into the product.</p></details>
@@ -97,7 +97,7 @@ export default function Pricing() {
         </div>
       </section>
 
-      <section className="pricing-final" aria-labelledby="pricing-final-title"><div><p className="section-kicker">YOUR NEXT PULL REQUEST</p><h2 id="pricing-final-title">Bring the change.<br /><span>See what needs checking.</span></h2><p>{FREE_DAILY_REVIEWS} free reviews a day in this browser. Start with a public GitHub PR.</p></div><Link href="/#analyze" className="pricing-final-action">Analyze a PR <span aria-hidden="true">↗︎</span></Link></section>
+      <section className="pricing-final" aria-labelledby="pricing-final-title"><div><p className="section-kicker">YOUR NEXT PULL REQUEST</p><h2 id="pricing-final-title">Bring the change.<br /><span>See what needs checking.</span></h2><p>{FREE_MONTHLY_REVIEWS} free reviews a month. Start with a public GitHub PR.</p></div><Link href="/#analyze" className="pricing-final-action">Analyze a PR <span aria-hidden="true">↗︎</span></Link></section>
     </main>
   );
 }

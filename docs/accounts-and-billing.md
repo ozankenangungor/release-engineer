@@ -52,8 +52,8 @@ configuration disables account billing; it does not manufacture a subscription.
 
 ## Allowance and payment state
 
-Free signed-in accounts have 10 completed reviews per UTC day. An active verified
-**live** subscription with the configured price and a future paid period has 100 per UTC calendar month, with a daily ceiling of 100. Free accounts have a monthly ceiling of 30.
+Free signed-in accounts have 10 completed reviews per UTC calendar month. An active verified
+**live** subscription with the configured price and a future paid period has 100 per UTC calendar month, with a daily ceiling of 100. Monthly allowances reset at 00:00 UTC on the first day of each month. Existing completed usage is preserved when the Free limit is lowered.
 Sandbox subscription records never buy real inference allowance. A row lock
 serializes per-account review reservations across instances. One account has at
 most one pending review. Failures release their reservation; a crash reservation
@@ -130,7 +130,7 @@ test subscription's renewal was canceled in the customer portal before the owned
 Clerk identity and Neon account were removed. The mobile account view had no
 horizontal overflow at 390 × 844.
 
-The sandbox account retained its Free allowance of 10 reviews/day. No real payment
+At the time of this historical verification, the sandbox account retained its Free allowance of 10 reviews/day. The current Free allowance is 10/month. No real payment
 or paid Claude call was made. This is integration verification, not customer
 traction or verification of live payment processing. Production signup/signin
 forms and the production Clerk SDK were checked; production signup email delivery
@@ -138,4 +138,4 @@ was not exercised by this development-account test.
 
 ## Measurement migration
 
-The migration runner applies both 001 and 002 in one transaction. Migration 002 adds content-free inference records, operator classification and shared daily cost admission, and replaces quota functions with calendar-month enforcement. Re-running the runner finishes with the newer functions. See [measurement](live-usage-evidence.md) and [release scope](product-growth-release.md). Comparison files remain in tab memory.
+The migration runner applies 001, 002 and 003 in one transaction. Migration 002 adds content-free inference records, operator classification and shared daily cost admission, and replaces quota functions with calendar-month enforcement. Migration 003 lowers Free to 10/month without changing completed usage or Pro entitlement. Re-running the runner finishes with the newer functions. See [measurement](live-usage-evidence.md) and [release scope](product-growth-release.md). Comparison files remain in tab memory.

@@ -158,7 +158,7 @@ test("the pricing offers remain readable when JavaScript is disabled", async ({ 
   const page = await context.newPage();
   try {
     await page.goto(`${baseURL}/pricing`);
-    await expect(page.getByRole("article", { name: "Free", exact: true })).toContainText("10 reviews / day");
+    await expect(page.getByRole("article", { name: "Free", exact: true })).toContainText("10 reviews / month");
     // Playwright's text selector excludes noscript nodes. With scripting
     // disabled, target the rendered fallback directly and verify visibility.
     const fallback = page.locator("noscript .checkout-preview-note");

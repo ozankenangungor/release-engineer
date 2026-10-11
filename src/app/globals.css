@@ -2190,7 +2190,7 @@ button:disabled {
     gap: 45px;
   }
 }
-@media (max-width: 1119px) {
+@media (max-width: 1199px) {
   .header-inner {
     min-height: 82px;
   }

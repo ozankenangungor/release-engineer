@@ -9,7 +9,7 @@ if (!process.argv[2]) throw new Error("Pass a private environment file.");
 const env = parseEnv(fs.readFileSync(process.argv[2], "utf8"));
 const sql = neon(env.DATABASE_URL_UNPOOLED);
 const schema = `account_verification_${Date.now()}`;
-const source = ["001_accounts.sql", "002_product_measurement.sql"].map(name => fs.readFileSync(new URL(`../db/migrations/${name}`, import.meta.url), "utf8")).join("\n-- statement-breakpoint\n").replaceAll("release_engineer", schema);
+const source = ["001_accounts.sql", "002_product_measurement.sql", "003_free_monthly_allowance.sql"].map(name => fs.readFileSync(new URL(`../db/migrations/${name}`, import.meta.url), "utf8")).join("\n-- statement-breakpoint\n").replaceAll("release_engineer", schema);
 let assertions = 0;
 const check = (actual, expected) => {
   assert.deepEqual(actual, expected);
@@ -58,9 +58,15 @@ try {
   check(winners.length, 1);
   check(race.filter((r) => r.error === "ACCOUNT_BUSY").length, 7);
   check(await finish("free", winners[0].reservation, true), true);
-  check((await reserve("free")).error, "DAILY_LIMIT");
+  check((await reserve("free")).error, "MONTHLY_LIMIT");
   check((await usage("free")).remaining, 0);
   check(await finish("free", winners[0].reservation, true), false);
+  await query("UPDATE $SCHEMA.reviews SET utc_day=utc_day-1 WHERE user_id='free'");
+  check((await usage("free")).used, 0);
+  check((await usage("free")).monthly.used, 10);
+  check((await reserve("free")).error, "MONTHLY_LIMIT");
+  await query("UPDATE $SCHEMA.reviews SET utc_day=date_trunc('month',now() AT TIME ZONE 'UTC')::date-1 WHERE user_id='free'");
+  check((await usage("free")).remaining, 10);
   const stale = await reserve("expired");
   await query(
     "UPDATE $SCHEMA.reviews SET expires_at=now()-interval '1 second' WHERE id=$1::uuid",
@@ -148,7 +154,9 @@ try {
   await query("INSERT INTO $SCHEMA.accounts(user_id) VALUES ('monthly-free')");
   await query("INSERT INTO $SCHEMA.reviews(id,user_id,status,utc_day) SELECT gen_random_uuid(),'monthly-free','completed',date_trunc('month',now() AT TIME ZONE 'UTC')::date FROM generate_series(1,30)");
   check((await reserve("monthly-free")).error, "MONTHLY_LIMIT");
-  check((await usage("monthly-free")).monthly.limit, 30);
+  check((await usage("monthly-free")).monthly.limit, 10);
+  check((await usage("monthly-free")).monthly.used, 30);
+  check((await usage("monthly-free")).monthly.remaining, 0);
   console.log(
     JSON.stringify({
       assertions,

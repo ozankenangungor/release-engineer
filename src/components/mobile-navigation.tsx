@@ -61,6 +61,16 @@ export function MobileNavigation({
           </span>
           GitHub<span aria-hidden="true">↗︎</span>
         </a>
+        <a
+          href="https://linkedin.com/in/ozan-kenan-gungor"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span className="menu-index" aria-hidden="true">
+            {String(items.length + 2).padStart(2, "0")}
+          </span>
+          LinkedIn<span aria-hidden="true">↗︎</span>
+        </a>
         <AccountLink className="mobile-account-link" />
         <Link href="/#analyze" className="mobile-analyze">
           Analyze a public PR →

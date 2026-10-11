@@ -9,7 +9,7 @@ import {
 } from "@/lib/review-schema";
 import { ReviewReport } from "./review-report";
 import { createPortal } from "react-dom";
-import { completeFreeReview, FREE_DAILY_REVIEWS, FREE_REVIEW_LOCK, FreeLimitError, prepareFreeReview } from "@/lib/free-plan";
+import { completeFreeReview, FREE_MONTHLY_REVIEWS, FREE_REVIEW_LOCK, FreeLimitError, prepareFreeReview } from "@/lib/free-plan";
 import { notifyFreeUsageChanged, useFreeAllowance } from "./use-free-allowance";
 import { useAccount } from './account-context';
 
@@ -170,7 +170,7 @@ export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
         <form onSubmit={analyze} aria-busy={loading} noValidate>
           <div className="analysis-label-row">
             <label htmlFor="pr-url">GitHub pull request URL</label>
-            <span>{account?.usage.plan === 'pro' ? 'Pro · 100/month' : 'Free · 10/day · 30/month'}</span>
+            <span>{account?.usage.plan === 'pro' ? 'Pro · 100/month' : 'Free · 10/month'}</span>
           </div>
           <div className="analysis-controls">
             <input
@@ -215,8 +215,8 @@ export function AnalysisForm({ examplePrUrl, interfaceRevision = null }: {
               {remaining === null
                 ? "Enable browser storage to track free reviews."
                 : remaining === 0
-                  ? "Review limit reached. Daily reset: 00:00 UTC; monthly reset: the 1st."
-                  : `${remaining} of ${account?.usage.limit ?? FREE_DAILY_REVIEWS} ${account?.usage.plan === 'pro' ? 'Pro' : 'free'} reviews left today`}
+                  ? "Review limit reached. Your monthly allowance resets on the 1st at 00:00 UTC."
+                  : `${remaining} of ${account?.usage.monthly?.limit ?? account?.usage.limit ?? FREE_MONTHLY_REVIEWS} ${account?.usage.plan === 'pro' ? 'Pro' : 'free'} reviews left this month`}
               <span className="allowance-scope"> · {account ? 'Your account' : 'This browser'}</span>
             </p>
             <Link href="/pricing">View plans <span aria-hidden="true">↗︎</span></Link>

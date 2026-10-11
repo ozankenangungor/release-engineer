@@ -62,6 +62,14 @@ export function Header() {
           >
             GitHub <span aria-hidden="true">↗︎</span>
           </a>
+          <a
+            className="nav-link"
+            href="https://linkedin.com/in/ozan-kenan-gungor"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            LinkedIn <span aria-hidden="true">↗︎</span>
+          </a>
         </nav>
         <div className="header-account-actions"><AccountLink /><Link href="/#analyze" className="header-action">
           Analyze a PR <span aria-hidden="true">↗︎</span>

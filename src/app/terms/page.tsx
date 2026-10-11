@@ -95,7 +95,7 @@ export default function Terms() {
             warnings. The service may change or be unavailable during the beta.
           </p>
           <p className="mt-3">
-            Free homepage use allows 10 completed, validated reviews per UTC day, up to 30 per UTC calendar month,
+            Free homepage use allows 10 completed, validated reviews per UTC calendar month,
             in each browser, tracked in local storage. Failed or interrupted
             reviews do not count. Rate, concurrency and service-wide daily capacity limits also apply. The
             Pro plan at $9/month on the <a href="/pricing" className="text-signal underline underline-offset-4">Pricing page</a>{" "}

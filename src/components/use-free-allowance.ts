@@ -1,12 +1,12 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { FREE_DAILY_REVIEWS, FREE_MONTHLY_REVIEWS, FREE_USAGE_KEY, readFreeUsage, readMonthlyFreeUsage } from "@/lib/free-plan";
+import { FREE_MONTHLY_REVIEWS, FREE_USAGE_KEY, readMonthlyFreeUsage } from "@/lib/free-plan";
 
 const changed = "release-engineer:free-usage-changed";
 
 function remaining() {
-  try { return Math.min(FREE_DAILY_REVIEWS - readFreeUsage(window.localStorage).used, FREE_MONTHLY_REVIEWS - readMonthlyFreeUsage(window.localStorage).monthlyUsed); }
+  try { return FREE_MONTHLY_REVIEWS - readMonthlyFreeUsage(window.localStorage).monthlyUsed; }
   catch { return null; }
 }
 
@@ -18,7 +18,7 @@ function subscribe(refresh: () => void) {
   window.addEventListener(changed, refresh);
   window.addEventListener("focus", refresh);
   document.addEventListener("visibilitychange", refresh);
-  // Refresh an open page after UTC midnight, including when no input occurs.
+  // Refresh an open page across the UTC month boundary without user input.
   const timer = window.setInterval(refresh, 30_000);
   return () => {
     window.removeEventListener("storage", storage);
@@ -31,5 +31,5 @@ function subscribe(refresh: () => void) {
 
 export function notifyFreeUsageChanged() { window.dispatchEvent(new Event(changed)); }
 export function useFreeAllowance() {
-  return useSyncExternalStore(subscribe, remaining, () => FREE_DAILY_REVIEWS);
+  return useSyncExternalStore(subscribe, remaining, () => FREE_MONTHLY_REVIEWS);
 }

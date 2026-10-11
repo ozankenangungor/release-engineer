@@ -292,7 +292,7 @@
     gap: 8px;
   }
 }
-@media (max-width: 1119px) {
+@media (max-width: 1199px) {
   .header-account-actions {
     display: none;
   }
