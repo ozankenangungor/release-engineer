@@ -475,6 +475,12 @@
 .studio-experience .section-shell {
   padding-block: clamp(64px, 5.2vw, 128px);
 }
+.studio-experience .analysis-section {
+  padding-top: 0;
+}
+.studio-experience .analysis-section .hero-entry {
+  padding: 0;
+}
 .studio-experience .section-kicker {
   font-size: clamp(11px, 0.8vw, 16px);
   color: #98a5bb;

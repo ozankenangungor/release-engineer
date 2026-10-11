@@ -6,13 +6,13 @@ Use the existing locally hosted, SIL OFL licensed Inter variable font. Large dis
 
 ## Composition
 
-1. Spacious navigation; editorial headline and product introduction; an immediately visible cinematic graph; then the functioning inline analyzer. On mobile, a compact static graph precedes the form. Header and mobile-menu analysis links jump directly to the form. The product LinkedIn page appears in navigation; the founder's personal profile stays on About.
+1. Spacious navigation; editorial headline and product introduction; an immediately visible cinematic graph; then the interactive example workspace, followed by the functioning analyzer and its live results. On mobile, the same order uses a compact static graph. Header and mobile-menu analysis links jump directly to the form. The product LinkedIn page appears in navigation; the founder's personal profile stays on About.
 2. One unified dark software workspace connects an authored API-contract diff to Risk, Evidence and Next steps. It is explicitly illustrative. Selecting a changed line highlights the related finding.
 3. An open process timeline connects retrieval, context selection, Claude reasoning and human verification.
 4. A ruled engineering ledger links real implementation evidence. Historical failures stay explicit.
 5. Named independent operator, a cobalt final invitation and an editorial footer.
 
-The completed real report mounts in a full-width region below the hero. Request parsing, schema validation, error recovery and server boundaries are preserved. About, Evidence, case studies and legal pages share the editorial type, spacing and dividers; factual and legal meaning is retained.
+The completed real report mounts in a full-width region below the analyzer. Request parsing, schema validation, error recovery and server boundaries are preserved. About, Evidence, case studies and legal pages share the editorial type, spacing and dividers; factual and legal meaning is retained.
 
 ## The Release Graph
 

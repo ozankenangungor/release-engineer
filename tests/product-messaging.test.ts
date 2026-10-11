@@ -28,8 +28,11 @@ describe("product clarity and evidence integrity", () => {
     expect(html).toContain('href="#report-preview"');
     expect(html).toContain('href="/evidence"');
     expect(html).toContain('id="pr-url"');
+    expect(html.indexOf('id="report-preview"')).toBeLessThan(
+      html.indexOf('id="analyze"'),
+    );
     expect(html.indexOf('id="analyze"')).toBeLessThan(
-      html.indexOf('id="report-preview"'),
+      html.indexOf('id="analysis-results"'),
     );
     expect(html.match(/<blockquote>/g)).toHaveLength(1);
     expect(html).toContain("Daniel Reyes");

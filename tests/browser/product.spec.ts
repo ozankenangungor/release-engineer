@@ -65,7 +65,9 @@ for (const [width, height] of [
     });
     const graph = await page.locator(".hero-stage").boundingBox();
     const analyzer = await page.locator("#analyze").boundingBox();
+    const showcase = await page.locator("#report-preview").boundingBox();
     expect(graph!.y + graph!.height).toBeLessThan(analyzer!.y);
+    expect(showcase!.y + showcase!.height).toBeLessThanOrEqual(analyzer!.y);
     expect(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth,
@@ -1030,7 +1032,7 @@ test("release graph chapters work by keyboard with a static reduced-motion drawi
   ).toBeEnabled();
 });
 
-test("the editorial hero introduces the product and graph before the working analyzer", async ({
+test("the product introduction, graph and interactive workspace precede the working analyzer", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -1040,9 +1042,15 @@ test("the editorial hero introduces the product and graph before the working ana
   const analyzer = await page.locator("#analyze").boundingBox();
   const graph = await page.locator(".hero-stage").boundingBox();
   const introduction = await page.locator(".hero-intro").boundingBox();
+  const workspace = await page.locator("#report-preview").boundingBox();
   expect(title!.y + title!.height).toBeLessThan(introduction!.y);
   expect(introduction!.y + introduction!.height).toBeLessThanOrEqual(graph!.y);
   expect(graph!.y + graph!.height).toBeLessThan(analyzer!.y);
+  expect(graph!.y + graph!.height).toBeLessThan(workspace!.y);
+  expect(workspace!.y + workspace!.height).toBeLessThanOrEqual(analyzer!.y);
+  expect(await page.locator("#analyze").evaluate((form) => Boolean(
+    form.compareDocumentPosition(document.getElementById("analysis-results")!) & Node.DOCUMENT_POSITION_FOLLOWING,
+  ))).toBe(true);
   expect(analyzer!.y).toBeGreaterThanOrEqual(900);
   expect(graph!.width).toBeGreaterThan(1200);
   expect(graph!.y + graph!.height).toBeLessThanOrEqual(900);

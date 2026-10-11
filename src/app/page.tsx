@@ -98,23 +98,28 @@ export default function Home() {
             </div>
             <ReleaseIntelligenceScene />
           </div>
-          <div className="hero-entry">
-            <div className="hero-analysis-intro">
-              <p className="section-kicker">YOUR PUBLIC PULL REQUEST</p>
-              <h2>Bring your next change.</h2>
-              <p className="hero-analysis-description">
-                Get a structured second opinion, tied to the reviewed commit.
-              </p>
-            </div>
-            <AnalysisForm
-              examplePrUrl={example?.prUrl}
-              interfaceRevision={interfaceRevision}
-            />
+        </div>
+      </section>
+      <ReportPreview />
+      <section
+        className="analysis-section section-shell"
+        aria-labelledby="analyzer-title"
+      >
+        <div className="hero-entry">
+          <div className="hero-analysis-intro">
+            <p className="section-kicker">YOUR PUBLIC PULL REQUEST</p>
+            <h2 id="analyzer-title">Bring your next change.</h2>
+            <p className="hero-analysis-description">
+              Get a structured second opinion, tied to the reviewed commit.
+            </p>
           </div>
+          <AnalysisForm
+            examplePrUrl={example?.prUrl}
+            interfaceRevision={interfaceRevision}
+          />
         </div>
       </section>
       <div id="analysis-results" className="analysis-results" />
-      <ReportPreview />
       <DeveloperOutcome />
       <section
         id="how-it-works"
